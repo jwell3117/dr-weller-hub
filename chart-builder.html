@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dr. Weller's Chart Builder v0.13</title>
+<title>Dr. Weller's Chart Builder v0.16</title>
 <style>
 :root{
   --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#64748b;--border:#d9e2ef;
@@ -69,7 +69,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <body>
 <header>
 <div class="header-inner">
-<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Offline clinical documentation builder • v0.13</div></div>
+<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Offline clinical documentation builder • v0.16 audited</div></div>
 <div class="badge">No patient data stored</div>
 </div>
 </header>
@@ -99,16 +99,10 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <div class="small">ICD-10 families: H52.0 hypermetropia, H52.1 myopia, H52.2 astigmatism, H52.3 anisometropia/aniseikonia, H52.4 presbyopia.</div>
 </div><div class="card">
 <h2>Patient Rx &amp; Automatic Material Recommendation</h2>
-<div class="small">Enter the absolute power in each principal meridian. Material guidance is based on the lesser absolute meridian, then adjusted for age and safety/monocular needs.</div>
+<div class="small">Enter the absolute power in each principal meridian. Material guidance is based on the lesser absolute meridian, then adjusted for pediatric and safety needs.</div>
 <div class="rx-grid" style="margin-top:12px">
 <div class="field"><label>Patient age</label><input id="rxAge" max="120" min="0" placeholder="e.g., 12" type="number"/></div>
-<div class="field">
-<label>Absolute power — meridian 1</label>
-<input id="rxMeridian1" min="0" placeholder="e.g., 6.25" step="0.25" type="number"/>
-</div><div class="field">
-<label>Absolute power — meridian 2</label>
-<input id="rxMeridian2" min="0" placeholder="e.g., 4.50" step="0.25" type="number"/>
-</div>
+<div class="field"><label>Absolute power — meridian 1</label><input id="rxMeridian1" min="0" placeholder="e.g., 6.25" step="0.25" type="number"/></div><div class="field"><label>Absolute power — meridian 2</label><input id="rxMeridian2" min="0" placeholder="e.g., 4.50" step="0.25" type="number"/></div>
 <div class="field"><label>Pediatric patient</label>
 <select id="rxPediatric"><option value="">Auto by age</option><option value="yes">Yes</option><option value="no">No</option></select>
 </div>
@@ -122,7 +116,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <div class="material-note" id="materialSummary">No Rx-based material recommendation applied.</div>
 <div style="margin-top:18px">
 <h3>Near Support / Digital Eye Strain</h3>
-<div class="small">Select symptom stage, enter the approximate support accepted during testing, and choose the insurance ecosystem. The builder maps the result to the closest manufacturer-specific design and compares it with the age-matched starting tier.</div>
+<div class="small">Select symptom stage, enter measured support when available, and choose the insurance ecosystem. Measured support drives the product match. If only symptoms are entered and the symptom tier conflicts with the age tier, the builder will flag the mismatch for manual selection.</div>
 <div class="support-grid">
 <div class="field">
 <label>Symptoms</label>
@@ -197,14 +191,14 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <label class="option"><input data-lens-text="Polycarbonate for impact resistance and safety" id="lens-poly" type="checkbox"/>Polycarbonate</label>
 <label class="option"><input data-lens-text="High index for optical clarity and decreasing lens thickness" id="lens-highindex" type="checkbox"/>High index</label>
 <label class="option"><input data-lens-text="Trivex for optimal clarity" id="lens-trivex" type="checkbox"/>Trivex</label>
-<label class="option"><input data-lens-text="Anti-reflective coating for glare reduction" type="checkbox"/>Anti-reflective coating</label>
-<label class="option"><input data-lens-text="Transitions for indoor/outdoor comfort" type="checkbox"/>Transitions</label>
-<label class="option"><input data-lens-text="Polarized sunglasses for glare reduction" type="checkbox"/>Polarized sunglasses</label>
-<label class="option"><input data-lens-text="Eyezen for digital eye strain" type="checkbox"/>Eyezen</label>
-<label class="option"><input data-lens-text="Unity lens for digital eye strain" type="checkbox"/>Unity / VSP option</label>
-<label class="option"><input data-lens-text="Educated patient on the importance of UV protection." type="checkbox"/>UV protection</label>
-<label class="option"><input data-lens-text="Due to high myopia, educated patient on the increased risk of retinal detachment and reviewed warning symptoms including new flashes, floaters, curtain or shadow, and sudden vision loss." type="checkbox"/>High-myopia RD precautions</label>
-<label class="option"><input data-lens-text="Eyezen for near work and digital eyestrain" id="lens-eyezen" type="checkbox"/>Eyezen</label><label class="option"><input data-lens-text="Varilux X progressive for multifocal viewing" id="lens-varilux-x" type="checkbox"/>Varilux X Series</label><label class="option"><input data-lens-text="Varilux XR progressive for multifocal viewing" id="lens-varilux-xr" type="checkbox"/>Varilux XR Series</label><label class="option"><input data-lens-text="Varilux Comfort progressive" id="lens-varilux-comfort" type="checkbox"/>Varilux Comfort</label><label class="option"><input data-lens-text="Varilux Physio progressive" id="lens-varilux-physio" type="checkbox"/>Varilux Physio</label><label class="option"><input data-lens-text="Unity SVx for digital eye strain" id="lens-unity-svx" type="checkbox"/>Unity SVx</label><label class="option"><input data-lens-text="Unity Relieve for computer and intermediate viewing" id="lens-unity-relieve" type="checkbox"/>Unity Relieve 50/70</label><label class="option"><input data-lens-text="Unity progressive for multifocal viewing" id="lens-unity-pal" type="checkbox"/>Unity Progressive / Via</label><label class="option"><input data-lens-text="Crizal Sapphire HR for glare reduction, durability, and cleanability" id="lens-crizal" type="checkbox"/>Crizal Sapphire HR</label><label class="option"><input data-lens-text="TechShield AR for glare reduction" id="lens-techshield" type="checkbox"/>TechShield AR</label><label class="option"><input data-lens-text="SunSync photochromic lenses" id="lens-sunsync" type="checkbox"/>SunSync</label><label class="option"><input data-lens-text="Xperio polarized sunglasses for glare reduction" id="lens-xperio" type="checkbox"/>Xperio polarized</label><label class="option"><input data-lens-text="Unity Relieve 50 for +0.50 D near support" id="lens-unity-relieve-50" type="checkbox"/>Unity Relieve 50</label><label class="option"><input data-lens-text="Unity Relieve 70 for +0.70 D near support" id="lens-unity-relieve-70" type="checkbox"/>Unity Relieve 70</label><label class="option"><input data-lens-text="Eyezen 2 for near work and digital eyestrain" id="lens-eyezen-2" type="checkbox"/>Eyezen 2</label><label class="option"><input data-lens-text="Eyezen Start for near work and digital eyestrain" id="lens-eyezen-start" type="checkbox"/>Eyezen Start</label><label class="option"><input data-lens-text="Eyezen 1 for near work and digital eyestrain" id="lens-eyezen-1" type="checkbox"/>Eyezen 1</label><label class="option"><input data-lens-text="Eyezen 3 for near work and digital eyestrain" id="lens-eyezen-3" type="checkbox"/>Eyezen 3</label><label class="option"><input data-lens-text="Eyezen 4 for near work and digital eyestrain" id="lens-eyezen-4" type="checkbox"/>Eyezen 4</label><label class="option"><input data-lens-text="Trivex or high index for optimal clarity" id="lens-trivex-or-highindex" type="checkbox"/>Trivex or high index</label></div>
+<label class="option"><input data-lens-text="Anti-reflective coating" id="lens-generic-ar" type="checkbox"/>Anti-reflective coating</label>
+<label class="option"><input data-lens-text="Transitions optional" id="lens-transitions" type="checkbox"/>Transitions</label>
+<label class="option"><input data-lens-text="Polarized sunglasses for glare reduction" id="lens-polarized" type="checkbox"/>Polarized sunglasses</label>
+
+
+<label class="option"><input data-text="Educated patient on the importance of UV protection." type="checkbox"/>UV protection</label>
+<label class="option"><input data-text="Due to high myopia, educated patient on the increased risk of retinal detachment and reviewed warning symptoms including new flashes, floaters, curtain or shadow, and sudden vision loss." type="checkbox"/>High-myopia RD precautions</label>
+<label class="option"><input data-lens-text="Eyezen for near work and digital eyestrain" id="lens-eyezen" type="checkbox"/>Eyezen</label><label class="option"><input data-lens-text="Varilux X progressive for first-time progressive wearers" id="lens-varilux-x" type="checkbox"/>Varilux X Series</label><label class="option"><input data-lens-text="Varilux XR progressive for multifocal viewing" id="lens-varilux-xr" type="checkbox"/>Varilux XR Series</label><label class="option"><input data-lens-text="Varilux Comfort progressive" id="lens-varilux-comfort" type="checkbox"/>Varilux Comfort</label><label class="option"><input data-lens-text="Varilux Physio progressive" id="lens-varilux-physio" type="checkbox"/>Varilux Physio</label><label class="option"><input data-lens-text="Unity SVx for digital eye strain" id="lens-unity-svx" type="checkbox"/>Unity SVx</label><label class="option"><input data-lens-text="Unity Relieve for computer and intermediate viewing" id="lens-unity-relieve" type="checkbox"/>Unity Relieve 50/70</label><label class="option"><input data-lens-text="Unity progressive for multifocal viewing" id="lens-unity-pal" type="checkbox"/>Unity Progressive / Via</label><label class="option"><input data-lens-text="Crizal Sapphire HR" id="lens-crizal" type="checkbox"/>Crizal Sapphire HR</label><label class="option"><input data-lens-text="TechShield AR" id="lens-techshield" type="checkbox"/>TechShield AR</label><label class="option"><input data-lens-text="SunSync optional" id="lens-sunsync" type="checkbox"/>SunSync</label><label class="option"><input data-lens-text="Xperio polarized sunglasses for glare reduction" id="lens-xperio" type="checkbox"/>Xperio polarized</label><label class="option"><input data-lens-text="Unity Relieve 50 for near work and digital eyestrain" id="lens-unity-relieve-50" type="checkbox"/>Unity Relieve 50</label><label class="option"><input data-lens-text="Unity Relieve 70 for near work and digital eyestrain" id="lens-unity-relieve-70" type="checkbox"/>Unity Relieve 70</label><label class="option"><input data-lens-text="Eyezen 2 for near work and digital eyestrain" id="lens-eyezen-2" type="checkbox"/>Eyezen 2</label><label class="option"><input data-lens-text="Eyezen Start for near work and digital eyestrain" id="lens-eyezen-start" type="checkbox"/>Eyezen Start</label><label class="option"><input data-lens-text="Eyezen 1 for near work and digital eyestrain" id="lens-eyezen-1" type="checkbox"/>Eyezen 1</label><label class="option"><input data-lens-text="Eyezen 3 for near work and digital eyestrain" id="lens-eyezen-3" type="checkbox"/>Eyezen 3</label><label class="option"><input data-lens-text="Eyezen 4 for near work and digital eyestrain" id="lens-eyezen-4" type="checkbox"/>Eyezen 4</label><label class="option"><input data-lens-text="Trivex or high index for optimal clarity" id="lens-trivex-or-highindex" type="checkbox"/>Trivex or high index</label></div>
 </div>
 </section>
 <section class="section" id="amd">
@@ -516,44 +510,49 @@ const diagnosisMap=[
 ];
 
 const insuranceProfiles={
- eyemed:{
-  ids:['lens-varilux-xr','lens-crizal'],
-  summary:'Varilux XR; Crizal Sapphire HR. Eyezen is selected separately by support level. Verify benefits.'
- },
- vsp:{
-  ids:['lens-unity-svx','lens-unity-relieve','lens-unity-pal','lens-techshield','lens-sunsync'],
-  summary:'Unity SVx/Relieve; Unity progressive; TechShield AR; SunSync. Verify benefits.'
- },
- aetna:{
-  ids:['lens-eyezen','lens-varilux-x','lens-crizal'],
-  summary:'Eyezen; Varilux X; Crizal AR. Verify benefits.'
- },
- metlife:{
-  ids:['lens-unity-svx','lens-unity-pal','lens-techshield'],
-  summary:'Unity SVx; Unity progressive; TechShield AR. Verify benefits.'
- },
- davis:{
-  ids:[],
-  summary:'Use current formulary for standard, premium, and digital lens options.'
- },
- spectera:{
-  ids:[],
-  summary:'Verify single-vision, progressive, digital, AR, and photochromic options.'
- },
- superior:{
-  ids:[],
-  summary:'Verify lab, progressive formulary, and lens enhancements.'
- }
+ eyemed:{ecosystem:'eyemed',coating:'lens-crizal',photo:'lens-transitions',summary:'Essilor ecosystem selected. Crizal Sapphire HR and Transitions optional added. Eyezen is chosen by support level; Varilux XR is reserved for presbyopia.'},
+ vsp:{ecosystem:'vsp',coating:'lens-techshield',photo:'lens-sunsync',summary:'Unity ecosystem selected. TechShield AR and SunSync optional added. Unity Relieve is chosen by support level; Unity progressive is reserved for presbyopia.'},
+ aetna:{ecosystem:'eyemed',coating:'lens-crizal',photo:'lens-transitions',summary:'Aetna/EyeMed-style ecosystem selected. Verify benefits; lens design remains based on clinical need.'},
+ metlife:{ecosystem:'vsp',coating:'lens-techshield',photo:'lens-sunsync',summary:'MetLife/VSP-style ecosystem selected. Verify benefits; lens design remains based on clinical need.'},
+ davis:{ecosystem:'manual',summary:'Use the current Davis formulary and select the lens design manually.'},
+ spectera:{ecosystem:'manual',summary:'Verify the current Spectera formulary and select the lens design manually.'},
+ superior:{ecosystem:'manual',summary:'Verify the current Superior Vision formulary and select the lens design manually.'}
 };
 let currentInsurancePreset='';
+function insuranceEcosystem(value){
+  if(!value) return currentInsurancePreset && insuranceProfiles[currentInsurancePreset] ? insuranceProfiles[currentInsurancePreset].ecosystem : '';
+  if(value==='eyemed'||value==='vsp'||value==='other') return value==='other'?'manual':value;
+  return insuranceProfiles[value] ? insuranceProfiles[value].ecosystem : 'manual';
+}
+function clearLensGroup(ids){ids.forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});}
+function syncInsuranceExtras(ecosystem){
+  clearLensGroup(['lens-crizal','lens-techshield','lens-transitions','lens-sunsync']);
+  if(ecosystem==='vsp'){
+    const ar=document.getElementById('lens-techshield'); if(ar) ar.checked=true;
+    const photo=document.getElementById('lens-sunsync'); if(photo) photo.checked=true;
+  }else if(ecosystem==='eyemed'){
+    const ar=document.getElementById('lens-crizal'); if(ar) ar.checked=true;
+    const photo=document.getElementById('lens-transitions'); if(photo) photo.checked=true;
+  }
+}
+function clearAutomaticDesigns(){
+  clearLensGroup(['lens-unity-svx','lens-unity-relieve','lens-unity-relieve-50','lens-unity-relieve-70','lens-eyezen','lens-eyezen-start','lens-eyezen-1','lens-eyezen-2','lens-eyezen-3','lens-eyezen-4','lens-varilux-xr','lens-unity-pal']);
+  // Varilux X is intentionally manual and is not cleared here.
+}
+
 function applyInsurance(name){
- currentInsurancePreset=name;
- const section=document.getElementById('refractive');
- section.querySelectorAll('input[id^="lens-"]').forEach(x=>x.checked=false);
- const p=insuranceProfiles[name];
- p.ids.forEach(id=>{const el=document.getElementById(id);if(el)el.checked=true});
- document.getElementById('insuranceSummary').textContent=p.summary;
- generateNote();
+  currentInsurancePreset=name;
+  const p=insuranceProfiles[name];
+  clearAutomaticDesigns();
+  syncInsuranceExtras(p.ecosystem);
+  document.getElementById('insuranceSummary').textContent=p.summary;
+  const supportSelect=document.getElementById('supportInsurance');
+  if(supportSelect){
+    supportSelect.value=p.ecosystem==='eyemed'?'eyemed':p.ecosystem==='vsp'?'vsp':'other';
+  }
+  if(document.getElementById('rxMeridian1').value || document.getElementById('rxMeridian2').value) applyRxMaterial();
+  generateNote();
+  generateLensNote();
 }
 
 function setDiagnosis(id){
@@ -665,12 +664,10 @@ function generateLensNote(){
     /Polarized|Xperio/i
   ];
   const sorted=[];
-  order.forEach(rx=>{
-    parts.filter(p=>rx.test(p)).forEach(p=>sorted.push(p));
-  });
+  order.forEach(rx=>parts.filter(p=>rx.test(p)).forEach(p=>sorted.push(p)));
   parts.forEach(p=>{if(!sorted.includes(p)) sorted.push(p);});
-  document.getElementById('lensOutput').value=sorted.join('\n\n');
-}}
+  document.getElementById('lensOutput').value=[...new Set(sorted)].join('\n\n');
+}
 
 async function copyLensNote(){
   const text=document.getElementById('lensOutput').value;
@@ -697,261 +694,44 @@ function applyRxMaterial(){
   const safety=document.getElementById('rxSafety').value==='yes';
   const pediatric=pedChoice==='yes' || (pedChoice==='' && !Number.isNaN(age) && age<14);
 
-  ['lens-poly','lens-highindex','lens-trivex','lens-trivex-or-highindex'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.checked=false;
-  });
-
-  let summary='';
+  clearLensGroup(['lens-poly','lens-highindex','lens-trivex','lens-trivex-or-highindex']);
   let lowerPower=NaN;
-
-  if(!Number.isNaN(m1) && !Number.isNaN(m2)) lowerPower=Math.min(Math.abs(m1),Math.abs(m2));
+  if(!Number.isNaN(m1)&&!Number.isNaN(m2)) lowerPower=Math.min(Math.abs(m1),Math.abs(m2));
   else if(!Number.isNaN(m1)) lowerPower=Math.abs(m1);
   else if(!Number.isNaN(m2)) lowerPower=Math.abs(m2);
 
+  let summary='';
   if(safety){
-    const el=document.getElementById('lens-poly'); if(el) el.checked=true;
+    const el=document.getElementById('lens-poly'); if(el)el.checked=true;
     summary='Polycarbonate selected because of safety or monocular protection needs.';
   }else if(Number.isNaN(lowerPower)){
     summary='Enter at least one principal-meridian power to apply a material recommendation.';
   }else if(pediatric){
     if(lowerPower>7){
-      const el=document.getElementById('lens-highindex'); if(el) el.checked=true;
-      summary='High index selected: pediatric patient with the lesser meridian greater than ±7.00 D. Confirm impact-resistance needs and frame selection.';
+      const el=document.getElementById('lens-highindex'); if(el)el.checked=true;
+      summary='High index selected for pediatric high prescription. Confirm impact-resistance needs and frame selection.';
     }else{
-      const el=document.getElementById('lens-poly'); if(el) el.checked=true;
-      summary='Polycarbonate selected: pediatric patient under approximately age 14 with the lesser meridian at or below ±7.00 D.';
+      const el=document.getElementById('lens-poly'); if(el)el.checked=true;
+      summary='Polycarbonate selected for pediatric patient.';
     }
+  }else if(lowerPower<4.00){
+    const el=document.getElementById('lens-trivex'); if(el)el.checked=true;
+    summary='Trivex selected for optimal clarity.';
+  }else if(lowerPower<=5.00){
+    const el=document.getElementById('lens-trivex-or-highindex'); if(el)el.checked=true;
+    summary='Trivex or high index selected for optimal clarity.';
   }else{
-    if(lowerPower < 4.00){
-      const el=document.getElementById('lens-trivex'); if(el) el.checked=true;
-      summary='Trivex selected for optimal clarity.';
-    }else if(lowerPower <= 5.00){
-      const el=document.getElementById('lens-trivex-or-highindex'); if(el) el.checked=true;
-      summary='Trivex or high index selected for optimal clarity.';
-    }else{
-      const el=document.getElementById('lens-highindex'); if(el) el.checked=true;
-      summary='High index selected for optical clarity and decreasing lens thickness.';
-    }
+    const el=document.getElementById('lens-highindex'); if(el)el.checked=true;
+    summary='High index selected for optical clarity and decreasing lens thickness.';
   }
 
-  document.getElementById('materialSummary').textContent=summary;
-  if(!document.getElementById('lens-crizal').checked && !document.getElementById('lens-techshield').checked){
- const c=document.getElementById('lens-crizal');
- if(c) c.checked=true;
-}
-generateLensNote();
-}const select=document.getElementById('diagnosisSelect');
-
-const diagnosisMap=[
-{id:'refractive',label:'Refractive Error',keywords:'myopia hyperopia astigmatism presbyopia anisometropia high myopia glasses refraction spectacle progressive multifocal'},
-{id:'amd',label:'Early Dry AMD',keywords:'amd macular degeneration drusen areds amsler'},
-{id:'dryeye',label:'Dry Eye / MGD',keywords:'dry eye mgd meibomian irritation burning tears fluorescein staining'},
-{id:'glaucoma',label:'Glaucoma Suspect',keywords:'glaucoma suspect ocular hypertension oct rnfl gcc visual field pachy gonio'},
-{id:'cataract',label:'Cataracts',keywords:'cataract lens opacity surgery glare'},
-{id:'pvd',label:'PVD / Symptomatic Floaters',keywords:'pvd floaters flashes retinal detachment vitreous'},
-{id:'diabetes',label:'Diabetes Without Retinopathy',keywords:'diabetes diabetic retinopathy dfe mac oct'},
-{id:'contact',label:'Contact Lens Annual',keywords:'contact lens annual cl fitting hygiene daily monthly'},
-{id:'blepharitis',label:'Blepharitis',keywords:'blepharitis lids crusting lid hygiene'},
-{id:'allergy',label:'Allergic Conjunctivitis',keywords:'allergy allergic conjunctivitis itching pataday olopatadine'},
-{id:'bacterial',label:'Bacterial Conjunctivitis',keywords:'bacterial conjunctivitis pink eye polytrim moxifloxacin besivance'},
-{id:'abrasion',label:'Corneal Abrasion',keywords:'corneal abrasion epithelial defect bandage contact lens cycloplegic'}
-];
-
-const insuranceProfiles={
- eyemed:{
-  ids:['lens-varilux-xr','lens-crizal'],
-  summary:'Varilux XR; Crizal Sapphire HR. Eyezen is selected separately by support level. Verify benefits.'
- },
- vsp:{
-  ids:['lens-unity-svx','lens-unity-relieve','lens-unity-pal','lens-techshield','lens-sunsync'],
-  summary:'Unity SVx/Relieve; Unity progressive; TechShield AR; SunSync. Verify benefits.'
- },
- aetna:{
-  ids:['lens-eyezen','lens-varilux-x','lens-crizal'],
-  summary:'Eyezen; Varilux X; Crizal AR. Verify benefits.'
- },
- metlife:{
-  ids:['lens-unity-svx','lens-unity-pal','lens-techshield'],
-  summary:'Unity SVx; Unity progressive; TechShield AR. Verify benefits.'
- },
- davis:{
-  ids:[],
-  summary:'Use current formulary for standard, premium, and digital lens options.'
- },
- spectera:{
-  ids:[],
-  summary:'Verify single-vision, progressive, digital, AR, and photochromic options.'
- },
- superior:{
-  ids:[],
-  summary:'Verify lab, progressive formulary, and lens enhancements.'
- }
-};
-let currentInsurancePreset='';
-function applyInsurance(name){
- currentInsurancePreset=name;
- const section=document.getElementById('refractive');
- section.querySelectorAll('input[id^="lens-"]').forEach(x=>x.checked=false);
- const p=insuranceProfiles[name];
- p.ids.forEach(id=>{const el=document.getElementById(id);if(el)el.checked=true});
- document.getElementById('insuranceSummary').textContent=p.summary;
- generateNote();
-}
-
-function setDiagnosis(id){
-  select.value=id; showDiagnosis();
-  document.getElementById('diagnosisSearch').value='';
-  document.getElementById('searchResults').style.display='none';
-}
-function filterDiagnoses(){
-  const q=document.getElementById('diagnosisSearch').value.trim().toLowerCase();
-  const box=document.getElementById('searchResults');
-  const matches=diagnosisMap.filter(d=>!q||d.label.toLowerCase().includes(q)||d.keywords.includes(q));
-  box.innerHTML='';
-  matches.forEach(d=>{
-    const item=document.createElement('div');
-    item.className='search-item';
-    item.textContent=d.label;
-    item.onclick=()=>setDiagnosis(d.id);
-    box.appendChild(item);
-  });
-  box.style.display=matches.length?'block':'none';
-}
-document.addEventListener('click',e=>{
-  if(!e.target.closest('.search-wrap')) document.getElementById('searchResults').style.display='none';
-});
-
-
-function activeSection(){return document.querySelector('.section.active')}
-
-function showDiagnosis(){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(select.value).classList.add('active');
-  clearChartOutput();
-  clearLensOutput();
-  if(document.getElementById('materialSummary')) document.getElementById('materialSummary').textContent='No Rx-based material recommendation applied.';
-  if(document.getElementById('supportSummary')) document.getElementById('supportSummary').textContent='No near-support recommendation applied.';
-  if(document.getElementById('supportAlert')) document.getElementById('supportAlert').style.display='none';
-  ['supportSymptoms','supportAdd','supportInsurance'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.value='';
-  });
-}
-
-function formatDiagnosisList(items){
-  if(items.length===0) return '';
-  if(items.length===1) return items[0];
-  if(items.length===2) return items[0]+' and '+items[1];
-  return items.slice(0,-1).join(', ')+', and '+items[items.length-1];
-}
-
-function generateNote(){
-  const parts=[];
-  const section=activeSection();
-
-  if(section.id==='refractive'){
-    const diagnoses=[...section.querySelectorAll('input[data-diagnosis]:checked')].map(el=>el.dataset.diagnosis);
-    if(diagnoses.length){
-      parts.push('Educated patient on diagnosis of '+formatDiagnosisList(diagnoses)+'.');
-    }
-  }
-
-  section.querySelectorAll('input[type=checkbox]:checked').forEach(el=>{
-    if(el.dataset.text) parts.push(el.dataset.text);
-  });
-
-  const custom=document.getElementById('customSentence').value.trim();
-  if(custom) parts.push(custom.endsWith('.')?custom:custom+'.');
-
-  const n=document.getElementById('rtcNumber').value.trim();
-  const u=document.getElementById('rtcUnit').value;
-  if(n && u){
-    let rtc=`RTC x ${n} ${u}`;
-    if(document.getElementById('soonerPrn').checked) rtc+=', sooner PRN';
-    parts.push(rtc+'.');
-  }
-  if(document.getElementById('understanding').checked){
-    parts.push('Patient confirms understanding and denies further questions.');
-  }
-  document.getElementById('output').value=parts.join(' ');
-}
-
-async function copyChartNote(){
-  const text=document.getElementById('output').value;
-  if(!text){document.getElementById('copyStatus').textContent='Nothing to copy yet.';return}
-  try{
-    await navigator.clipboard.writeText(text);
-    document.getElementById('copyStatus').textContent='Copied to clipboard.';
-  }catch(e){
-    const out=document.getElementById('output');out.select();document.execCommand('copy');
-    document.getElementById('copyStatus').textContent='Copied to clipboard.';
-  }
-}
-
-function clearChartOutput(){
-  document.getElementById('output').value='';
-  document.getElementById('copyStatus').textContent='';
-}
-
-
-function generateLensNote(){
-  const section=activeSection();
-  const parts=[];
-  section.querySelectorAll('input[data-lens-text]:checked').forEach(el=>{
-    if(el.dataset.lensText) parts.push(el.dataset.lensText.replace(/[.]+$/,''));
-  });
-  document.getElementById('lensOutput').value=parts.join('; ');
-}
-
-async function copyLensNote(){
-  const text=document.getElementById('lensOutput').value;
-  if(!text){document.getElementById('lensCopyStatus').textContent='Nothing to copy yet.';return}
-  try{
-    await navigator.clipboard.writeText(text);
-    document.getElementById('lensCopyStatus').textContent='Copied to clipboard.';
-  }catch(e){
-    const out=document.getElementById('lensOutput');out.select();document.execCommand('copy');
-    document.getElementById('lensCopyStatus').textContent='Copied to clipboard.';
-  }
-}
-
-function clearLensOutput(){
-  document.getElementById('lensOutput').value='';
-  document.getElementById('lensCopyStatus').textContent='';
-}
-
-function applyRxMaterial(){
-  const age=parseFloat(document.getElementById('rxAge').value);
-  const power=parseFloat(document.getElementById('rxPower').value);
-  const pedChoice=document.getElementById('rxPediatric').value;
-  const safety=document.getElementById('rxSafety').value==='yes';
-  const pediatric=pedChoice==='yes' || (pedChoice==='' && !Number.isNaN(age) && age<14);
-
-  ['lens-poly','lens-highindex','lens-trivex'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.checked=false;
-  });
-
-  let summary='';
-  if(safety){
-    const el=document.getElementById('lens-poly'); if(el) el.checked=true;
-    summary='Polycarbonate selected because of safety/monocular protection needs.';
-  }else if(Number.isNaN(power)){
-    summary='Enter the highest absolute Rx power to apply a material recommendation.';
-  }else if(pediatric){
-    if(power>7){
-      const el=document.getElementById('lens-highindex'); if(el) el.checked=true;
-      summary='High-index selected: pediatric patient with prescription greater than ±7.00 D. Confirm impact-resistance needs and frame selection.';
-    }else{
-      const el=document.getElementById('lens-poly'); if(el) el.checked=true;
-      summary='Polycarbonate selected: pediatric patient under approximately age 14 with prescription not exceeding ±7.00 D.';
-    }
+  const ecosystem=insuranceEcosystem(document.getElementById('supportInsurance').value);
+  if(ecosystem==='vsp'){
+    const t=document.getElementById('lens-techshield'); if(t)t.checked=true;
+    const c=document.getElementById('lens-crizal'); if(c)c.checked=false;
   }else{
-    if(power>=5){
-      const el=document.getElementById('lens-highindex'); if(el) el.checked=true;
-      summary='High-index selected: adult prescription at or above approximately ±5.00 D.';
-    }else{
-      const el=document.getElementById('lens-trivex'); if(el) el.checked=true;
-      summary='Trivex selected as the default adult option below approximately ±5.00 D when impact resistance and optical quality are desired.';
-    }
+    const c=document.getElementById('lens-crizal'); if(c)c.checked=true;
+    const t=document.getElementById('lens-techshield'); if(t)t.checked=false;
   }
   document.getElementById('materialSummary').textContent=summary;
   generateLensNote();
@@ -978,131 +758,139 @@ function symptomDefault(stage){
   return map[stage] ?? 0.40;
 }
 
-function showSupportAlert(target, age, manufacturerLabel, selectedLabel){
+function showSupportAlert(target,age,manufacturerLabel,selectedLabel,sourceMode){
   const box=document.getElementById('supportAlert');
   box.className='support-alert';
   box.style.display='block';
-
   if(Number.isNaN(age)){
     box.textContent='Age was not entered, so no age-matched comparison was performed.';
     return;
   }
-
   const ageTier=eyezenAgeTier(age);
-  if(!ageTier){
-    box.style.display='none';
-    return;
-  }
-
+  if(!ageTier){box.style.display='none';return;}
   const excess=target-ageTier.value;
-  if(excess >= 0.25){
-    box.textContent='Support accepted (+'+target.toFixed(2)+' D) is greater than the age-matched starting tier ('+
-      ageTier.label+', approximately +'+ageTier.value.toFixed(2)+' D). Consider accommodative and binocular-vision testing at a future visit if symptoms, near demands, or findings warrant.';
-  }else if(excess <= -0.25){
+  if(excess>=0.25){
+    box.textContent='Support accepted (+'+target.toFixed(2)+' D) is greater than the age-matched starting tier ('+ageTier.label+'). Consider accommodative and binocular-vision testing at a future visit if symptoms, near demands, or findings warrant.';
+  }else if(excess<=-0.25){
     box.textContent='Support accepted is lower than the age-matched starting tier. Use clinical judgment and patient preference when finalizing '+selectedLabel+'.';
   }else{
     box.className='support-alert support-ok';
-    box.textContent='Selected support is reasonably aligned with the age-matched starting tier. Continue to individualize based on symptoms and measured findings.';
+    box.textContent='Selected support is reasonably aligned with the age-matched starting tier.';
   }
-
-  if(manufacturerLabel==='Unity'){
-    box.textContent += ' Unity Relieve offers fixed 0.50 and 0.70 D choices, so its closest product may not match the Eyezen age tier exactly.';
-  }
+  if(manufacturerLabel==='Unity') box.textContent+=' Unity Relieve has fixed 0.50 and 0.70 D options, so an exact match may not be available.';
+  if(sourceMode==='symptom') box.textContent+=' This recommendation was estimated from symptom level rather than a measured support value.';
 }
 
 function applySupportRecommendation(){
   const symptoms=document.getElementById('supportSymptoms').value;
   const raw=parseFloat(document.getElementById('supportAdd').value);
   const age=parseFloat(document.getElementById('rxAge').value);
-  const insuranceChoice=document.getElementById('supportInsurance').value || currentInsurancePreset;
+  const ecosystem=insuranceEcosystem(document.getElementById('supportInsurance').value);
+  const summaryBox=document.getElementById('supportSummary');
+  const alert=document.getElementById('supportAlert');
+  clearAutomaticDesigns();
 
-  ['lens-unity-svx','lens-unity-relieve','lens-unity-relieve-50','lens-unity-relieve-70',
-   'lens-eyezen','lens-eyezen-start','lens-eyezen-1','lens-eyezen-2','lens-eyezen-3','lens-eyezen-4',
-   'lens-varilux-x','lens-varilux-xr','lens-unity-pal']
-   .forEach(id=>{const el=document.getElementById(id); if(el) el.checked=false;});
-
-  let target=Number.isNaN(raw) ? symptomDefault(symptoms) : raw;
-  let summary='';
-  let selectedLabel='';
-  let manufacturerLabel='';
-
-  if(symptoms==='presbyopic' || target>=1.25){
-    if(insuranceChoice==='vsp'){
-      const el=document.getElementById('lens-unity-pal'); if(el) el.checked=true;
-      selectedLabel='Unity progressive';
-      manufacturerLabel='Unity';
-      summary='Unity progressive selected for multifocal viewing.';
-    }else{
-      const el=document.getElementById('lens-varilux-xr'); if(el) el.checked=true;
-      selectedLabel='Varilux XR';
-      manufacturerLabel='Eyezen/Varilux';
-      summary='Varilux XR selected as the default progressive for multifocal viewing. Varilux X remains a manual option when indicated.';
-    }
-  }else if(insuranceChoice==='vsp'){
-    const unityOptions=[
-      {value:0.50,id:'lens-unity-relieve-50',label:'Unity Relieve 50'},
-      {value:0.70,id:'lens-unity-relieve-70',label:'Unity Relieve 70'}
-    ];
-    const match=closestOption(target,unityOptions);
-    const el=document.getElementById(match.id); if(el) el.checked=true;
-    selectedLabel=match.label;
-    manufacturerLabel='Unity';
-    summary=match.label+' selected as the closest Unity option to the desired +'+target.toFixed(2)+' D support.';
-  }else if(insuranceChoice==='eyemed'){
-    const eyezenOptions=[
-      {value:0.00,id:'lens-eyezen-start',label:'Eyezen Start'},
-      {value:0.40,id:'lens-eyezen-1',label:'Eyezen 1'},
-      {value:0.60,id:'lens-eyezen-2',label:'Eyezen 2'},
-      {value:0.85,id:'lens-eyezen-3',label:'Eyezen 3'},
-      {value:1.10,id:'lens-eyezen-4',label:'Eyezen 4'}
-    ];
-    const match=closestOption(target,eyezenOptions);
-    const el=document.getElementById(match.id); if(el) el.checked=true;
-    selectedLabel=match.label;
-    manufacturerLabel='Eyezen';
-    summary=match.label+' selected as the closest Eyezen option to the desired +'+target.toFixed(2)+' D support.';
-  }else{
-    const allOptions=[
-      {value:0.40,id:'lens-eyezen-1',label:'Eyezen 1',manufacturer:'Eyezen'},
-      {value:0.50,id:'lens-unity-relieve-50',label:'Unity Relieve 50',manufacturer:'Unity'},
-      {value:0.60,id:'lens-eyezen-2',label:'Eyezen 2',manufacturer:'Eyezen'},
-      {value:0.70,id:'lens-unity-relieve-70',label:'Unity Relieve 70',manufacturer:'Unity'},
-      {value:0.85,id:'lens-eyezen-3',label:'Eyezen 3',manufacturer:'Eyezen'},
-      {value:1.10,id:'lens-eyezen-4',label:'Eyezen 4',manufacturer:'Eyezen'}
-    ];
-    const match=closestOption(target,allOptions);
-    const el=document.getElementById(match.id); if(el) el.checked=true;
-    selectedLabel=match.label;
-    manufacturerLabel=match.manufacturer;
-    summary=match.label+' selected as the closest starting point to +'+target.toFixed(2)+' D support. Select insurance for manufacturer-specific mapping.';
+  if(!ecosystem || ecosystem==='manual'){
+    summaryBox.textContent='Select an EyeMed/Essilor or VSP/Unity ecosystem before applying a manufacturer-specific recommendation.';
+    alert.style.display='none';
+    generateLensNote();
+    return;
+  }
+  if(!symptoms && Number.isNaN(raw)){
+    summaryBox.textContent='Select a symptom stage or enter a measured support value.';
+    alert.style.display='none';
+    generateLensNote();
+    return;
   }
 
-  document.getElementById('supportSummary').textContent=summary;
-  showSupportAlert(target,age,manufacturerLabel,selectedLabel);
+  syncInsuranceExtras(ecosystem);
+  const sourceMode=Number.isNaN(raw)?'symptom':'measured';
+  const target=Number.isNaN(raw)?symptomDefault(symptoms):raw;
+
+  if(symptoms==='presbyopic'){
+    const id=ecosystem==='vsp'?'lens-unity-pal':'lens-varilux-xr';
+    const el=document.getElementById(id); if(el)el.checked=true;
+    const label=ecosystem==='vsp'?'Unity progressive':'Varilux XR';
+    summaryBox.textContent=label+' selected for multifocal viewing.'+(ecosystem==='eyemed'?' Varilux X remains a manual option for selected first-time progressive wearers.':'');
+    alert.style.display='none';
+    generateLensNote();
+    return;
+  }
+
+  if(target>1.10){
+    summaryBox.textContent='Desired support exceeds the Eyezen anti-fatigue range. Confirm presbyopic status or select a lens manually; no progressive was automatically chosen.';
+    showSupportAlert(target,age,ecosystem==='vsp'?'Unity':'Eyezen','manual selection',sourceMode);
+    generateLensNote();
+    return;
+  }
+
+  const ageTier=eyezenAgeTier(age);
+  const symptomTarget=symptomDefault(symptoms);
+  if(sourceMode==='symptom' && ageTier && Math.abs(symptomTarget-ageTier.value)>=0.25){
+    summaryBox.textContent='Symptom-based and age-based starting tiers do not match. No lens was automatically selected; choose the design manually or enter measured support.';
+    alert.className='support-alert'; alert.style.display='block';
+    alert.textContent='Symptom estimate: +'+symptomTarget.toFixed(2)+' D. Age-matched starting tier: '+ageTier.label+'. Consider accommodative/binocular-vision testing if the discrepancy is clinically meaningful.';
+    generateLensNote();
+    return;
+  }
+
+  let selectedLabel='',manufacturer='';
+  if(ecosystem==='vsp'){
+    const options=[{value:.50,id:'lens-unity-relieve-50',label:'Unity Relieve 50'},{value:.70,id:'lens-unity-relieve-70',label:'Unity Relieve 70'}];
+    const match=closestOption(target,options);
+    const el=document.getElementById(match.id); if(el)el.checked=true;
+    selectedLabel=match.label; manufacturer='Unity';
+  }else{
+    const options=[
+      {value:0,id:'lens-eyezen-start',label:'Eyezen Start'},
+      {value:.40,id:'lens-eyezen-1',label:'Eyezen 1'},
+      {value:.60,id:'lens-eyezen-2',label:'Eyezen 2'},
+      {value:.85,id:'lens-eyezen-3',label:'Eyezen 3'},
+      {value:1.10,id:'lens-eyezen-4',label:'Eyezen 4'}
+    ];
+    let match=closestOption(target,options);
+    const distance=Math.abs(match.value-target);
+    const tied=options.filter(o=>Math.abs(Math.abs(o.value-target)-distance)<0.0001);
+    if(tied.length>1 && ageTier) match=closestOption(ageTier.value,tied);
+    const el=document.getElementById(match.id); if(el)el.checked=true;
+    selectedLabel=match.label; manufacturer='Eyezen';
+  }
+  summaryBox.textContent=selectedLabel+' selected as the closest '+manufacturer+' option to +'+target.toFixed(2)+' D support.';
+  showSupportAlert(target,age,manufacturer,selectedLabel,sourceMode);
   generateLensNote();
 }
 
 function clearAll(){
   activeSection().querySelectorAll('input[type=checkbox]').forEach(x=>x.checked=false);
-  document.getElementById('rtcNumber').value='';
-  document.getElementById('rtcUnit').value='';
+  ['rtcNumber','customSentence','rxAge','rxMeridian1','rxMeridian2','supportAdd'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['rtcUnit','rxPediatric','rxSafety','supportSymptoms','supportInsurance'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id==='rxSafety'?'no':'';});
   document.getElementById('soonerPrn').checked=false;
   document.getElementById('understanding').checked=true;
-  document.getElementById('customSentence').value='';
+  currentInsurancePreset='';
+  const ins=document.getElementById('insuranceSummary'); if(ins)ins.textContent='No insurance preset selected.';
+  const mat=document.getElementById('materialSummary'); if(mat)mat.textContent='No Rx-based material recommendation applied.';
+  const sup=document.getElementById('supportSummary'); if(sup)sup.textContent='No near-support recommendation applied.';
+  const alert=document.getElementById('supportAlert'); if(alert)alert.style.display='none';
   clearChartOutput();
   clearLensOutput();
 }
 
 document.addEventListener('change',e=>{
+  if(e.target.id==='supportInsurance'){
+    const eco=insuranceEcosystem(e.target.value);
+    syncInsuranceExtras(eco);
+    if(document.getElementById('rxMeridian1').value||document.getElementById('rxMeridian2').value) applyRxMaterial();
+  }
+  if(['rxPediatric','rxSafety'].includes(e.target.id) && (document.getElementById('rxMeridian1').value||document.getElementById('rxMeridian2').value)) applyRxMaterial();
   if(e.target.matches('input[type=checkbox], select') && e.target.id!=='diagnosisSelect'){
-    generateNote();
-    generateLensNote();
+    generateNote(); generateLensNote();
   }
 });
 document.addEventListener('input',e=>{
   if(['rtcNumber','customSentence'].includes(e.target.id)) generateNote();
+  if(['rxAge','rxMeridian1','rxMeridian2'].includes(e.target.id) && (document.getElementById('rxMeridian1').value||document.getElementById('rxMeridian2').value)) applyRxMaterial();
 });
-generateNote();
+generateNote(); generateLensNote();
 </script>
 </body>
 </html>
