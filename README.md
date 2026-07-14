@@ -1,13 +1,16 @@
-# Weller Hub — Deployable Starter
+# Weller Hub Baseline
 
-This package is a static website ready for GitHub + Vercel.
+This is the stable website baseline.
 
-## Files
-- `index.html` — Weller Hub dashboard
-- `clinical/chart-builder.html` — full chart builder
-- `clinical/offline-chart-builder.html` — lightweight backup builder
+It contains:
+- `index.html` — simple Weller Hub homepage
+- `chart-builder.html` — the working Chart Builder from the original HTML development
+- `offline-chart-builder.html` — the lightweight offline backup
+- `vercel.json` — clean URL support
 
-## Deploy
-Upload the contents of this folder to the root of your GitHub repository.
-Then import the repository into Vercel and deploy with the framework preset set to **Other**.
-No build command or output directory is required for this static version.
+## Deployment
+Replace the files in the root of the `dr-weller-hub` repository with these files.
+Commit and push through GitHub Desktop.
+Vercel will redeploy automatically.
+
+Future edits should be made directly to this working baseline rather than rebuilding it.

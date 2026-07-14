@@ -5,28 +5,109 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Weller Hub</title>
 <style>
-:root{--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#667085;--border:#d8e0ec;--blue:#2557d6}
+:root{
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --text:#172033;
+  --muted:#667085;
+  --border:#d8e1ed;
+  --blue:#2858d8;
+  --blue-soft:#edf3ff;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
-header{background:#fff;border-bottom:1px solid var(--border)}
-.wrap{max-width:1100px;margin:auto;padding:24px}
-h1{margin:0}.sub{color:var(--muted);margin-top:6px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:24px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-decoration:none;color:inherit;box-shadow:0 4px 18px rgba(30,55,90,.05)}
-.card:hover{border-color:#9bb0ec;transform:translateY(-1px)}
-.card h2{font-size:18px;margin:0 0 8px}.card p{color:var(--muted);line-height:1.45;margin:0}
-.badge{display:inline-block;margin-top:12px;padding:6px 9px;border-radius:999px;background:#edf3ff;color:var(--blue);font-size:12px;font-weight:700}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+header{
+  background:#fff;
+  border-bottom:1px solid var(--border);
+}
+.wrap{
+  max-width:1000px;
+  margin:auto;
+  padding:28px 22px;
+}
+h1{margin:0;font-size:28px}
+.subtitle{margin-top:6px;color:var(--muted)}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:18px;
+  margin-top:28px;
+}
+.card{
+  display:block;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:22px;
+  text-decoration:none;
+  color:inherit;
+  box-shadow:0 4px 18px rgba(30,55,90,.05);
+}
+.card:hover{
+  border-color:#9db2ee;
+  transform:translateY(-1px);
+}
+.card h2{margin:0 0 8px;font-size:20px}
+.card p{margin:0;color:var(--muted);line-height:1.45}
+.badge{
+  display:inline-block;
+  margin-top:14px;
+  padding:6px 9px;
+  border-radius:999px;
+  background:var(--blue-soft);
+  color:var(--blue);
+  font-size:12px;
+  font-weight:700;
+}
+.note{
+  margin-top:24px;
+  color:var(--muted);
+  font-size:12px;
+}
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1>Weller Hub</h1><div class="sub">Clinical and personal workspace</div></div></header>
+<header>
+  <div class="wrap">
+    <h1>Weller Hub</h1>
+    <div class="subtitle">Clinical tools and future personal projects</div>
+  </div>
+</header>
 <main class="wrap">
-<div class="grid">
-<a class="card" href="chart-builder.html"><h2>🩺 Chart Builder</h2><p>Full clinical chart and optical recommendation builder.</p><span class="badge">Open</span></a>
-<a class="card" href="offline-chart-builder.html"><h2>📋 Offline Phrase Builder</h2><p>Lightweight phrase picker for rapid copy and paste.</p><span class="badge">Open</span></a>
-<div class="card"><h2>📖 Clinical Handbook</h2><p>Searchable clinical reference.</p><span class="badge">Coming next</span></div>
-<div class="card"><h2>🍳 Kitchen OS</h2><p>Meal preparation and recipe workspace.</p><span class="badge">Coming next</span></div>
-</div>
+  <div class="grid">
+    <a class="card" href="chart-builder.html">
+      <h2>Dr. Weller's Chart Builder</h2>
+      <p>The full working chart and optical recommendation builder developed from the original HTML versions.</p>
+      <span class="badge">Primary tool</span>
+    </a>
+
+    <a class="card" href="offline-chart-builder.html">
+      <h2>Offline Phrase Builder</h2>
+      <p>A lightweight backup for selecting, editing, copying, and pasting common chart phrases.</p>
+      <span class="badge">Backup tool</span>
+    </a>
+
+    <div class="card">
+      <h2>Clinical Handbook</h2>
+      <p>This module will be added after the Chart Builder baseline is stable.</p>
+      <span class="badge">Coming later</span>
+    </div>
+
+    <div class="card">
+      <h2>Kitchen OS / Meal Prep</h2>
+      <p>Your meal prep and nutrition projects will be added to this same website later.</p>
+      <span class="badge">Coming later</span>
+    </div>
+  </div>
+
+  <div class="note">
+    This baseline stores no patient-identifying information. Review generated text before placing it in the medical record.
+  </div>
 </main>
 </body>
 </html>
