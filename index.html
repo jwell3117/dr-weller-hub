@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dr. Weller's Chart Builder v0.31</title>
+<title>Dr. Weller's Chart Builder v0.32</title>
 <style>
 :root{
   --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#64748b;--border:#d9e2ef;
@@ -64,13 +64,20 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 
 .support-alert{margin-top:10px;padding:10px 12px;border-radius:8px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:12px;display:none}
 .support-ok{background:#ecfdf5;border-color:#a7f3d0;color:#065f46}
-.support-grid{grid-template-columns:repeat(3,minmax(0,1fr))}</style>
+.support-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.icd-card{border:2px solid #bfdbfe;background:#f8fbff}
+.icd-status{font-size:12px;font-weight:700;margin-bottom:10px;padding:8px 10px;border-radius:8px;background:#fff7ed;color:#9a3412}
+.icd-status.ready{background:#ecfdf5;color:#065f46}
+.icd-code{font-family:Consolas,Monaco,monospace;font-size:24px;font-weight:800;letter-spacing:.4px;color:#1d4ed8;margin:6px 0}
+.icd-description{font-size:14px;line-height:1.45;margin-bottom:10px}
+.icd-warning{font-size:11px;color:#64748b;line-height:1.35;margin-top:10px}
+</style>
 </head>
 <body>
 <header>
 <div class="header-inner">
-<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.31 expanded umbrella diagnoses</div></div>
-<div class="badge">v0.31 • No patient data stored</div>
+<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.32 umbrella diagnoses + ICD-10 assistant</div></div>
+<div class="badge">v0.32 • No patient data stored</div>
 </div>
 </header>
 <div class="container">
@@ -506,6 +513,19 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 </div>
 <div class="small" id="copyStatus" style="margin-top:9px"></div>
 </div>
+<div class="card icd-card">
+<h2>ICD-10 Assistant</h2>
+<div class="icd-status" id="icdStatus">Select a diagnosis and required details.</div>
+<div class="icd-code" id="icdCode">—</div>
+<div class="icd-description" id="icdDescription">No code generated.</div>
+<div class="actions">
+<button class="primary" onclick="copyIcdCode()" type="button">Copy Code</button>
+<button class="success" onclick="copyIcdBoth()" type="button">Copy Code + Description</button>
+<button class="secondary" onclick="clearIcdOutput()" type="button">Clear</button>
+</div>
+<div class="small" id="icdCopyStatus" style="margin-top:9px"></div>
+<div class="icd-warning">Decision support only. Verify the final code, exclusions, encounter details, and payer requirements in the current ICD-10-CM code set/EHR before claim submission.</div>
+</div>
 <div class="card lens-output">
 <h2>Lens Recommendations for Rx Printout</h2>
 <textarea id="lensOutput" placeholder="Lens recommendations will appear here separately."></textarea>
@@ -617,6 +637,7 @@ function showDiagnosis(){
   document.getElementById(select.value).classList.add('active');
   clearChartOutput();
   clearLensOutput();
+  updateIcdOutput();
   if(document.getElementById('materialSummary')) document.getElementById('materialSummary').textContent='No Rx-based material recommendation applied.';
   if(document.getElementById('supportSummary')) document.getElementById('supportSummary').textContent='No near-support recommendation applied.';
   if(document.getElementById('supportAlert')) document.getElementById('supportAlert').style.display='none';
@@ -734,6 +755,186 @@ function renderStructuredNote(groups){
   return blocks.join('\n\n');
 }
 
+
+function icdLateralitySuffix(lat, right='1', left='2', bilateral='3', unspecified='9'){
+  return lat==='OD'?right:lat==='OS'?left:lat==='OU'?bilateral:unspecified;
+}
+function icdResult(code,description,status='ready',message='ICD-10 code generated from current selections.'){
+  return {code,description,status,message};
+}
+function icdNeeds(message){return {code:'',description:'',status:'needs',message};}
+
+function diabetesIcd(){
+  const type=document.getElementById('dmType').value;
+  const stage=document.getElementById('dmStage').value;
+  const dme=document.getElementById('dmDme').value;
+  const lat=document.getElementById('dmLaterality').value;
+  if(!type) return icdNeeds('Select diabetes type.');
+  if(!stage) return icdNeeds('Select retinopathy stage.');
+  if(stage==='No diabetic retinopathy'){
+    if(type==='Type 1 diabetes mellitus') return icdResult('E10.9','Type 1 diabetes mellitus without complications');
+    if(type==='Type 2 diabetes mellitus') return icdResult('E11.9','Type 2 diabetes mellitus without complications');
+    if(type==='Other specified diabetes mellitus') return icdResult('E13.9','Other specified diabetes mellitus without complications');
+    return icdNeeds('This diabetes type requires cause/trimester details for accurate coding. Search the EHR manually.');
+  }
+  if(!dme) return icdNeeds('Select macular edema status.');
+  if(!lat || lat==='Asymmetric between eyes') return icdNeeds(lat==='Asymmetric between eyes'?'Code each eye separately; asymmetric disease needs eye-specific selections.':'Select laterality.');
+  const prefix=type==='Type 1 diabetes mellitus'?'E10':type==='Type 2 diabetes mellitus'?'E11':type==='Other specified diabetes mellitus'?'E13':'';
+  if(!prefix) return icdNeeds('This diabetes category needs etiology-specific coding. Search the EHR manually.');
+  const suffix=icdLateralitySuffix(lat);
+  const withDme=dme==='With diabetic macular edema';
+  const noDme=dme==='Without diabetic macular edema';
+  if(!withDme && !noDme) return icdNeeds('Macular edema status must be known for a specific retinopathy code.');
+  const table={
+    'Mild nonproliferative diabetic retinopathy':withDme?'321':'329',
+    'Moderate nonproliferative diabetic retinopathy':withDme?'331':'339',
+    'Severe nonproliferative diabetic retinopathy':withDme?'341':'349',
+    'Proliferative diabetic retinopathy':withDme?'351':'359'
+  };
+  if(stage==='Regressed / treated proliferative diabetic retinopathy'){
+    if(withDme) return icdNeeds('Treated/stable PDR with DME requires more specific activity and treatment-status details.');
+    const code=prefix+'.355'+suffix;
+    return icdResult(code,type+' with stable proliferative diabetic retinopathy without macular edema, '+({OD:'right eye',OS:'left eye',OU:'bilateral'})[lat]);
+  }
+  const stem=table[stage];
+  if(!stem) return icdNeeds('Select a codable retinopathy stage.');
+  const descStage=stage.toLowerCase();
+  const descDme=withDme?'with macular edema':'without macular edema';
+  const eye={OD:'right eye',OS:'left eye',OU:'bilateral'}[lat];
+  return icdResult(prefix+'.'+stem+suffix,`${type} with ${descStage} ${descDme}, ${eye}`);
+}
+
+function cataractIcd(){
+  const type=document.getElementById('catType').value, lat=document.getElementById('catLaterality').value;
+  if(!type) return icdNeeds('Select cataract morphology/type.');
+  if(!lat) return icdNeeds('Select laterality.');
+  const eye={OD:'right eye',OS:'left eye',OU:'bilateral'}[lat];
+  const simple={
+    'Nuclear sclerotic cataract':['H25.1','Age-related nuclear cataract'],
+    'Cortical cataract':['H25.01','Cortical age-related cataract'],
+    'Posterior subcapsular cataract':['H25.04','Posterior subcapsular polar age-related cataract'],
+    'Anterior subcapsular cataract':['H25.03','Anterior subcapsular polar age-related cataract'],
+    'Mixed age-related cataract':['H25.81','Combined forms of age-related cataract']
+  };
+  if(simple[type]){
+    const [base,desc]=simple[type];
+    const code=base+icdLateralitySuffix(lat,'1','2','3','9');
+    return icdResult(code,`${desc}, ${eye}`);
+  }
+  if(type==='Posterior capsular opacification'){
+    const code='H26.49'+icdLateralitySuffix(lat,'1','2','3','9');
+    return icdResult(code,`Other secondary cataract / posterior capsular opacification, ${eye}`,'ready','Generated as H26.49x; confirm the EHR description matches posterior capsular opacification.');
+  }
+  return icdNeeds('This lens opacity requires additional etiology or age details for accurate coding.');
+}
+
+function dryEyeIcd(){
+  const type=document.getElementById('deType').value, lat=document.getElementById('deLaterality').value;
+  if(!type) return icdNeeds('Select dry-eye mechanism.');
+  if(!lat) return icdNeeds('Select laterality.');
+  const code='H04.12'+icdLateralitySuffix(lat,'1','2','3','9');
+  const eye={OD:'right lacrimal gland',OS:'left lacrimal gland',OU:'bilateral lacrimal glands'}[lat];
+  let message='Dry eye syndrome code generated.';
+  if(type.includes('MGD')||type.includes('Evaporative')) message='Primary dry-eye code generated. Consider an additional meibomian-gland dysfunction code when clinically documented.';
+  if(type.includes('Neurotrophic')) return icdNeeds('Neurotrophic disease is not adequately represented by a generic dry-eye code; grade the keratopathy and select the specific corneal code in the EHR.');
+  return icdResult(code,`Dry eye syndrome of ${eye}`,'ready',message);
+}
+
+function glaucomaIcd(){
+  const type=document.getElementById('glType').value, stage=document.getElementById('glStage').value, lat=document.getElementById('glLaterality').value;
+  if(!type) return icdNeeds('Select glaucoma type.');
+  if(!lat) return icdNeeds('Select laterality.');
+  const eye={OD:'right eye',OS:'left eye',OU:'bilateral'}[lat];
+  if(type==='Ocular hypertension') return icdResult('H40.05'+icdLateralitySuffix(lat),`Ocular hypertension, ${eye}`);
+  if(type==='Glaucoma suspect') return icdResult('H40.00'+icdLateralitySuffix(lat),`Glaucoma suspect, ${eye}`);
+  if(type==='Anatomical narrow angles') return icdResult('H40.03'+icdLateralitySuffix(lat),`Anatomical narrow angle, ${eye}`);
+  const bases={
+    'Primary open-angle glaucoma':'H40.11',
+    'Low/normal-tension glaucoma':'H40.12',
+    'Pigmentary glaucoma':'H40.13',
+    'Pseudoexfoliative glaucoma':'H40.14',
+    'Chronic angle-closure glaucoma':'H40.22'
+  };
+  if(!bases[type]) return icdNeeds('This glaucoma type requires additional cause or episode details for accurate coding.');
+  if(!stage || stage==='Suspect / no established damage') return icdNeeds('Select glaucoma stage.');
+  const stageDigit={Mild:'1',Moderate:'2',Severe:'3',Indeterminate:'4'}[stage];
+  if(!stageDigit) return icdNeeds('Select a codable glaucoma stage.');
+  const latDigit=icdLateralitySuffix(lat,'1','2','3','9');
+  return icdResult(bases[type]+latDigit+stageDigit,`${type}, ${eye}, ${stage.toLowerCase()} stage`);
+}
+
+function amdIcd(){
+  const phenotype=document.getElementById('amdPhenotype').value, stage=document.getElementById('amdStage').value, lat=document.getElementById('amdLaterality').value;
+  if(!phenotype) return icdNeeds('Select AMD phenotype.');
+  if(!stage) return icdNeeds('Select AMD stage/activity.');
+  if(!lat) return icdNeeds('Select laterality.');
+  const eye={OD:'right eye',OS:'left eye',OU:'bilateral'}[lat];
+  const latDigit=icdLateralitySuffix(lat,'1','2','3','9');
+  if(phenotype==='Nonexudative AMD' || phenotype==='Geographic atrophy'){
+    const stageDigit={
+      'Early':'1','Intermediate':'2',
+      'Advanced nonexudative without subfoveal involvement':'3',
+      'Advanced nonexudative with subfoveal involvement':'4'
+    }[stage];
+    if(!stageDigit) return icdNeeds('Select a nonexudative AMD stage.');
+    return icdResult('H35.31'+latDigit+stageDigit,`Nonexudative age-related macular degeneration, ${eye}, ${stage.toLowerCase()}`);
+  }
+  if(phenotype==='Exudative AMD' || phenotype==='Inactive choroidal neovascularization' || phenotype==='History of exudative AMD'){
+    const activity=stage==='Active exudative'?'1':stage==='Inactive scar'?'3':phenotype==='Inactive choroidal neovascularization'?'2':'';
+    if(!activity) return icdNeeds('Select active exudation, inactive CNV, or inactive scar.');
+    const desc=activity==='1'?'with active choroidal neovascularization':activity==='2'?'with inactive choroidal neovascularization':'with inactive scar';
+    return icdResult('H35.32'+latDigit+activity,`Exudative age-related macular degeneration, ${eye}, ${desc}`);
+  }
+  return icdNeeds('Selections do not map to a specific AMD code.');
+}
+
+function refractiveIcd(){
+  const checked=[...activeSection().querySelectorAll('input[data-diagnosis]:checked')].map(x=>x.dataset.diagnosis);
+  if(checked.length!==1) return icdNeeds(checked.length?'Select one refractive diagnosis at a time for a specific code.':'Select a refractive diagnosis.');
+  const map={myopia:['H52.10','Myopia, unspecified eye'],hyperopia:['H52.00','Hypermetropia, unspecified eye'],'regular astigmatism':['H52.229','Regular astigmatism, unspecified eye'],presbyopia:['H52.4','Presbyopia'],anisometropia:['H52.31','Anisometropia'],'high myopia':['H52.10','Myopia, unspecified eye']};
+  return icdResult(...map[checked[0]],'ready','Refractive section does not yet collect laterality; an unspecified-eye code is shown where applicable.');
+}
+
+function currentIcdResult(){
+  const id=activeSection()?.id;
+  if(id==='diabetes') return diabetesIcd();
+  if(id==='cataract') return cataractIcd();
+  if(id==='dryeye') return dryEyeIcd();
+  if(id==='glaucoma') return glaucomaIcd();
+  if(id==='amd') return amdIcd();
+  if(id==='refractive') return refractiveIcd();
+  const staticMap={
+    pvd:['H43.819','Vitreous degeneration / posterior vitreous detachment, unspecified eye'],
+    blepharitis:['H01.009','Unspecified blepharitis, unspecified eye and eyelid'],
+    allergy:['H10.10','Acute atopic conjunctivitis, unspecified eye'],
+    bacterial:['H10.9','Unspecified conjunctivitis'],
+    abrasion:['S05.00XA','Injury of conjunctiva and corneal abrasion without foreign body, unspecified eye, initial encounter']
+  };
+  if(staticMap[id]) return icdResult(...staticMap[id],'ready','A broad default code is shown because this section does not yet collect all required specificity. Verify and refine in the EHR.');
+  return icdNeeds('ICD-10 output is not applicable to this interpretation module.');
+}
+
+function updateIcdOutput(){
+  const r=currentIcdResult();
+  const status=document.getElementById('icdStatus');
+  document.getElementById('icdCode').textContent=r.code||'—';
+  document.getElementById('icdDescription').textContent=r.description||'No code generated.';
+  status.textContent=r.message;
+  status.className='icd-status'+(r.status==='ready'?' ready':'');
+  document.getElementById('icdCopyStatus').textContent='';
+}
+async function copyTextSafe(text,statusId){
+  if(!text){document.getElementById(statusId).textContent='Nothing to copy yet.';return;}
+  try{await navigator.clipboard.writeText(text);}catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}
+  document.getElementById(statusId).textContent='Copied to clipboard.';
+}
+function copyIcdCode(){copyTextSafe(document.getElementById('icdCode').textContent==='—'?'':document.getElementById('icdCode').textContent,'icdCopyStatus');}
+function copyIcdBoth(){
+  const code=document.getElementById('icdCode').textContent, desc=document.getElementById('icdDescription').textContent;
+  copyTextSafe(code==='—'?'':code+' — '+desc,'icdCopyStatus');
+}
+function clearIcdOutput(){document.getElementById('icdCode').textContent='—';document.getElementById('icdDescription').textContent='No code generated.';document.getElementById('icdStatus').textContent='Select a diagnosis and required details.';document.getElementById('icdStatus').className='icd-status';document.getElementById('icdCopyStatus').textContent='';}
+
 function generateNote(){
   const section=activeSection();
   if(!section) return;
@@ -832,6 +1033,7 @@ function generateNote(){
   if(document.getElementById('understanding').checked) groups.education.push('Patient confirms understanding and denies further questions.');
 
   document.getElementById('output').value=renderStructuredNote(groups);
+  updateIcdOutput();
 }
 
 async function copyChartNote(){
@@ -1077,6 +1279,7 @@ function clearAll(){
   const alert=document.getElementById('supportAlert'); if(alert)alert.style.display='none';
   clearChartOutput();
   clearLensOutput();
+  updateIcdOutput();
 }
 
 document.addEventListener('change',e=>{
