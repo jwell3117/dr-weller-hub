@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dr. Weller's Chart Builder v0.30</title>
+<title>Dr. Weller's Chart Builder v0.31</title>
 <style>
 :root{
   --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#64748b;--border:#d9e2ef;
@@ -69,8 +69,8 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <body>
 <header>
 <div class="header-inner">
-<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.30 clinic-ready structured notes</div></div>
-<div class="badge">v0.30 • No patient data stored</div>
+<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.31 expanded umbrella diagnoses</div></div>
+<div class="badge">v0.31 • No patient data stored</div>
 </div>
 </header>
 <div class="container">
@@ -86,7 +86,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <option value="glaucoma">Glaucoma</option>
 <option value="cataract">Cataracts</option>
 <option value="pvd">PVD / Symptomatic Floaters</option>
-<option value="diabetes">Diabetes Without Retinopathy</option>
+<option value="diabetes">Diabetes Mellitus / Diabetic Retinopathy</option>
 <option value="contact">Contact Lens Annual</option>
 <option value="blepharitis">Blepharitis</option><option value="allergy">Allergic Conjunctivitis</option><option value="bacterial">Bacterial Conjunctivitis</option><option value="abrasion">Corneal Abrasion</option><option value="visualfield">Visual Field Interpretation</option><option value="oct">OCT Interpretation</option></select>
 <button class="secondary" onclick="clearAll()">Clear Current Diagnosis</button>
@@ -227,50 +227,36 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 </div></div>
 </section>
 <section class="section" id="dryeye">
-<div class="card"><h2>Dry Eye / MGD</h2><div class="small">ICD-10 families: H04.12, H02.88, H16.22 — complete laterality/type in EHR.</div></div>
-<div class="card">
-<h2>Assessment</h2>
-<div class="grid">
-<label class="option"><input data-text="Educated patient on diagnosis of dry eye disease." type="checkbox"/>Dry eye diagnosis</label>
-<label class="option"><input data-text="Educated patient on diagnosis of evaporative dry eye secondary to meibomian gland dysfunction." type="checkbox"/>Evaporative/MGD</label>
-<label class="option"><input data-text="Educated patient on diagnosis of aqueous-deficient dry eye." type="checkbox"/>Aqueous deficient</label>
-<label class="option"><input data-text="Educated patient on stability of condition." type="checkbox"/>Stable</label>
-<label class="option"><input data-text="Educated patient that condition has improved." type="checkbox"/>Improved</label>
-<label class="option"><input data-text="Educated patient that condition has slightly progressed." type="checkbox"/>Slightly progressed</label>
-</div>
-</div>
-<div class="card">
-<h2>Testing</h2>
-<div class="grid">
+<div class="card"><h2>Dry Eye Disease / MGD</h2><div class="small">Umbrella diagnosis. Select mechanism, severity, laterality, status, testing, education, and treatment. Confirm the final ICD-10 code and prescription details in the EHR.</div></div>
+<div class="card"><h2>Diagnosis Classification</h2><div class="inline-grid">
+<div class="field"><label>Primary mechanism</label><select id="deType"><option value="">Select...</option><option>Evaporative dry eye / MGD</option><option>Aqueous-deficient dry eye</option><option>Mixed-mechanism dry eye</option><option>Exposure-related dry eye</option><option>Neurotrophic ocular surface disease</option><option>Contact lens-associated dry eye</option><option>Unspecified dry eye disease</option></select></div>
+<div class="field"><label>Severity</label><select id="deSeverity"><option value="">Select...</option><option>Mild</option><option>Moderate</option><option>Severe</option><option>Indeterminate</option></select></div>
+<div class="field"><label>Laterality</label><select id="deLaterality"><option value="">Select...</option><option>OD</option><option>OS</option><option>OU</option></select></div>
+<div class="field"><label>Status</label><select id="deStatus"><option value="">Select...</option><option>Newly diagnosed</option><option>Stable</option><option>Improved</option><option>Persistent</option><option>Worsened</option><option>Acute flare</option></select></div>
+</div></div>
+<div class="card"><h2>Clinical Findings &amp; Testing</h2><div class="grid">
 <label class="option"><input data-text="Tear breakup time was evaluated with fluorescein." type="checkbox"/>TBUT</label>
-<label class="option"><input data-text="Fluorescein showed positive staining indicative of dry eye." type="checkbox"/>NaFl staining</label>
-<label class="option"><input data-text="Lissamine green staining was evaluated." type="checkbox"/>LG staining</label>
-<label class="option"><input data-text="Schirmer testing was performed due to concern for aqueous deficiency." type="checkbox"/>Schirmer</label>
-</div>
-</div>
-<div class="card">
-<h2>Treatment</h2>
-<h3>Conservative</h3>
-<div class="grid">
-<label class="option"><input data-text="Recommended OTC artificial tears as needed." type="checkbox"/>OTC ATs PRN</label>
-<label class="option"><input data-text="Recommended preservative-free artificial tears QID." type="checkbox"/>PF ATs QID</label>
-<label class="option"><input data-text="Recommended warm compresses for 10 minutes BID." type="checkbox"/>Warm compresses 10 min BID</label>
-<label class="option"><input data-text="Recommended lid hygiene." type="checkbox"/>Lid hygiene</label>
-</div>
-<h3>Prescription / Escalation</h3>
-<div class="grid">
-<label class="option"><input data-text="Discussed a short pulse of generic loteprednol for ocular surface inflammation, with dosing and taper to be individualized." type="checkbox"/>Consider loteprednol pulse</label>
-<label class="option"><input data-text="Discussed future prescription anti-inflammatory therapy, including lifitegrast or cyclosporine options, if symptoms persist." type="checkbox"/>Discuss Xiidra/Restasis/Cequa</label>
-<label class="option"><input data-text="Discussed Miebo as a future treatment option for evaporative dry eye if indicated." type="checkbox"/>Discuss Miebo</label>
-<label class="option"><input data-text="Discussed future procedural options, including IPL and meibomian gland expression, if conservative therapy is inadequate." type="checkbox"/>Discuss IPL/MG expression</label>
-</div>
-<h3>Contact Lens Considerations</h3>
-<div class="grid">
-<label class="option"><input data-text="Reviewed contact lens hygiene and recommended daily disposable lenses when feasible." type="checkbox"/>Daily disposable recommendation</label>
+<label class="option"><input data-text="Fluorescein staining demonstrated ocular surface epithelial compromise." type="checkbox"/>NaFl staining</label>
+<label class="option"><input data-text="Lissamine green staining was evaluated to assess conjunctival and corneal surface disease." type="checkbox"/>Lissamine staining</label>
+<label class="option"><input data-text="Schirmer testing was performed due to concern for aqueous tear deficiency." type="checkbox"/>Schirmer</label>
+<label class="option"><input data-text="Meibomian gland structure and function were evaluated, including lid margin findings and gland expression." type="checkbox"/>MG evaluation</label>
+<label class="option"><input data-text="Incomplete blink and/or exposure was noted as a contributing factor." type="checkbox"/>Blink/exposure finding</label>
+</div></div>
+<div class="card"><h2>Treatment &amp; Education</h2><h3>Foundational Therapy</h3><div class="grid">
+<label class="option"><input data-text="Recommended preservative-free artificial tears up to QID or more frequently as needed." type="checkbox"/>PF tears</label>
+<label class="option"><input data-text="Recommended warm compresses for 10 minutes once to twice daily with gentle lid massage." type="checkbox"/>Warm compresses</label>
+<label class="option"><input data-text="Recommended daily lid hygiene and reviewed proper technique." type="checkbox"/>Lid hygiene</label>
+<label class="option"><input data-text="Reviewed environmental and behavioral modifications, including hydration, blink breaks, airflow avoidance, and humidification." type="checkbox"/>Environment/blink education</label>
+<label class="option"><input data-text="Recommended omega-3 dietary intake if medically appropriate and discussed coordination with the patient's medical provider when needed." type="checkbox"/>Omega-3 discussion</label>
 <label class="option"><input data-text="Recommended a contact lens holiday until the ocular surface improves." type="checkbox"/>CL holiday</label>
-<label class="option"><input data-text="Discussed periodic hydrogen peroxide-based disinfection with Clear Care for reusable lenses and reviewed proper neutralization." type="checkbox"/>Clear Care discussion</label>
-</div>
-</div>
+</div><h3>Prescription / Procedural Escalation</h3><div class="grid">
+<label class="option"><input data-text="A short course of topical corticosteroid therapy was discussed or initiated for ocular surface inflammation; dosing, duration, contraindications, and follow-up are documented separately." type="checkbox"/>Steroid pulse</label>
+<label class="option"><input data-text="Prescription anti-inflammatory dry eye therapy was discussed or initiated; the selected medication, dosing, and follow-up are documented separately." type="checkbox"/>Xiidra / cyclosporine</label>
+<label class="option"><input data-text="Perfluorohexyloctane therapy was discussed or initiated for evaporative dry eye; dosing and follow-up are documented separately." type="checkbox"/>Miebo</label>
+<label class="option"><input data-text="Punctal occlusion was discussed as a treatment option after addressing clinically significant ocular surface inflammation." type="checkbox"/>Punctal plugs</label>
+<label class="option"><input data-text="In-office treatment options, including intense pulsed light and/or meibomian gland expression, were discussed for persistent evaporative disease." type="checkbox"/>IPL / expression</label>
+<label class="option"><input data-text="Referral for advanced ocular surface evaluation was recommended due to severity, atypical findings, or inadequate response to treatment." type="checkbox"/>Refer ocular surface</label>
+</div></div>
 </section>
 <section class="section" id="glaucoma">
 <div class="card"><h2>Glaucoma</h2><div class="small">Umbrella diagnosis. Select angle class, diagnosis, stage, laterality, status, testing, education, and plan. Confirm coding and stage criteria in the EHR.</div></div>
@@ -300,26 +286,31 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 </div></div>
 </section>
 <section class="section" id="cataract">
-<div class="card"><h2>Cataracts</h2><div class="small">ICD-10 family: H25 — select morphology and laterality in EHR.</div></div>
-<div class="card">
-<h2>Assessment</h2>
-<div class="grid">
-<label class="option"><input data-text="Educated patient on diagnosis of age-related cataracts." type="checkbox"/>Diagnosis discussed</label>
-<label class="option"><input data-text="Educated patient on stability of condition." type="checkbox"/>Stable</label>
-<label class="option"><input data-text="Educated patient that cataracts have slightly progressed." type="checkbox"/>Slightly progressed</label>
-<label class="option"><input data-text="Educated patient that cataracts are contributing to reduced visual function." type="checkbox"/>Visually significant</label>
-</div>
-</div>
-<div class="card">
-<h2>Plan &amp; Education</h2>
-<div class="grid">
-<label class="option"><input data-text="Plan is to monitor at this time." type="checkbox"/>Monitor</label>
-<label class="option"><input data-text="Discussed cataract surgery versus continued monitoring based on objective findings and the patient's subjective visual limitations." type="checkbox"/>Discuss surgery vs monitor</label>
-<label class="option"><input data-text="Patient elected referral for cataract surgical evaluation." type="checkbox"/>Referral elected</label>
-<label class="option"><input data-text="Educated patient on the importance of UV protection." type="checkbox"/>UV protection</label>
-<label class="option"><input data-text="Recommended updated spectacle correction while cataracts remain non-surgical." type="checkbox"/>Update spectacles</label>
-</div>
-</div>
+<div class="card"><h2>Cataract / Lens Opacity</h2><div class="small">Umbrella diagnosis. Select morphology, functional significance, laterality, status, education, and plan. Confirm the final ICD-10 code in the EHR.</div></div>
+<div class="card"><h2>Diagnosis Classification</h2><div class="inline-grid">
+<div class="field"><label>Morphology / type</label><select id="catType"><option value="">Select...</option><option>Nuclear sclerotic cataract</option><option>Cortical cataract</option><option>Posterior subcapsular cataract</option><option>Mixed age-related cataract</option><option>Anterior subcapsular cataract</option><option>Traumatic cataract</option><option>Drug-induced cataract</option><option>Congenital/developmental cataract</option><option>Posterior capsular opacification</option><option>Unspecified lens opacity</option></select></div>
+<div class="field"><label>Functional significance</label><select id="catSignificance"><option value="">Select...</option><option>Not visually significant</option><option>Mild visual impact</option><option>Visually significant</option><option>Surgical threshold met</option><option>Indeterminate</option></select></div>
+<div class="field"><label>Laterality</label><select id="catLaterality"><option value="">Select...</option><option>OD</option><option>OS</option><option>OU</option></select></div>
+<div class="field"><label>Status</label><select id="catStatus"><option value="">Select...</option><option>Newly diagnosed</option><option>Stable</option><option>Slightly progressed</option><option>Progressed</option><option>Postoperative / pseudophakic</option></select></div>
+</div></div>
+<div class="card"><h2>Functional Findings</h2><div class="grid">
+<label class="option"><input data-text="The lens opacity is not currently causing a meaningful reduction in visual function." type="checkbox"/>No meaningful impact</label>
+<label class="option"><input data-text="Cataract is contributing to reduced best-corrected visual acuity." type="checkbox"/>Reduced BCVA</label>
+<label class="option"><input data-text="Cataract is contributing to glare, halos, or reduced night-driving function." type="checkbox"/>Glare/night driving</label>
+<label class="option"><input data-text="Cataract is contributing to reduced contrast sensitivity or difficulty with activities of daily living." type="checkbox"/>ADL/contrast impact</label>
+<label class="option"><input data-text="A change in spectacle correction was evaluated, but lens opacity remains a limiting factor." type="checkbox"/>Rx limited by cataract</label>
+<label class="option"><input data-text="Posterior segment visualization is limited by lens opacity." type="checkbox"/>Limits retinal view</label>
+</div></div>
+<div class="card"><h2>Education &amp; Plan</h2><div class="grid">
+<label class="option"><input data-text="Educated patient on the diagnosis, expected progression, and relationship between cataract and visual symptoms." type="checkbox"/>Diagnosis education</label>
+<label class="option"><input data-text="Plan is to monitor the cataract at routine examination, or sooner with worsening visual function." type="checkbox"/>Monitor</label>
+<label class="option"><input data-text="Recommended updated spectacle correction while the cataract remains below the surgical threshold." type="checkbox"/>Update spectacles</label>
+<label class="option"><input data-text="Discussed cataract surgery versus continued monitoring based on objective findings and the patient's subjective visual limitations." type="checkbox"/>Surgery vs monitor</label>
+<label class="option"><input data-text="Patient elected referral for cataract surgical evaluation." type="checkbox"/>Refer for surgery</label>
+<label class="option"><input data-text="Discussed general cataract surgery considerations, including refractive expectations, glare, infection, retinal complications, and the possibility of residual spectacle dependence." type="checkbox"/>Surgical counseling</label>
+<label class="option"><input data-text="Educated patient on the importance of ultraviolet protection." type="checkbox"/>UV protection</label>
+<label class="option"><input data-text="Referral for YAG capsulotomy evaluation was recommended due to visually significant posterior capsular opacification." type="checkbox"/>YAG referral</label>
+</div></div>
 </section>
 <section class="section" id="pvd">
 <div class="card"><h2>PVD / Symptomatic Floaters</h2><div class="small">ICD-10 family: H43.81 / H43.39 — select laterality and diagnosis in EHR.</div></div>
@@ -343,24 +334,33 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 </div>
 </section>
 <section class="section" id="diabetes">
-<div class="card"><h2>Diabetes Without Retinopathy</h2><div class="small">ICD-10 family: E11.9 / E10.9 — select diabetes type and ocular status in EHR.</div></div>
-<div class="card">
-<h2>Assessment &amp; Testing</h2>
-<div class="grid">
-<label class="option"><input data-text="Educated patient on the ocular effects of diabetes." type="checkbox"/>Diabetes education</label>
-<label class="option"><input data-text="No diabetic retinopathy was noted in either eye on today's examination." type="checkbox"/>No retinopathy OU</label>
+<div class="card"><h2>Diabetes Mellitus / Diabetic Retinopathy</h2><div class="small">Umbrella diagnosis. Select diabetes type, retinal stage, macular edema status, laterality, disease status, testing, education, and follow-up. Confirm the final ICD-10 code and systemic diagnosis details in the EHR.</div></div>
+<div class="card"><h2>Diagnosis Classification</h2><div class="inline-grid">
+<div class="field"><label>Diabetes type</label><select id="dmType"><option value="">Select...</option><option>Type 1 diabetes mellitus</option><option>Type 2 diabetes mellitus</option><option>Other specified diabetes mellitus</option><option>Secondary diabetes mellitus</option><option>Gestational diabetes mellitus</option><option>Diabetes type not documented</option></select></div>
+<div class="field"><label>Retinopathy stage</label><select id="dmStage"><option value="">Select...</option><option>No diabetic retinopathy</option><option>Mild nonproliferative diabetic retinopathy</option><option>Moderate nonproliferative diabetic retinopathy</option><option>Severe nonproliferative diabetic retinopathy</option><option>Proliferative diabetic retinopathy</option><option>Regressed / treated proliferative diabetic retinopathy</option><option>Indeterminate retinopathy stage</option></select></div>
+<div class="field"><label>Macular edema</label><select id="dmDme"><option value="">Select...</option><option>Without diabetic macular edema</option><option>With diabetic macular edema</option><option>Macular edema status indeterminate</option></select></div>
+<div class="field"><label>Laterality</label><select id="dmLaterality"><option value="">Select...</option><option>OD</option><option>OS</option><option>OU</option><option>Asymmetric between eyes</option></select></div>
+<div class="field"><label>Current status</label><select id="dmStatus"><option value="">Select...</option><option>Newly diagnosed ocular finding</option><option>Stable</option><option>Improved</option><option>Possible progression</option><option>Progressed</option><option>Status uncertain / no comparison</option></select></div>
+<div class="field"><label>Systemic control</label><select id="dmControl"><option value="">Select if known...</option><option>Reported well controlled</option><option>Reported variable control</option><option>Reported poorly controlled</option><option>Control not documented today</option></select></div>
+</div></div>
+<div class="card"><h2>Examination &amp; Testing</h2><div class="grid">
 <label class="option"><input data-text="Dilated fundus examination was performed today." type="checkbox"/>DFE</label>
-<label class="option"><input data-text="Macular OCT was performed due to reduced visual acuity or concern for macular involvement." type="checkbox"/>Mac OCT indicated</label>
-</div>
-</div>
-<div class="card">
-<h2>Plan &amp; Education</h2>
-<div class="grid">
-<label class="option"><input data-text="Discussed the importance of blood glucose, blood pressure, and lipid control." type="checkbox"/>Systemic control</label>
+<label class="option"><input data-text="Macular OCT was performed and reviewed to evaluate for diabetic macular edema or other macular pathology." type="checkbox"/>Macular OCT</label>
+<label class="option"><input data-text="Fundus photography was performed and reviewed for documentation of diabetic retinal findings." type="checkbox"/>Fundus photos</label>
+<label class="option"><input data-text="The peripheral retina was evaluated for neovascularization, hemorrhage, and other diabetic retinal complications." type="checkbox"/>Peripheral retinal evaluation</label>
+<label class="option"><input data-text="No diabetic retinopathy was noted in either eye on today's examination." type="checkbox"/>No retinopathy OU</label>
+<label class="option"><input data-text="No clinically apparent diabetic macular edema was identified on today's examination." type="checkbox"/>No DME clinically</label>
+</div></div>
+<div class="card"><h2>Education &amp; Plan</h2><div class="grid">
+<label class="option"><input data-text="Educated patient on the ocular effects of diabetes and the importance of regular dilated retinal examinations." type="checkbox"/>Diabetes eye education</label>
+<label class="option"><input data-text="Discussed the importance of blood glucose, blood pressure, and lipid control in reducing the risk of diabetic eye disease progression." type="checkbox"/>Systemic control</label>
 <label class="option"><input data-text="Recommended continued care with the patient's primary care provider and/or endocrinologist." type="checkbox"/>Continue PCP/endocrine care</label>
-<label class="option"><input data-text="A report will be sent to the patient's primary care provider." type="checkbox"/>Send PCP letter</label>
-</div>
-</div>
+<label class="option"><input data-text="A report will be sent to the patient's primary care provider and/or endocrinologist." type="checkbox"/>Send provider letter</label>
+<label class="option"><input data-text="Retina consultation was recommended for further evaluation and management of diabetic retinopathy and/or macular edema." type="checkbox"/>Refer retina</label>
+<label class="option"><input data-text="Reviewed urgent return precautions for sudden vision loss, new distortion, a curtain or shadow, or a marked increase in flashes or floaters." type="checkbox"/>Urgent precautions</label>
+<label class="option"><input data-text="Annual dilated diabetic eye examination was recommended, or sooner if vision changes occur." type="checkbox"/>Annual DFE</label>
+<label class="option"><input data-text="Closer retinal follow-up was recommended based on the severity or uncertainty of today's diabetic retinal findings." type="checkbox"/>Closer follow-up</label>
+</div></div>
 </section>
 <section class="section" id="contact">
 <div class="card"><h2>Contact Lens Annual</h2><div class="small">Use the EHR's contact lens diagnosis and refractive code families as applicable.</div></div>
@@ -526,11 +526,11 @@ const select=document.getElementById('diagnosisSelect');
 const diagnosisMap=[
 {id:'refractive',label:'Refractive Error',keywords:'myopia hyperopia astigmatism presbyopia anisometropia high myopia glasses refraction spectacle progressive multifocal'},
 {id:'amd',label:'Age-Related Macular Degeneration',keywords:'amd age related macular degeneration dry wet exudative nonexudative geographic atrophy drusen areds amsler'},
-{id:'dryeye',label:'Dry Eye / MGD',keywords:'dry eye mgd meibomian irritation burning tears fluorescein staining'},
+{id:'dryeye',label:'Dry Eye Disease / MGD',keywords:'dry eye disease ded mgd meibomian evaporative aqueous deficient mixed exposure ocular surface tears staining schirmer tbut miebo xiidra restasis cequa'},
 {id:'glaucoma',label:'Glaucoma',keywords:'glaucoma suspect ocular hypertension open angle closed angle angle closure poag normal tension pigmentary pseudoexfoliation secondary congenital juvenile'},
-{id:'cataract',label:'Cataracts',keywords:'cataract lens opacity surgery glare'},
+{id:'cataract',label:'Cataract / Lens Opacity',keywords:'cataract lens opacity nuclear sclerosis cortical posterior subcapsular psc mixed pco posterior capsule yag surgery glare night driving'},
 {id:'pvd',label:'PVD / Symptomatic Floaters',keywords:'pvd floaters flashes retinal detachment vitreous'},
-{id:'diabetes',label:'Diabetes Without Retinopathy',keywords:'diabetes diabetic retinopathy dfe mac oct'},
+{id:'diabetes',label:'Diabetes Mellitus / Diabetic Retinopathy',keywords:'diabetes diabetic retinopathy type 1 type 2 npdr pdr proliferative nonproliferative macular edema dme dfe fundus oct'},
 {id:'contact',label:'Contact Lens Annual',keywords:'contact lens annual cl fitting hygiene daily monthly'},
 {id:'blepharitis',label:'Blepharitis',keywords:'blepharitis lids crusting lid hygiene'},
 {id:'allergy',label:'Allergic Conjunctivitis',keywords:'allergy allergic conjunctivitis itching pataday olopatadine'},
@@ -762,6 +762,37 @@ function generateNote(){
     if(dx) groups.assessment.push(dx+'.');
     if(angle) groups.assessment.push('Angle classification: '+angle.toLowerCase()+'.');
     if(status) groups.assessment.push('Current status: '+status.toLowerCase()+'.');
+  }
+  if(section.id==='diabetes'){
+    const type=document.getElementById('dmType').value;
+    const stage=document.getElementById('dmStage').value;
+    const dme=document.getElementById('dmDme').value;
+    const lat=document.getElementById('dmLaterality').value;
+    const status=document.getElementById('dmStatus').value;
+    const control=document.getElementById('dmControl').value;
+    const dx=[type,stage,dme,lat].filter(Boolean).join(', ');
+    if(dx) groups.assessment.push(dx+'.');
+    if(status) groups.assessment.push('Current retinal status: '+status.toLowerCase()+'.');
+    if(control) groups.assessment.push('Systemic diabetic control: '+control.toLowerCase()+'.');
+  }
+  if(section.id==='cataract'){
+    const type=document.getElementById('catType').value;
+    const significance=document.getElementById('catSignificance').value;
+    const lat=document.getElementById('catLaterality').value;
+    const status=document.getElementById('catStatus').value;
+    const dx=[type,lat].filter(Boolean).join(', ');
+    if(dx) groups.assessment.push(dx+'.');
+    if(significance) groups.assessment.push('Functional significance: '+significance.toLowerCase()+'.');
+    if(status) groups.assessment.push('Current status: '+status.toLowerCase()+'.');
+  }
+  if(section.id==='dryeye'){
+    const type=document.getElementById('deType').value;
+    const severity=document.getElementById('deSeverity').value;
+    const lat=document.getElementById('deLaterality').value;
+    const status=document.getElementById('deStatus').value;
+    const dx=[severity,type,lat].filter(Boolean).join(', ');
+    if(dx) groups.assessment.push(dx+'.');
+    if(status) groups.assessment.push('Current ocular surface status: '+status.toLowerCase()+'.');
   }
 
   section.querySelectorAll('input[type=checkbox]:checked').forEach(el=>{
@@ -1032,7 +1063,9 @@ function applySupportRecommendation(){
 }
 
 function clearAll(){
-  activeSection().querySelectorAll('input[type=checkbox]').forEach(x=>x.checked=false);
+  const section=activeSection();
+  section.querySelectorAll('input[type=checkbox]').forEach(x=>x.checked=false);
+  section.querySelectorAll('select').forEach(x=>x.selectedIndex=0);
   ['rtcNumber','customSentence','rxAge','rxMeridian1','rxMeridian2','supportAdd'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   ['rtcUnit','rxPediatric','rxSafety','supportSymptoms','supportInsurance'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id==='rxSafety'?'no':'';});
   document.getElementById('soonerPrn').checked=false;
