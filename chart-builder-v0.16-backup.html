@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dr. Weller's Chart Builder v0.30</title>
+<title>Dr. Weller's Chart Builder v0.16</title>
 <style>
 :root{
   --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#64748b;--border:#d9e2ef;
@@ -69,8 +69,8 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <body>
 <header>
 <div class="header-inner">
-<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.30 clinic-ready structured notes</div></div>
-<div class="badge">v0.30 • No patient data stored</div>
+<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Offline clinical documentation builder • v0.16 audited</div></div>
+<div class="badge">No patient data stored</div>
 </div>
 </header>
 <div class="container">
@@ -81,14 +81,14 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 </div>
 <select id="diagnosisSelect" onchange="showDiagnosis()">
 <option value="refractive">Refractive Error</option>
-<option value="amd">Age-Related Macular Degeneration</option>
+<option value="amd">Early Dry AMD</option>
 <option value="dryeye">Dry Eye / MGD</option>
-<option value="glaucoma">Glaucoma</option>
+<option value="glaucoma">Glaucoma Suspect</option>
 <option value="cataract">Cataracts</option>
 <option value="pvd">PVD / Symptomatic Floaters</option>
 <option value="diabetes">Diabetes Without Retinopathy</option>
 <option value="contact">Contact Lens Annual</option>
-<option value="blepharitis">Blepharitis</option><option value="allergy">Allergic Conjunctivitis</option><option value="bacterial">Bacterial Conjunctivitis</option><option value="abrasion">Corneal Abrasion</option><option value="visualfield">Visual Field Interpretation</option><option value="oct">OCT Interpretation</option></select>
+<option value="blepharitis">Blepharitis</option><option value="allergy">Allergic Conjunctivitis</option><option value="bacterial">Bacterial Conjunctivitis</option><option value="abrasion">Corneal Abrasion</option></select>
 <button class="secondary" onclick="clearAll()">Clear Current Diagnosis</button>
 </div>
 <div class="layout">
@@ -202,29 +202,40 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 </div>
 </section>
 <section class="section" id="amd">
-<div class="card"><h2>Age-Related Macular Degeneration</h2><div class="small">Umbrella diagnosis. Select phenotype, stage, laterality, status, education, and plan. Confirm the final ICD-10 code in the EHR.</div></div>
-<div class="card"><h2>Diagnosis &amp; Stage</h2><div class="inline-grid">
-<div class="field"><label>Phenotype</label><select id="amdPhenotype"><option value="">Select...</option><option>Nonexudative AMD</option><option>Exudative AMD</option><option>Geographic atrophy</option><option>Inactive choroidal neovascularization</option><option>History of exudative AMD</option></select></div>
-<div class="field"><label>Stage</label><select id="amdStage"><option value="">Select...</option><option>Early</option><option>Intermediate</option><option>Advanced nonexudative without subfoveal involvement</option><option>Advanced nonexudative with subfoveal involvement</option><option>Active exudative</option><option>Inactive scar</option><option>Indeterminate</option></select></div>
-<div class="field"><label>Laterality</label><select id="amdLaterality"><option value="">Select...</option><option>OD</option><option>OS</option><option>OU</option></select></div>
-<div class="field"><label>Status</label><select id="amdStatus"><option value="">Select...</option><option>Newly diagnosed</option><option>Stable</option><option>Improved</option><option>Slightly progressed</option><option>Progressed</option></select></div>
-</div></div>
-<div class="card"><h2>Testing Performed</h2><div class="grid">
+<div class="card">
+<h2>Early Dry AMD</h2>
+<div class="small">ICD-10 family: H35.31 — select laterality and stage in the EHR.</div>
+</div>
+<div class="card">
+<h2>Assessment</h2>
+<div class="grid">
+<label class="option"><input data-text="Educated patient on diagnosis of early dry age-related macular degeneration." type="checkbox"/>Diagnosis discussed</label>
+<label class="option"><input data-text="Educated patient on stability of condition." type="checkbox"/>Stable</label>
+<label class="option"><input data-text="Educated patient that condition has slightly progressed." type="checkbox"/>Slightly progressed</label>
+<label class="option"><input data-text="Educated patient that condition has progressed." type="checkbox"/>Progressed</label>
+</div>
+</div>
+<div class="card">
+<h2>Testing</h2>
+<div class="grid">
 <label class="option"><input data-text="Dilated fundus examination was performed today." type="checkbox"/>DFE</label>
 <label class="option"><input data-text="Macular OCT was performed today and reviewed." type="checkbox"/>Macular OCT</label>
-<label class="option"><input data-text="Fundus photography was performed today and reviewed." type="checkbox"/>Fundus photos</label>
-<label class="option"><input data-text="Fundus autofluorescence imaging was performed today and reviewed." type="checkbox"/>FAF</label>
-</div></div>
-<div class="card"><h2>Education &amp; Plan</h2><div class="grid">
-<label class="option"><input data-text="Educated patient on the diagnosis, expected course, and importance of continued monitoring for age-related macular degeneration." type="checkbox"/>Diagnosis education</label>
-<label class="option"><input data-text="Educated patient on the importance of UV protection and smoking avoidance." type="checkbox"/>UV/smoking</label>
-<label class="option"><input data-text="Discussed a Mediterranean-style diet rich in leafy green vegetables, fish, colorful vegetables, and nuts." type="checkbox"/>AMD diet</label>
-<label class="option"><input data-text="Discussed that AREDS2 supplementation is not currently indicated based on today's disease stage." type="checkbox"/>AREDS2 not indicated</label>
-<label class="option"><input data-text="AREDS2 supplementation was recommended based on disease stage, barring contraindication or intolerance." type="checkbox"/>AREDS2 recommended</label>
-<label class="option"><input data-text="A home Amsler grid was supplied and proper monocular use was reviewed." type="checkbox"/>Amsler supplied</label>
-<label class="option"><input data-text="Reviewed return precautions for new distortion, metamorphopsia, central blur, scotoma, or sudden vision change." type="checkbox"/>CNV precautions</label>
-<label class="option"><input data-text="Retina consultation was recommended for further evaluation and management." type="checkbox"/>Refer retina</label>
-</div></div>
+<label class="option"><input data-text="Five-line raster imaging was obtained and reviewed." type="checkbox"/>Five-line raster</label>
+<label class="option"><input data-text="Fundus photographs were obtained and reviewed." type="checkbox"/>Fundus photos</label>
+</div>
+</div>
+<div class="card">
+<h2>Education &amp; Plan</h2>
+<div class="grid">
+<label class="option"><input data-text="Educated patient on the importance of UV protection." type="checkbox"/>UV protection</label>
+<label class="option"><input data-text="Smoking cessation was recommended." type="checkbox"/>Smoking cessation</label>
+<label class="option"><input data-text="Discussed a Mediterranean-style diet rich in leafy green vegetables such as kale, spinach, and collard greens, along with fish, colorful vegetables, and nuts." type="checkbox"/>AMD diet</label>
+<label class="option"><input data-text="Discussed that AREDS2 supplementation is not currently indicated based on today's stage of disease." type="checkbox"/>AREDS2 not indicated</label>
+<label class="option"><input data-text="AREDS2 supplementation was recommended based on disease stage." type="checkbox"/>AREDS2 indicated</label>
+<label class="option"><input data-text="A home Amsler grid was supplied and proper use was reviewed." type="checkbox"/>Amsler grid supplied</label>
+<label class="option"><input data-text="Educated patient to return promptly with new distortion, metamorphopsia, central blur, or sudden vision change." type="checkbox"/>Wet AMD precautions</label>
+</div>
+</div>
 </section>
 <section class="section" id="dryeye">
 <div class="card"><h2>Dry Eye / MGD</h2><div class="small">ICD-10 families: H04.12, H02.88, H16.22 — complete laterality/type in EHR.</div></div>
@@ -273,31 +284,36 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 </div>
 </section>
 <section class="section" id="glaucoma">
-<div class="card"><h2>Glaucoma</h2><div class="small">Umbrella diagnosis. Select angle class, diagnosis, stage, laterality, status, testing, education, and plan. Confirm coding and stage criteria in the EHR.</div></div>
-<div class="card"><h2>Diagnosis Classification</h2><div class="inline-grid">
-<div class="field"><label>Angle class</label><select id="glAngle"><option value="">Select...</option><option>Open angle</option><option>Angle closure</option><option>Mixed mechanism</option><option>Developmental/congenital</option><option>Indeterminate</option></select></div>
-<div class="field"><label>Type</label><select id="glType"><option value="">Select...</option><option>Glaucoma suspect</option><option>Ocular hypertension</option><option>Primary open-angle glaucoma</option><option>Low/normal-tension glaucoma</option><option>Pseudoexfoliative glaucoma</option><option>Pigmentary glaucoma</option><option>Chronic angle-closure glaucoma</option><option>Acute angle closure</option><option>Anatomical narrow angles</option><option>Secondary glaucoma</option><option>Steroid responder/glaucoma</option><option>Traumatic glaucoma</option><option>Uveitic glaucoma</option><option>Neovascular glaucoma</option><option>Congenital/juvenile glaucoma</option></select></div>
-<div class="field"><label>Stage</label><select id="glStage"><option value="">Select...</option><option>Suspect / no established damage</option><option>Mild</option><option>Moderate</option><option>Severe</option><option>Indeterminate</option></select></div>
-<div class="field"><label>Laterality</label><select id="glLaterality"><option value="">Select...</option><option>OD</option><option>OS</option><option>OU</option></select></div>
-<div class="field"><label>Status</label><select id="glStatus"><option value="">Select...</option><option>Newly diagnosed</option><option>Stable</option><option>Possible progression</option><option>Likely progression</option><option>Above target IOP</option><option>At target IOP</option><option>Improved control</option></select></div>
-</div></div>
-<div class="card"><h2>Testing Performed</h2><div class="grid">
-<label class="option"><input data-text="Intraocular pressure was measured and reviewed in the context of the patient's target pressure and risk factors." type="checkbox"/>IOP reviewed</label>
-<label class="option"><input data-text="Gonioscopy was performed and findings were reviewed." type="checkbox"/>Gonioscopy</label>
-<label class="option"><input data-text="Pachymetry was performed and central corneal thickness was considered in risk assessment." type="checkbox"/>Pachymetry</label>
-<label class="option"><input data-text="OCT RNFL/GCC imaging was performed and reviewed." type="checkbox"/>OCT RNFL/GCC</label>
-<label class="option"><input data-text="Standard automated perimetry was performed and reviewed." type="checkbox"/>Visual field</label>
-<label class="option"><input data-text="Optic nerve photography was performed and reviewed." type="checkbox"/>Disc photos</label>
-</div></div>
-<div class="card"><h2>Education &amp; Plan</h2><div class="grid">
-<label class="option"><input data-text="Educated patient on the diagnosis, chronic nature of glaucoma, and risk of irreversible vision loss if progression occurs." type="checkbox"/>Diagnosis education</label>
-<label class="option"><input data-text="Discussed the importance of medication adherence and proper drop instillation." type="checkbox"/>Drop adherence</label>
-<label class="option"><input data-text="Continue current glaucoma therapy without change." type="checkbox"/>Continue therapy</label>
-<label class="option"><input data-text="Initiated topical ocular hypotensive therapy; risks, benefits, alternatives, and expected adverse effects were reviewed." type="checkbox"/>Start medication</label>
-<label class="option"><input data-text="Discussed selective laser trabeculoplasty as a treatment option, including expected benefits, limitations, and need for continued monitoring." type="checkbox"/>Discuss SLT</label>
-<label class="option"><input data-text="Referral to a glaucoma specialist was recommended for further evaluation and management." type="checkbox"/>Refer glaucoma</label>
-<label class="option"><input data-text="Reviewed symptoms of acute angle closure and instructed the patient to seek immediate care for severe ocular pain, headache, halos, nausea, or sudden vision change." type="checkbox"/>Angle-closure precautions</label>
-</div></div>
+<div class="card"><h2>Glaucoma Suspect</h2><div class="small">ICD-10 families: H40.00 / H40.01 — select type and laterality in EHR.</div></div>
+<div class="card">
+<h2>Assessment</h2>
+<div class="grid">
+<label class="option"><input data-text="Educated patient on diagnosis of glaucoma suspect." type="checkbox"/>Diagnosis discussed</label>
+<label class="option"><input data-text="Educated patient that concern is based on optic nerve appearance." type="checkbox"/>Optic nerve appearance</label>
+<label class="option"><input data-text="Educated patient that concern is based on elevated intraocular pressure." type="checkbox"/>Elevated IOP</label>
+<label class="option"><input data-text="Educated patient on stability of condition." type="checkbox"/>Stable</label>
+<label class="option"><input data-text="Educated patient that findings have slightly progressed." type="checkbox"/>Slight progression</label>
+</div>
+</div>
+<div class="card">
+<h2>Testing</h2>
+<div class="grid">
+<label class="option"><input data-text="OCT of the optic nerve and macular ganglion cell complex was performed and reviewed." type="checkbox"/>OCT ONH + GCC</label>
+<label class="option"><input data-text="A 24-2 visual field was performed and reviewed." type="checkbox"/>24-2 VF</label>
+<label class="option"><input data-text="Central corneal thickness was measured by pachymetry." type="checkbox"/>Pachymetry</label>
+<label class="option"><input data-text="Gonioscopy was performed." type="checkbox"/>Gonioscopy</label>
+<label class="option"><input data-text="Baseline glaucoma testing was discussed and planned for a future visit." type="checkbox"/>Plan future baseline testing</label>
+</div>
+</div>
+<div class="card">
+<h2>Plan</h2>
+<div class="grid">
+<label class="option"><input data-text="Plan is to monitor without treatment at this time." type="checkbox"/>Monitor</label>
+<label class="option"><input data-text="Discussed selective laser trabeculoplasty as a first-line treatment option when clinically appropriate and available." type="checkbox"/>Discuss SLT</label>
+<label class="option"><input data-text="Discussed latanoprost as first-line topical therapy if treatment is initiated." type="checkbox"/>Discuss latanoprost</label>
+<label class="option"><input data-text="Discussed the chronic nature of glaucoma and the importance of follow-up testing." type="checkbox"/>Chronic disease education</label>
+</div>
+</div>
 </section>
 <section class="section" id="cataract">
 <div class="card"><h2>Cataracts</h2><div class="small">ICD-10 family: H25 — select morphology and laterality in EHR.</div></div>
@@ -449,51 +465,6 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <input id="customSentence" placeholder="Add a patient-specific line..." type="text"/>
 </div>
 </div>
-
-<section class="section" id="visualfield">
-<div class="card"><h2>Visual Field Interpretation</h2><div class="small">Independent test-interpretation module. Review raw thresholds, probability plots, gaze tracking, structure-function agreement, and prior fields before using generated language.</div></div>
-<div class="card"><h2>Test &amp; Reliability</h2><div class="inline-grid">
-<div class="field"><label>Test</label><select id="vfTest"><option value="">Select...</option><option>Humphrey 24-2</option><option>Humphrey 24-2C</option><option>Humphrey 30-2</option><option>Humphrey 10-2</option><option>Humphrey 60-4</option><option>Other automated perimetry</option></select></div>
-<div class="field"><label>Laterality</label><select id="vfLaterality"><option value="">Select...</option><option>OD</option><option>OS</option><option>OU</option></select></div>
-<div class="field"><label>Reliability grade</label><select id="vfReliability"><option value="">Select...</option><option>Excellent</option><option>Good</option><option>Fair</option><option>Poor</option></select></div>
-<div class="field"><label>VQI / quality index</label><input id="vfVqi" inputmode="decimal" placeholder="e.g. 92" type="number"/></div>
-<div class="field"><label>Fixation losses</label><input id="vfFl" placeholder="e.g. 2/14" type="text"/></div>
-<div class="field"><label>False positives (%)</label><input id="vfFp" min="0" max="100" type="number"/></div>
-<div class="field"><label>False negatives (%)</label><input id="vfFn" min="0" max="100" type="number"/></div>
-<div class="field"><label>Test duration</label><input id="vfDuration" placeholder="e.g. 4:18" type="text"/></div>
-</div></div>
-<div class="card"><h2>Global Indices &amp; Pattern</h2><div class="inline-grid">
-<div class="field"><label>Mean deviation (dB)</label><input id="vfMd" step="0.01" type="number"/></div>
-<div class="field"><label>MD interpretation</label><select id="vfMdGrade"><option value="">Auto from MD or select...</option><option>No depression noted</option><option>Mild generalized depression</option><option>Moderate generalized depression</option><option>Severe generalized depression</option></select></div>
-<div class="field"><label>PSD (dB)</label><input id="vfPsd" step="0.01" type="number"/></div>
-<div class="field"><label>Defect pattern</label><select id="vfPattern"><option value="">Select...</option><option>No localized defect noted</option><option>Generalized depression</option><option>Superior nasal step</option><option>Inferior nasal step</option><option>Superior arcuate defect</option><option>Inferior arcuate defect</option><option>Paracentral defect</option><option>Central scotoma</option><option>Cecocentral scotoma</option><option>Altitudinal defect</option><option>Temporal wedge</option><option>Hemianopic defect</option><option>Quadrantanopic defect</option><option>Scattered nonspecific defects</option><option>Other localized defect</option></select></div>
-<div class="field"><label>Comparison</label><select id="vfProgression"><option value="">Select...</option><option>Baseline study</option><option>Stable compared with prior</option><option>Possible progression</option><option>Likely progression</option><option>Improved compared with prior</option><option>Not comparable with prior</option></select></div>
-<div class="field"><label>Correlation</label><select id="vfCorrelation"><option value="">Select...</option><option>Correlates with OCT/optic nerve findings</option><option>Does not correlate with structural findings</option><option>Structure-function correlation is equivocal</option><option>No structural comparison available</option></select></div>
-</div></div>
-<div class="card"><h2>Education &amp; Plan</h2><div class="grid">
-<label class="option"><input data-text="Reviewed the visual field findings and their significance with the patient." type="checkbox"/>Discussed results</label>
-<label class="option"><input data-text="Discussed the importance of repeatable serial testing to distinguish true change from test variability." type="checkbox"/>Serial testing education</label>
-<label class="option"><input data-text="Repeat visual field testing was recommended to confirm the finding." type="checkbox"/>Repeat to confirm</label>
-<label class="option"><input data-text="Continue serial visual field monitoring." type="checkbox"/>Continue monitoring</label>
-</div></div>
-</section>
-<section class="section" id="oct">
-<div class="card"><h2>OCT Interpretation</h2><div class="small">Independent test-interpretation module for optic nerve/RNFL/GCC or macular OCT. Verify segmentation, centration, signal quality, artifacts, and comparison validity.</div></div>
-<div class="card"><h2>Study</h2><div class="inline-grid">
-<div class="field"><label>Study type</label><select id="octType"><option value="">Select...</option><option>OCT RNFL/GCC</option><option>Macular OCT</option><option>Anterior segment OCT</option></select></div>
-<div class="field"><label>Laterality</label><select id="octLaterality"><option value="">Select...</option><option>OD</option><option>OS</option><option>OU</option></select></div>
-<div class="field"><label>Image quality</label><select id="octQuality"><option value="">Select...</option><option>Good quality</option><option>Acceptable quality</option><option>Limited quality</option><option>Poor quality / not interpretable</option></select></div>
-<div class="field"><label>Finding</label><select id="octFinding"><option value="">Select...</option><option>Within normal limits</option><option>Borderline thinning</option><option>Focal thinning</option><option>Diffuse thinning</option><option>Superior thinning</option><option>Inferior thinning</option><option>Superior and inferior thinning</option><option>Abnormal macular architecture</option><option>Intraretinal fluid</option><option>Subretinal fluid</option><option>Drusen/RPE irregularity</option><option>Epiretinal membrane</option><option>Vitreomacular adhesion/traction</option><option>Other abnormality</option></select></div>
-<div class="field"><label>Progression</label><select id="octProgression"><option value="">Select...</option><option>Baseline study</option><option>Stable compared with prior</option><option>Possible progression</option><option>Likely progression</option><option>Improved compared with prior</option><option>Not comparable with prior</option></select></div>
-<div class="field"><label>Correlation</label><select id="octCorrelation"><option value="">Select...</option><option>Correlates with clinical examination</option><option>Correlates with visual field findings</option><option>Does not correlate with other findings</option><option>Correlation is equivocal</option></select></div>
-</div></div>
-<div class="card"><h2>Education &amp; Plan</h2><div class="grid">
-<label class="option"><input data-text="Reviewed the OCT findings and their significance with the patient." type="checkbox"/>Discussed results</label>
-<label class="option"><input data-text="Continue serial OCT monitoring for structural change." type="checkbox"/>Continue monitoring</label>
-<label class="option"><input data-text="Repeat OCT was recommended due to limited image quality or possible artifact." type="checkbox"/>Repeat OCT</label>
-<label class="option"><input data-text="Additional clinical correlation and/or specialty referral was recommended based on the OCT findings." type="checkbox"/>Additional evaluation</label>
-</div></div>
-</section>
 </main>
 <aside><div class="output-stack">
 <div class="card output-card">
@@ -525,9 +496,9 @@ const select=document.getElementById('diagnosisSelect');
 
 const diagnosisMap=[
 {id:'refractive',label:'Refractive Error',keywords:'myopia hyperopia astigmatism presbyopia anisometropia high myopia glasses refraction spectacle progressive multifocal'},
-{id:'amd',label:'Age-Related Macular Degeneration',keywords:'amd age related macular degeneration dry wet exudative nonexudative geographic atrophy drusen areds amsler'},
+{id:'amd',label:'Early Dry AMD',keywords:'amd macular degeneration drusen areds amsler'},
 {id:'dryeye',label:'Dry Eye / MGD',keywords:'dry eye mgd meibomian irritation burning tears fluorescein staining'},
-{id:'glaucoma',label:'Glaucoma',keywords:'glaucoma suspect ocular hypertension open angle closed angle angle closure poag normal tension pigmentary pseudoexfoliation secondary congenital juvenile'},
+{id:'glaucoma',label:'Glaucoma Suspect',keywords:'glaucoma suspect ocular hypertension oct rnfl gcc visual field pachy gonio'},
 {id:'cataract',label:'Cataracts',keywords:'cataract lens opacity surgery glare'},
 {id:'pvd',label:'PVD / Symptomatic Floaters',keywords:'pvd floaters flashes retinal detachment vitreous'},
 {id:'diabetes',label:'Diabetes Without Retinopathy',keywords:'diabetes diabetic retinopathy dfe mac oct'},
@@ -535,9 +506,7 @@ const diagnosisMap=[
 {id:'blepharitis',label:'Blepharitis',keywords:'blepharitis lids crusting lid hygiene'},
 {id:'allergy',label:'Allergic Conjunctivitis',keywords:'allergy allergic conjunctivitis itching pataday olopatadine'},
 {id:'bacterial',label:'Bacterial Conjunctivitis',keywords:'bacterial conjunctivitis pink eye polytrim moxifloxacin besivance'},
-{id:'abrasion',label:'Corneal Abrasion',keywords:'corneal abrasion epithelial defect bandage contact lens cycloplegic'},
-{id:'visualfield',label:'Visual Field Interpretation',keywords:'visual field hvf perimetry mean deviation md pattern standard deviation psd reliability vqi fixation loss false positive false negative'},
-{id:'oct',label:'OCT Interpretation',keywords:'oct rnfl gcc macula macular optic nerve tomography progression segmentation'}
+{id:'abrasion',label:'Corneal Abrasion',keywords:'corneal abrasion epithelial defect bandage contact lens cycloplegic'}
 ];
 
 const insuranceProfiles={
@@ -632,175 +601,35 @@ function formatDiagnosisList(items){
   return items.slice(0,-1).join(', ')+', and '+items[items.length-1];
 }
 
-function uniqueItems(items){
-  const seen=new Set();
-  return items.filter(item=>{
-    const clean=(item||'').trim();
-    if(!clean) return false;
-    const key=clean.toLowerCase().replace(/\s+/g,' ');
-    if(seen.has(key)) return false;
-    seen.add(key); return true;
-  });
-}
-
-function ensurePeriod(text){
-  const clean=(text||'').trim();
-  if(!clean) return '';
-  return /[.!?]$/.test(clean)?clean:clean+'.';
-}
-
-function classifyStatement(text){
-  const t=(text||'').toLowerCase();
-  if(/^(educated|discussed|reviewed|instructed|counseled)/.test(t) ||
-     /warning symptoms|return precautions|precautions|importance of|proper .*use|hygiene/.test(t)) return 'education';
-  if(/^(recommended|plan is|continue|initiated|referral|a report will|patient elected|a topical|a cycloplegic|a bandage|new contact lens trials|contact lens prescription|patient will return)/.test(t) ||
-     /was prescribed|was supplied|was recommended|monitoring was recommended/.test(t)) return 'plan';
-  if(/was performed|was measured|was evaluated|was reviewed and interpreted|testing was performed/.test(t)) return 'testing';
-  return 'assessment';
-}
-
-function testNameFromText(text){
-  const t=(text||'').toLowerCase();
-  if(t.includes('dilated fundus')) return 'Dilated fundus examination';
-  if(t.includes('oct rnfl') || t.includes('rnfl/gcc')) return 'OCT RNFL/GCC';
-  if(t.includes('macular oct')) return 'Macular OCT';
-  if(t.includes('anterior segment oct')) return 'Anterior segment OCT';
-  if(t.includes('standard automated perimetry') || t.includes('visual field')) return 'Visual field';
-  if(t.includes('pachymetry')) return 'Pachymetry';
-  if(t.includes('gonioscopy')) return 'Gonioscopy';
-  if(t.includes('optic nerve photography') || t.includes('disc photos')) return 'Optic nerve photography';
-  if(t.includes('fundus photography') || t.includes('fundus photos')) return 'Fundus photography';
-  if(t.includes('autofluorescence') || t.includes('faf')) return 'Fundus autofluorescence';
-  if(t.includes('intraocular pressure')) return 'Intraocular pressure';
-  if(t.includes('tear breakup')) return 'Tear breakup time';
-  if(t.includes('lissamine')) return 'Lissamine green staining';
-  if(t.includes('schirmer')) return 'Schirmer testing';
-  if(t.includes('fluorescein')) return 'Fluorescein staining';
-  return '';
-}
-
-function buildVisualFieldInterpretation(){
-  const lines=[];
-  const test=document.getElementById('vfTest').value;
-  const lat=document.getElementById('vfLaterality').value;
-  if(test) lines.push(test+(lat?' '+lat:'')+' was reviewed and interpreted.');
-  const rel=document.getElementById('vfReliability').value;
-  const vqi=document.getElementById('vfVqi').value;
-  const fl=document.getElementById('vfFl').value.trim();
-  const fp=document.getElementById('vfFp').value;
-  const fn=document.getElementById('vfFn').value;
-  const dur=document.getElementById('vfDuration').value.trim();
-  const metrics=[];
-  if(vqi) metrics.push('VQI '+vqi);
-  if(fl) metrics.push('FL '+fl);
-  if(fp!=='') metrics.push('FP '+fp+'%');
-  if(fn!=='') metrics.push('FN '+fn+'%');
-  if(dur) metrics.push('duration '+dur);
-  if(rel) lines.push('Reliability is '+rel.toLowerCase()+(metrics.length?' ('+metrics.join(', ')+')':'')+'.');
-  else if(metrics.length) lines.push('Reliability indices: '+metrics.join(', ')+'.');
-  const mdRaw=document.getElementById('vfMd').value;
-  const md=mdRaw===''?NaN:Number(mdRaw);
-  let mdGrade=document.getElementById('vfMdGrade').value;
-  if(!mdGrade && !Number.isNaN(md)) mdGrade=md>-1.5?'No depression noted':md>=-6?'Mild generalized depression':md>=-12?'Moderate generalized depression':'Severe generalized depression';
-  if(!Number.isNaN(md)) lines.push('Mean deviation is '+md.toFixed(2)+' dB; '+(mdGrade||'interpretation not selected').toLowerCase()+'.');
-  else if(mdGrade) lines.push(mdGrade+'.');
-  const psd=document.getElementById('vfPsd').value;
-  if(psd!=='') lines.push('Pattern standard deviation is '+Number(psd).toFixed(2)+' dB.');
-  ['vfPattern','vfProgression','vfCorrelation'].forEach(id=>{const v=document.getElementById(id).value;if(v)lines.push(ensurePeriod(v));});
-  return lines;
-}
-
-function buildOctInterpretation(){
-  const lines=[];
-  const type=document.getElementById('octType').value;
-  const lat=document.getElementById('octLaterality').value;
-  if(type) lines.push(type+(lat?' '+lat:'')+' was reviewed and interpreted.');
-  const quality=document.getElementById('octQuality').value;
-  if(quality) lines.push('Image quality is '+quality.toLowerCase()+'.');
-  ['octFinding','octProgression','octCorrelation'].forEach(id=>{const v=document.getElementById(id).value;if(v)lines.push(ensurePeriod(v));});
-  return lines;
-}
-
-function renderStructuredNote(groups){
-  const blocks=[];
-  const add=(heading,items)=>{
-    const clean=uniqueItems(items.map(ensurePeriod));
-    if(clean.length) blocks.push(heading+'\n'+clean.join(' '));
-  };
-  add('Assessment',groups.assessment);
-  add('Diagnostic Testing',groups.testing);
-  add('Patient Education',groups.education);
-  add('Plan',groups.plan);
-  return blocks.join('\n\n');
-}
-
 function generateNote(){
+  const parts=[];
   const section=activeSection();
-  if(!section) return;
-  const groups={assessment:[],testing:[],education:[],plan:[]};
-  const testNames=[];
 
   if(section.id==='refractive'){
     const diagnoses=[...section.querySelectorAll('input[data-diagnosis]:checked')].map(el=>el.dataset.diagnosis);
-    if(diagnoses.length) groups.assessment.push('Refractive diagnosis: '+formatDiagnosisList(diagnoses)+'.');
-  }
-  if(section.id==='amd'){
-    const phenotype=document.getElementById('amdPhenotype').value;
-    const stage=document.getElementById('amdStage').value;
-    const lat=document.getElementById('amdLaterality').value;
-    const status=document.getElementById('amdStatus').value;
-    const desc=[stage,phenotype].filter(Boolean).join(' ');
-    if(desc) groups.assessment.push(desc+(lat?' '+lat:'')+(status?' is '+status.toLowerCase():'')+'.');
-  }
-  if(section.id==='glaucoma'){
-    const angle=document.getElementById('glAngle').value;
-    const type=document.getElementById('glType').value;
-    const stage=document.getElementById('glStage').value;
-    const lat=document.getElementById('glLaterality').value;
-    const status=document.getElementById('glStatus').value;
-    const dx=[type,stage&&stage!=='Suspect / no established damage'?stage+' stage':'',lat].filter(Boolean).join(', ');
-    if(dx) groups.assessment.push(dx+'.');
-    if(angle) groups.assessment.push('Angle classification: '+angle.toLowerCase()+'.');
-    if(status) groups.assessment.push('Current status: '+status.toLowerCase()+'.');
+    if(diagnoses.length){
+      parts.push('Educated patient on diagnosis of '+formatDiagnosisList(diagnoses)+'.');
+    }
   }
 
   section.querySelectorAll('input[type=checkbox]:checked').forEach(el=>{
-    const text=el.dataset.text;
-    if(!text) return;
-    const category=classifyStatement(text);
-    if(category==='testing'){
-      const name=testNameFromText(text);
-      if(name) testNames.push(name); else groups.testing.push(text);
-    }else groups[category].push(text);
+    if(el.dataset.text) parts.push(el.dataset.text);
   });
 
-  if(section.id==='visualfield'){
-    const test=document.getElementById('vfTest').value;
-    if(test) testNames.push(test);
-    groups.testing.push(...buildVisualFieldInterpretation());
-  }
-  if(section.id==='oct'){
-    const type=document.getElementById('octType').value;
-    if(type) testNames.push(type);
-    groups.testing.push(...buildOctInterpretation());
-  }
-
-  const uniqueTests=uniqueItems(testNames);
-  if(uniqueTests.length) groups.testing.unshift('Diagnostic testing performed and reviewed today: '+uniqueTests.join(', ')+'.');
-
   const custom=document.getElementById('customSentence').value.trim();
-  if(custom) groups.plan.push(custom);
+  if(custom) parts.push(custom.endsWith('.')?custom:custom+'.');
 
   const n=document.getElementById('rtcNumber').value.trim();
   const u=document.getElementById('rtcUnit').value;
   if(n && u){
-    let rtc='RTC x '+n+' '+u;
+    let rtc=`RTC x ${n} ${u}`;
     if(document.getElementById('soonerPrn').checked) rtc+=', sooner PRN';
-    groups.plan.push(rtc+'.');
+    parts.push(rtc+'.');
   }
-  if(document.getElementById('understanding').checked) groups.education.push('Patient confirms understanding and denies further questions.');
-
-  document.getElementById('output').value=renderStructuredNote(groups);
+  if(document.getElementById('understanding').checked){
+    parts.push('Patient confirms understanding and denies further questions.');
+  }
+  document.getElementById('output').value=parts.join(' ');
 }
 
 async function copyChartNote(){
@@ -1058,7 +887,7 @@ document.addEventListener('change',e=>{
   }
 });
 document.addEventListener('input',e=>{
-  if(e.target.matches('input, select, textarea')) generateNote();
+  if(['rtcNumber','customSentence'].includes(e.target.id)) generateNote();
   if(['rxAge','rxMeridian1','rxMeridian2'].includes(e.target.id) && (document.getElementById('rxMeridian1').value||document.getElementById('rxMeridian2').value)) applyRxMaterial();
 });
 generateNote(); generateLensNote();

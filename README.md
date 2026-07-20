@@ -1,16 +1,24 @@
-# Weller Hub Baseline
+# Weller Hub v0.21 — Functional first upgrade
 
-This is the stable website baseline.
+This is the first deployable upgrade toward the expanded Chart Builder.
 
-It contains:
-- `index.html` — simple Weller Hub homepage
-- `chart-builder.html` — the working Chart Builder from the original HTML development
-- `offline-chart-builder.html` — the lightweight offline backup
-- `vercel.json` — clean URL support
+## New in this build
 
-## Deployment
-Replace the files in the root of the `dr-weller-hub` repository with these files.
-Commit and push through GitHub Desktop.
-Vercel will redeploy automatically.
+- AMD umbrella diagnosis with selectable phenotype, stage, laterality, status, testing, education, and plan.
+- Glaucoma umbrella diagnosis with selectable angle class, type, stage, laterality, status, testing, education, and plan.
+- Independent Visual Field Interpretation module.
+- Independent OCT Interpretation module.
+- Search terms updated for the new modules.
+- Previous audited v0.16 builder included as a fallback page.
 
-Future edits should be made directly to this working baseline rather than rebuilding it.
+## Files
+
+- `index.html` — Weller Hub homepage.
+- `chart-builder.html` — current upgraded builder.
+- `chart-builder-v0.16-backup.html` — prior audited fallback.
+- `offline-chart-builder.html` — lightweight offline phrase builder.
+- `vercel.json` — Vercel routing settings.
+- `DEPLOYMENT-GUIDE.md` — safe GitHub/Vercel installation steps.
+- `CHANGELOG.md` — development notes.
+
+See `DEPLOYMENT-GUIDE.md` before deployment.
