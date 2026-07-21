@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dr. Weller's Chart Builder v0.35</title>
+<title>Dr. Weller's Chart Builder v0.36</title>
 <style>
 :root{
   --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#64748b;--border:#d9e2ef;
@@ -80,8 +80,8 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <body>
 <header>
 <div class="header-inner">
-<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.35 clinic workflow update</div></div>
-<div class="badge">v0.35 • No patient data stored</div>
+<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.36 streamlined plan update</div></div>
+<div class="badge">v0.36 • No patient data stored</div>
 </div>
 </header>
 <div class="container">
@@ -164,13 +164,16 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 </div>
 </div>
 <div class="card">
-<h2>Assessment &amp; Prescription</h2>
+<h2>Plan &amp; Prescription</h2>
 <div class="grid">
 <label class="option"><input data-text="Educated patient on stability of refractive condition." type="checkbox"/>Stable</label>
 <label class="option"><input data-text="Educated patient that refractive condition has slightly progressed." type="checkbox"/>Slightly progressed</label>
 <label class="option"><input data-text="No significant change in spectacle prescription was noted today." type="checkbox"/>No significant Rx change</label>
-<label class="option"><input data-text="A new spectacle prescription was released to improve visual acuity and function." type="checkbox"/>New spectacle Rx</label>
+<label class="option"><input data-text="Released updated Spec Rx for FTW." type="checkbox"/>New spectacle Rx</label>
 <label class="option"><input data-text="Educated patient on the expected adaptation period due to a significant change in prescription." type="checkbox"/>Large-change adaptation</label>
+<label class="option"><input data-text="Educated patient on options of glasses and contacts." type="checkbox"/>Discuss glasses and contacts</label>
+<label class="option"><input data-text="Patient does not express interest in contacts at this time." type="checkbox"/>Not interested in contacts</label>
+<label class="option"><input data-text="Patient expresses interest in contacts and will return for a contact lens fitting." type="checkbox"/>Interested in contacts</label>
 </div>
 </div>
 <div class="card">
@@ -181,7 +184,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <label class="option"><input data-text="Computer/intermediate spectacle correction was prescribed." type="checkbox"/>Computer Rx</label>
 <label class="option"><input data-text="Multifocal spectacle correction was recommended." type="checkbox"/>Multifocal Rx</label>
 <label class="option"><input data-text="Spectacle correction may be worn as needed based on visual demands." type="checkbox"/>Rx optional / PRN</label>
-<label class="option"><input data-text="Full-time spectacle wear was recommended." type="checkbox"/>Full-time wear</label></div>
+<label class="option"><input data-text="Recommend glasses for FTW." type="checkbox"/>Full-time wear</label></div>
 </div>
 <div class="card">
 <h2>Vision Insurance Lens Presets</h2>
@@ -1009,7 +1012,10 @@ function generateNote(){
 
   if(section.id==='refractive'){
     const diagnoses=[...section.querySelectorAll('input[data-diagnosis]:checked')].map(el=>el.dataset.diagnosis);
-    if(diagnoses.length) groups.assessment.push('Refractive diagnosis: '+formatDiagnosisList(diagnoses)+'.');
+    if(diagnoses.length){
+      const label=diagnoses.length===1?'diagnosis':'diagnoses';
+      groups.education.push('Educated patient on '+label+' of '+formatDiagnosisList(diagnoses)+'.');
+    }
   }
   if(section.id==='amd'){
     const phenotype=document.getElementById('amdPhenotype').value;
@@ -1098,15 +1104,37 @@ function generateNote(){
   if(custom) groups.plan.push(custom);
 
   const n=document.getElementById('rtcNumber').value.trim();
-  const u=document.getElementById('rtcUnit').value;
+  let u=document.getElementById('rtcUnit').value;
+  if(n==='1') u=u.replace(/s$/,'');
+  let closing=[];
+  if(document.getElementById('understanding').checked) closing.push('Patient confirms understanding and denies further questions.');
   if(n && u){
     let rtc='RTC x '+n+' '+u;
-    if(document.getElementById('soonerPrn').checked) rtc+=', sooner PRN';
-    groups.plan.push(rtc+'.');
+    if(document.getElementById('soonerPrn').checked) rtc+=', or sooner PRN';
+    closing.push(rtc+'.');
   }
-  if(document.getElementById('understanding').checked) groups.education.push('Patient confirms understanding and denies further questions.');
 
-  document.getElementById('output').value=renderStructuredNote(groups);
+  let note;
+  if(section.id==='refractive'){
+    // Refractive notes are a single seamless plan. Preserve the on-screen
+    // checkbox order so the narrative reads: diagnosis education, Rx release,
+    // options/interest, recommendation, then the universal closing and RTC.
+    const refractivePlan=[];
+    const diagnoses=[...section.querySelectorAll('input[data-diagnosis]:checked')].map(el=>el.dataset.diagnosis);
+    if(diagnoses.length){
+      const label=diagnoses.length===1?'diagnosis':'diagnoses';
+      refractivePlan.push('Educated patient on '+label+' of '+formatDiagnosisList(diagnoses)+'.');
+    }
+    section.querySelectorAll('input[data-text]:checked').forEach(el=>{
+      if(el.dataset.text) refractivePlan.push(el.dataset.text);
+    });
+    if(custom) refractivePlan.push(custom);
+    note=uniqueItems(refractivePlan.map(ensurePeriod)).join(' ');
+  }else{
+    note=renderStructuredNote(groups);
+  }
+  if(closing.length) note=(note?note+' ':'')+closing.join(' ');
+  document.getElementById('output').value=note;
   updateIcdOutput();
 }
 
