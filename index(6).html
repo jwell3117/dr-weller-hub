@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dr. Weller's Chart Builder v0.33</title>
+<title>Dr. Weller's Chart Builder v0.35</title>
 <style>
 :root{
   --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#64748b;--border:#d9e2ef;
@@ -74,13 +74,14 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 
 .paste-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.paste-box{min-height:118px}.compact-preview{white-space:pre-wrap;padding:12px;border:1px solid var(--border);border-radius:10px;background:#fbfdff;font:13px/1.5 Consolas,Monaco,monospace}.chip-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.chip{background:#eef2ff;color:#3730a3;padding:7px 10px;border-radius:999px;font-size:12px}.three-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.favorite-box{margin-top:10px;padding:10px;border:1px dashed var(--border);border-radius:9px;background:#f8fafc}.interpretation-input{min-height:95px}.hidden{display:none!important}
 @media(max-width:900px){.paste-grid,.three-grid{grid-template-columns:1fr}}
+.cl-options{white-space:pre-wrap;padding:12px;border:1px solid var(--border);border-radius:10px;background:#fbfdff;font-size:13px;line-height:1.5;min-height:80px}.compact-field-note{font-size:11px;color:var(--muted);margin-top:4px}
 </style>
 </head>
 <body>
 <header>
 <div class="header-inner">
-<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.33 clinic workflow upgrade</div></div>
-<div class="badge">v0.33 • No patient data stored</div>
+<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.35 clinic workflow update</div></div>
+<div class="badge">v0.35 • No patient data stored</div>
 </div>
 </header>
 <div class="container">
@@ -111,7 +112,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <h2>Patient Rx &amp; Automatic Material Recommendation</h2>
 <div class="small">Enter the absolute power in each principal meridian. Material guidance is based on the lesser absolute meridian, then adjusted for pediatric and safety needs.</div>
 <div class="rx-grid" style="margin-top:12px">
-<div class="field"><label>Patient age</label><input id="rxAge" max="120" min="0" placeholder="e.g., 12" type="number"/></div>
+<div class="field"><label>Age range</label><select id="rxAge"><option value="">Select...</option><option value="5">0–9</option><option value="14">10–17</option><option value="22">18–29</option><option value="34">30–39</option><option value="42">40–44</option><option value="47">45–49</option><option value="52">50–54</option><option value="57">55–59</option><option value="65">60–69</option><option value="75">70+</option></select><div class="compact-field-note">Narrower ranges are used around presbyopic transitions.</div></div>
 <div class="field"><label>Absolute power — meridian 1</label><input id="rxMeridian1" min="0" placeholder="e.g., 6.25" step="0.25" type="number"/></div><div class="field"><label>Absolute power — meridian 2</label><input id="rxMeridian2" min="0" placeholder="e.g., 4.50" step="0.25" type="number"/></div>
 <div class="field"><label>Pediatric patient</label>
 <select id="rxPediatric"><option value="">Auto by age</option><option value="yes">Yes</option><option value="no">No</option></select>
@@ -142,7 +143,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <option value="">Use insurance preset</option>
 <option value="eyemed">EyeMed / Essilor</option>
 <option value="vsp">VSP / Unity</option>
-<option value="other">Other / no specific plan</option>
+<option value="spectera">Spectera / UHC</option><option value="march">March Vision</option><option value="private">Private pay</option><option value="other">Other / no specific plan</option>
 </select>
 </div>
 </div>
@@ -186,13 +187,16 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <h2>Vision Insurance Lens Presets</h2>
 <div class="small">Clicking a plan preselects commonly associated lens options. Exact allowances and covered designs vary by employer plan, lab, and authorization; verify benefits before presenting final pricing.</div>
 <div class="insurance-grid" style="margin-top:12px">
-<button class="insurance-btn" onclick="applyInsurance('eyemed')" type="button"><strong>EyeMed</strong><br/><span class="small">Essilor ecosystem: Eyezen, Varilux, Crizal, Transitions, Xperio</span></button>
-<button class="insurance-btn" onclick="applyInsurance('vsp')" type="button"><strong>VSP</strong><br/><span class="small">Unity ecosystem: SVx, Relieve, Via/progressive, TechShield, SunSync</span></button>
+<button class="insurance-btn" onclick="applyInsurance('eyemed')" type="button"><strong>EyeMed</strong><br/><span class="small">Essilor ecosystem: Eyezen, Varilux, Crizal</span></button>
+<button class="insurance-btn" onclick="applyInsurance('vsp')" type="button"><strong>VSP</strong><br/><span class="small">Unity ecosystem: Unity SV/Relieve/Via and TechShield</span></button>
 <button class="insurance-btn" onclick="applyInsurance('aetna')" type="button"><strong>Aetna Vision Preferred</strong><br/><span class="small">Often uses EyeMed-style network options; verify plan</span></button>
 <button class="insurance-btn" onclick="applyInsurance('metlife')" type="button"><strong>MetLife Vision</strong><br/><span class="small">Commonly VSP-network oriented; verify plan</span></button>
 <button class="insurance-btn" onclick="applyInsurance('davis')" type="button"><strong>Davis Vision</strong><br/><span class="small">Plan formulary: standard/premium PAL and digital options</span></button>
 <button class="insurance-btn" onclick="applyInsurance('spectera')" type="button"><strong>UHC / Spectera</strong><br/><span class="small">Plan-authorized standard, premium, and digital designs</span></button>
 <button class="insurance-btn" onclick="applyInsurance('superior')" type="button"><strong>Superior Vision</strong><br/><span class="small">Plan-specific lab and progressive formulary</span></button>
+<button class="insurance-btn" onclick="applyInsurance('march')" type="button"><strong>March Vision</strong><br/><span class="small">Plan-specific formulary; use standard single vision or verified covered design</span></button>
+<button class="insurance-btn" onclick="applyInsurance('private')" type="button"><strong>Private Pay</strong><br/><span class="small">Best clinical lens design without a plan-specific formulary</span></button>
+<button class="insurance-btn" onclick="applyInsurance('other')" type="button"><strong>Other Insurance</strong><br/><span class="small">Use a verified formulary or generic recommendation</span></button>
 </div>
 <div class="insurance-note" id="insuranceSummary">No insurance preset selected.</div>
 </div><div class="card">
@@ -206,6 +210,9 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <label class="option"><input data-lens-text="Polarized sunglasses for glare reduction" id="lens-polarized" type="checkbox"/>Polarized sunglasses</label>
 
 
+<label class="option"><input data-lens-text="Eyezen Single Vision" id="lens-eyezen-sv" type="checkbox"/>Eyezen Single Vision</label>
+<label class="option"><input data-lens-text="Unity single vision" id="lens-unity-sv" type="checkbox"/>Unity Single Vision</label>
+<label class="option"><input data-lens-text="Single vision lens" id="lens-generic-sv" type="checkbox"/>Generic Single Vision</label>
 <label class="option"><input data-text="Educated patient on the importance of UV protection." type="checkbox"/>UV protection</label>
 <label class="option"><input data-text="Due to high myopia, educated patient on the increased risk of retinal detachment and reviewed warning symptoms including new flashes, floaters, curtain or shadow, and sudden vision loss." type="checkbox"/>High-myopia RD precautions</label>
 <label class="option"><input data-lens-text="Eyezen for near work and digital eyestrain" id="lens-eyezen" type="checkbox"/>Eyezen</label><label class="option"><input data-lens-text="Varilux X progressive for first-time progressive wearers" id="lens-varilux-x" type="checkbox"/>Varilux X Series</label><label class="option"><input data-lens-text="Varilux XR progressive for multifocal viewing" id="lens-varilux-xr" type="checkbox"/>Varilux XR Series</label><label class="option"><input data-lens-text="Varilux Comfort progressive" id="lens-varilux-comfort" type="checkbox"/>Varilux Comfort</label><label class="option"><input data-lens-text="Varilux Physio progressive" id="lens-varilux-physio" type="checkbox"/>Varilux Physio</label><label class="option"><input data-lens-text="Unity SVx for digital eye strain" id="lens-unity-svx" type="checkbox"/>Unity SVx</label><label class="option"><input data-lens-text="Unity Relieve for computer and intermediate viewing" id="lens-unity-relieve" type="checkbox"/>Unity Relieve 50/70</label><label class="option"><input data-lens-text="Unity progressive for multifocal viewing" id="lens-unity-pal" type="checkbox"/>Unity Progressive / Via</label><label class="option"><input data-lens-text="Crizal Sapphire HR" id="lens-crizal" type="checkbox"/>Crizal Sapphire HR</label><label class="option"><input data-lens-text="TechShield AR" id="lens-techshield" type="checkbox"/>TechShield AR</label><label class="option"><input data-lens-text="SunSync optional" id="lens-sunsync" type="checkbox"/>SunSync</label><label class="option"><input data-lens-text="Xperio polarized sunglasses for glare reduction" id="lens-xperio" type="checkbox"/>Xperio polarized</label><label class="option"><input data-lens-text="Unity Relieve 50 for near work and digital eyestrain" id="lens-unity-relieve-50" type="checkbox"/>Unity Relieve 50</label><label class="option"><input data-lens-text="Unity Relieve 70 for near work and digital eyestrain" id="lens-unity-relieve-70" type="checkbox"/>Unity Relieve 70</label><label class="option"><input data-lens-text="Eyezen 2 for near work and digital eyestrain" id="lens-eyezen-2" type="checkbox"/>Eyezen 2</label><label class="option"><input data-lens-text="Eyezen Start for near work and digital eyestrain" id="lens-eyezen-start" type="checkbox"/>Eyezen Start</label><label class="option"><input data-lens-text="Eyezen 1 for near work and digital eyestrain" id="lens-eyezen-1" type="checkbox"/>Eyezen 1</label><label class="option"><input data-lens-text="Eyezen 3 for near work and digital eyestrain" id="lens-eyezen-3" type="checkbox"/>Eyezen 3</label><label class="option"><input data-lens-text="Eyezen 4 for near work and digital eyestrain" id="lens-eyezen-4" type="checkbox"/>Eyezen 4</label><label class="option"><input data-lens-text="Trivex or high index for optimal clarity" id="lens-trivex-or-highindex" type="checkbox"/>Trivex or high index</label></div>
@@ -385,6 +392,15 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <div class="field"><label>Vision</label><input id="clVision" placeholder="e.g. 20/20" type="text"/></div>
 <div class="field"><label>Wearing schedule</label><input id="clWear" placeholder="e.g. daily wear" type="text"/></div>
 </div></div>
+<div class="card"><h2>Prescription-Based Lens Options</h2><div class="small">Optional screening tool for unusual prescriptions. Enter the spectacle or intended contact-lens powers. Results identify likely stock, extended-range, or custom options to verify—not guaranteed availability.</div>
+<div class="three-grid" style="margin-top:12px">
+<div class="field"><label>Sphere</label><input id="clRxSphere" placeholder="e.g. -9.50" step="0.25" type="number"/></div>
+<div class="field"><label>Cylinder</label><input id="clRxCyl" placeholder="e.g. -2.75" step="0.25" type="number"/></div>
+<div class="field"><label>Axis</label><input id="clRxAxis" min="1" max="180" placeholder="e.g. 180" type="number"/></div>
+<div class="field"><label>Near add</label><input id="clRxAdd" placeholder="e.g. +2.00" step="0.25" type="number"/></div>
+<div class="field"><label>Preferred modality</label><select id="clRxModality"><option value="">Any</option><option>Daily disposable</option><option>Monthly</option><option>2-week</option><option>Custom soft</option></select></div>
+</div><div class="actions"><button class="secondary" type="button" onclick="recommendContactLensOptions()">Show Lens Options</button><button class="secondary" type="button" onclick="clearContactLensOptions()">Clear</button></div>
+<div class="cl-options" id="clOptionResults">Enter an Rx to screen likely contact-lens categories and products.</div></div>
 <div class="card"><h2>Fit Assessment</h2><div class="three-grid">
 <div class="field"><label>Comfort</label><select id="clComfort"><option value="">Select...</option><option>Good comfort</option><option>Acceptable comfort</option><option>Reduced comfort</option><option>Symptomatic</option></select></div>
 <div class="field"><label>Centration</label><select id="clCentration"><option value="">Select...</option><option>Well centered</option><option>Slight decentration</option><option>Decentered</option></select></div>
@@ -483,8 +499,8 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <div class="card"><h2>Parsed / Manual Values</h2><div class="three-grid">
 <div class="field"><label>Fixation losses</label><input id="vfFl" placeholder="0/20" type="text"/></div>
 <div class="field"><label>HK</label><input id="vfHk" placeholder="e.g. acceptable / tracked" type="text"/></div>
-<div class="field"><label>FP (%)</label><input id="vfFp" min="0" max="100" type="number"/></div>
-<div class="field"><label>FN (%)</label><input id="vfFn" min="0" max="100" type="number"/></div>
+<div class="field"><label>FP (%) or fraction</label><input id="vfFp" placeholder="e.g. 5% or 1/20" type="text" oninput="normalizeVfRateField(this,false)" onblur="normalizeVfRateField(this,true)"/></div>
+<div class="field"><label>FN (%) or fraction</label><input id="vfFn" placeholder="e.g. 8% or 2/25" type="text" oninput="normalizeVfRateField(this,false)" onblur="normalizeVfRateField(this,true)"/></div>
 <div class="field"><label>Duration</label><input id="vfDuration" placeholder="8:17" type="text"/></div>
 <div class="field"><label>GHT</label><input id="vfGht" placeholder="Outside normal limits" type="text"/></div>
 <div class="field"><label>VFI (%)</label><input id="vfVfi" min="0" max="100" type="number"/></div>
@@ -576,13 +592,16 @@ const diagnosisMap=[
 ];
 
 const insuranceProfiles={
- eyemed:{ecosystem:'eyemed',coating:'lens-crizal',photo:'lens-transitions',summary:'Essilor ecosystem selected. Crizal Sapphire HR and Transitions optional added. Eyezen is chosen by support level; Varilux XR is reserved for presbyopia.'},
- vsp:{ecosystem:'vsp',coating:'lens-techshield',photo:'lens-sunsync',summary:'Unity ecosystem selected. TechShield AR and SunSync optional added. Unity Relieve is chosen by support level; Unity progressive is reserved for presbyopia.'},
- aetna:{ecosystem:'eyemed',coating:'lens-crizal',photo:'lens-transitions',summary:'Aetna/EyeMed-style ecosystem selected. Verify benefits; lens design remains based on clinical need.'},
- metlife:{ecosystem:'vsp',coating:'lens-techshield',photo:'lens-sunsync',summary:'MetLife/VSP-style ecosystem selected. Verify benefits; lens design remains based on clinical need.'},
+ eyemed:{ecosystem:'eyemed',coating:'lens-crizal',summary:'Essilor ecosystem selected. Crizal Sapphire HR is selected. Lens design is based on near-add need; no photochromic option is preselected.'},
+ vsp:{ecosystem:'vsp',coating:'lens-techshield',summary:'Unity ecosystem selected. TechShield AR is selected. Lens design is based on near-add need; no photochromic option is preselected.'},
+ aetna:{ecosystem:'eyemed',coating:'lens-crizal',summary:'Aetna/EyeMed-style ecosystem selected. Verify benefits; lens design remains based on clinical need.'},
+ metlife:{ecosystem:'vsp',coating:'lens-techshield',summary:'MetLife/VSP-style ecosystem selected. Verify benefits; lens design remains based on clinical need.'},
  davis:{ecosystem:'manual',summary:'Use the current Davis formulary and select the lens design manually.'},
  spectera:{ecosystem:'manual',summary:'Verify the current Spectera formulary and select the lens design manually.'},
- superior:{ecosystem:'manual',summary:'Verify the current Superior Vision formulary and select the lens design manually.'}
+ superior:{ecosystem:'manual',summary:'Verify the current Superior Vision formulary and select the lens design manually.'},
+ march:{ecosystem:'manual',summary:'March Vision selected. Use the current authorization and covered formulary; generic single vision is selected when no near add is needed.'},
+ private:{ecosystem:'manual',summary:'Private pay selected. Use the best clinically appropriate design; generic single vision is selected when no near add is needed.'},
+ other:{ecosystem:'manual',summary:'Other insurance selected. Verify the plan formulary; generic single vision is selected when no near add is needed.'}
 };
 let currentInsurancePreset='';
 function insuranceEcosystem(value){
@@ -592,18 +611,26 @@ function insuranceEcosystem(value){
 }
 function clearLensGroup(ids){ids.forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});}
 function syncInsuranceExtras(ecosystem){
-  clearLensGroup(['lens-crizal','lens-techshield','lens-transitions','lens-sunsync']);
+  clearLensGroup(['lens-crizal','lens-techshield','lens-generic-ar','lens-transitions','lens-sunsync']);
   if(ecosystem==='vsp'){
     const ar=document.getElementById('lens-techshield'); if(ar) ar.checked=true;
-    const photo=document.getElementById('lens-sunsync'); if(photo) photo.checked=true;
   }else if(ecosystem==='eyemed'){
     const ar=document.getElementById('lens-crizal'); if(ar) ar.checked=true;
-    const photo=document.getElementById('lens-transitions'); if(photo) photo.checked=true;
+  }else{
+    const ar=document.getElementById('lens-generic-ar'); if(ar) ar.checked=true;
   }
 }
 function clearAutomaticDesigns(){
-  clearLensGroup(['lens-unity-svx','lens-unity-relieve','lens-unity-relieve-50','lens-unity-relieve-70','lens-eyezen','lens-eyezen-start','lens-eyezen-1','lens-eyezen-2','lens-eyezen-3','lens-eyezen-4','lens-varilux-xr','lens-unity-pal']);
+  clearLensGroup(['lens-unity-svx','lens-unity-relieve','lens-unity-relieve-50','lens-unity-relieve-70','lens-eyezen','lens-eyezen-start','lens-eyezen-1','lens-eyezen-2','lens-eyezen-3','lens-eyezen-4','lens-varilux-xr','lens-unity-pal','lens-eyezen-sv','lens-unity-sv','lens-generic-sv']);
   // Varilux X is intentionally manual and is not cleared here.
+}
+
+function selectDefaultSingleVision(ecosystem){
+  clearLensGroup(['lens-eyezen-sv','lens-unity-sv','lens-generic-sv']);
+  const hasNearSupport=(document.getElementById('supportAdd').value!=='' || document.getElementById('supportSymptoms').value==='presbyopic');
+  if(hasNearSupport) return;
+  const id=ecosystem==='vsp'?'lens-unity-sv':ecosystem==='eyemed'?'lens-eyezen-sv':'lens-generic-sv';
+  const el=document.getElementById(id); if(el) el.checked=true;
 }
 
 function applyInsurance(name){
@@ -611,10 +638,11 @@ function applyInsurance(name){
   const p=insuranceProfiles[name];
   clearAutomaticDesigns();
   syncInsuranceExtras(p.ecosystem);
+  selectDefaultSingleVision(p.ecosystem);
   document.getElementById('insuranceSummary').textContent=p.summary;
   const supportSelect=document.getElementById('supportInsurance');
   if(supportSelect){
-    supportSelect.value=p.ecosystem==='eyemed'?'eyemed':p.ecosystem==='vsp'?'vsp':'other';
+    supportSelect.value=p.ecosystem==='eyemed'?'eyemed':p.ecosystem==='vsp'?'vsp':name==='spectera'?'spectera':name==='march'?'march':name==='private'?'private':'other';
   }
   if(document.getElementById('rxMeridian1').value || document.getElementById('rxMeridian2').value) applyRxMaterial();
   generateNote();
@@ -716,14 +744,26 @@ function testNameFromText(text){
 }
 
 function cleanVfLabel(value){return (value||'').trim().replace(/\s+/g,' ')}
-function parsePercent(text,patterns){for(const p of patterns){const m=text.match(p);if(m)return m[1]}return ''}
+function rateToPercent(value){
+  const raw=String(value??'').trim().replace(/%/g,'');
+  if(!raw)return '';
+  const fraction=raw.match(/^(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/);
+  if(fraction){const n=Number(fraction[1]),d=Number(fraction[2]);if(d>0)return String(Math.round((n/d)*1000)/10);return ''}
+  const n=Number(raw);return Number.isFinite(n)?String(Math.min(100,Math.max(0,n))):'';
+}
+function normalizeVfRateField(el,force=false){
+  const value=rateToPercent(el.value);
+  if(value!=='' && (force || /[%\/]/.test(el.value))) el.value=value;
+  updateVfPreview();
+}
+function parsePercent(text,patterns){for(const p of patterns){const m=text.match(p);if(m)return rateToPercent(m[1])}return ''}
 function parseVisualFieldPaste(){
   const text=((document.getElementById('vfReliabilityPaste').value||'')+'\n'+(document.getElementById('vfIndicesPaste').value||'')).replace(/,/g,' ');
   const set=(id,v)=>{if(v!==''&&v!=null)document.getElementById(id).value=cleanVfLabel(v)};
   let m=text.match(/fixation\s*loss(?:es)?\s*[:\-]?\s*(\d+\s*\/\s*\d+)/i); if(m)set('vfFl',m[1].replace(/\s/g,''));
   m=text.match(/\bHK\b\s*[:\-]?\s*([^\n;]+)/i); if(m)set('vfHk',m[1]);
-  set('vfFp',parsePercent(text,[/false\s*pos(?:itive)?(?:\s*errors?)?\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*%?/i,/\bFP\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*%?/i]));
-  set('vfFn',parsePercent(text,[/false\s*neg(?:ative)?(?:\s*errors?)?\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*%?/i,/\bFN\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*%?/i]));
+  set('vfFp',parsePercent(text,[/false\s*pos(?:itive)?(?:\s*errors?)?\s*[:\-]?\s*(\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?)\s*%?/i,/\bFP\s*[:\-]?\s*(\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?)\s*%?/i]));
+  set('vfFn',parsePercent(text,[/false\s*neg(?:ative)?(?:\s*errors?)?\s*[:\-]?\s*(\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?)\s*%?/i,/\bFN\s*[:\-]?\s*(\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?)\s*%?/i]));
   m=text.match(/test\s*duration\s*[:\-]?\s*(\d{1,2}:\d{2})/i); if(m)set('vfDuration',m[1]);
   m=text.match(/\bGHT\b\s*[:\-]?\s*([^\n;]+)/i); if(m)set('vfGht',m[1]);
   m=text.match(/\bVFI\b\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*%?/i); if(m)set('vfVfi',m[1]);
@@ -733,7 +773,7 @@ function parseVisualFieldPaste(){
 }
 function qualityFromVf(){
  const chosen=document.getElementById('vfReliability').value;if(chosen)return chosen;
- const fp=Number(document.getElementById('vfFp').value),fn=Number(document.getElementById('vfFn').value),fl=document.getElementById('vfFl').value;
+ const fp=Number(rateToPercent(document.getElementById('vfFp').value)),fn=Number(rateToPercent(document.getElementById('vfFn').value)),fl=document.getElementById('vfFl').value;
  let flBad=false;if(fl.includes('/')){const [a,b]=fl.split('/').map(Number);flBad=b>0&&a/b>0.2}
  if((!Number.isNaN(fp)&&fp>=15)||(!Number.isNaN(fn)&&fn>=25)||flBad)return 'Poor';
  if((!Number.isNaN(fp)&&fp>=8)||(!Number.isNaN(fn)&&fn>=15))return 'Fair';
@@ -755,7 +795,7 @@ function clearVfPastes(){['vfReliabilityPaste','vfIndicesPaste','vfFl','vfHk','v
 function buildVisualFieldInterpretation(includeInterpretation=true){
  const eye=document.getElementById('vfLaterality').value||'Eye';const quality=qualityFromVf();const rel=[];
  const fl=document.getElementById('vfFl').value.trim(),hk=document.getElementById('vfHk').value.trim(),fp=document.getElementById('vfFp').value,fn=document.getElementById('vfFn').value,dur=document.getElementById('vfDuration').value.trim(),ght=document.getElementById('vfGht').value.trim(),vfi=document.getElementById('vfVfi').value,md=document.getElementById('vfMd').value,psd=document.getElementById('vfPsd').value;
- if(fl)rel.push('FL '+fl);else if(hk)rel.push('HK '+hk);if(fp!=='')rel.push('FP '+fp+'%');if(fn!=='')rel.push('FN '+fn+'%');
+ if(fl)rel.push('FL '+fl);else if(hk)rel.push('HK '+hk);if(fp!=='')rel.push('FP '+rateToPercent(fp)+'%');if(fn!=='')rel.push('FN '+rateToPercent(fn)+'%');
  const lines=[eye+':',quality+' quality'+(rel.length?'; '+rel.join(', '):'')+'.'];if(dur)lines.push('Test duration: '+dur+'.');if(ght)lines.push('GHT: '+ght.replace(/\.$/,'')+'.');
  const indices=[];if(vfi!=='')indices.push('VFI: '+vfi+'%');if(md!=='')indices.push('MD: '+Number(md).toFixed(2)+' dB');if(psd!=='')indices.push('PSD: '+Number(psd).toFixed(2)+' dB');if(indices.length)lines.push(indices.join('. ')+'.');
  const interp=document.getElementById('vfInterpretation').value.trim();if(includeInterpretation&&interp)lines.push('', 'Interpretation:',ensurePeriod(interp));return lines.join('\n');
@@ -778,7 +818,7 @@ function renderStructuredNote(groups){
   const blocks=[];
   if(assessment.length)blocks.push('Assessment\n'+assessment.join(' '));
   if(plan.length)blocks.push('Plan\n'+plan.join(' '));
-  return blocks.join('\n\n');
+  return blocks.join('\n');
 }
 
 
@@ -1096,7 +1136,7 @@ function generateLensNote(){
   });
   const order=[
     /Polycarbonate|Trivex|High index/i,
-    /Eyezen|Unity|Varilux/i,
+    /Single vision|Eyezen|Unity|Varilux/i,
     /Crizal|TechShield/i,
     /Transitions|SunSync/i,
     /Polarized|Xperio/i
@@ -1104,7 +1144,7 @@ function generateLensNote(){
   const sorted=[];
   order.forEach(rx=>parts.filter(p=>rx.test(p)).forEach(p=>sorted.push(p)));
   parts.forEach(p=>{if(!sorted.includes(p)) sorted.push(p);});
-  document.getElementById('lensOutput').value=[...new Set(sorted)].join('\n\n');
+  document.getElementById('lensOutput').value=[...new Set(sorted)].join('\n');
 }
 
 async function copyLensNote(){
@@ -1167,8 +1207,13 @@ function applyRxMaterial(){
   if(ecosystem==='vsp'){
     const t=document.getElementById('lens-techshield'); if(t)t.checked=true;
     const c=document.getElementById('lens-crizal'); if(c)c.checked=false;
-  }else{
+  }else if(ecosystem==='eyemed'){
     const c=document.getElementById('lens-crizal'); if(c)c.checked=true;
+    const t=document.getElementById('lens-techshield'); if(t)t.checked=false;
+    const g=document.getElementById('lens-generic-ar'); if(g)g.checked=false;
+  }else{
+    const g=document.getElementById('lens-generic-ar'); if(g)g.checked=true;
+    const c=document.getElementById('lens-crizal'); if(c)c.checked=false;
     const t=document.getElementById('lens-techshield'); if(t)t.checked=false;
   }
   document.getElementById('materialSummary').textContent=summary;
@@ -1298,11 +1343,46 @@ function applySupportRecommendation(){
   generateLensNote();
 }
 
+function recommendContactLensOptions(){
+  const sphere=Number(document.getElementById('clRxSphere').value);
+  const cylRaw=document.getElementById('clRxCyl').value;
+  const cyl=cylRaw===''?0:Math.abs(Number(cylRaw));
+  const addRaw=document.getElementById('clRxAdd').value;
+  const add=addRaw===''?0:Math.abs(Number(addRaw));
+  const modality=document.getElementById('clRxModality').value;
+  const out=document.getElementById('clOptionResults');
+  if(!Number.isFinite(sphere)){out.textContent='Enter at least the sphere power to screen likely options.';return;}
+  const lines=[];
+  const highSphere=sphere>8 || sphere<-10;
+  const extendedSphere=sphere>6 || sphere<-8;
+  const highCyl=cyl>2.25;
+  const toric=cyl>=0.75;
+  const multifocal=add>=0.75;
+  if(highSphere||highCyl) lines.push('Range flag: extended-range or custom lens likely required.');
+  else if(extendedSphere) lines.push('Range flag: verify stock range; extended-range products may be needed.');
+  else lines.push('Range flag: likely within common stock ranges, subject to brand parameters.');
+  if(multifocal && highCyl) lines.push('Category: toric multifocal or custom multifocal. Consider Biofinity Toric Multifocal/custom soft, or specialty fitting when stock parameters do not overlap.');
+  else if(multifocal) lines.push('Category: multifocal soft lens. Common families to check include Biofinity Multifocal, MyDay Multifocal, ACUVUE OASYS MAX 1-Day Multifocal, TOTAL30 Multifocal, and Bausch + Lomb ULTRA Multifocal.');
+  else if(highCyl) lines.push('Category: extended-range toric/custom soft. Common families to check include Biofinity XR Toric, Proclear Toric XR, and custom soft toric laboratories.');
+  else if(toric) lines.push('Category: toric soft lens. Common families to check include MyDay Toric, Biofinity Toric, ACUVUE OASYS 1-Day for Astigmatism, TOTAL30 for Astigmatism, and Bausch + Lomb ULTRA for Astigmatism.');
+  else if(highSphere) lines.push('Category: extended-range spherical/custom soft. Common families to check include Biofinity XR, Proclear sphere/XR options, and custom soft lenses.');
+  else lines.push('Category: spherical soft lens. Daily and monthly options are broadly available.');
+  if(modality) lines.push('Preferred modality: '+modality+'. Filter the suggested families to products available in that modality.');
+  if(cyl>0 && cyl<0.75) lines.push('Low cylinder: a spherical equivalent trial may be reasonable depending on acuity, symptoms, and ocular dominance.');
+  lines.push('Verify the manufacturer’s current power, cylinder, axis, add, base-curve, and diameter availability before ordering.');
+  out.textContent=lines.join('\n');
+}
+function clearContactLensOptions(){
+  ['clRxSphere','clRxCyl','clRxAxis','clRxAdd'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('clRxModality').value='';
+  document.getElementById('clOptionResults').textContent='Enter an Rx to screen likely contact-lens categories and products.';
+}
+
 function clearAll(){
   const section=activeSection();
   section.querySelectorAll('input[type=checkbox]').forEach(x=>x.checked=false);
   section.querySelectorAll('select').forEach(x=>x.selectedIndex=0);
-  ['rtcNumber','customSentence','rxAge','rxMeridian1','rxMeridian2','supportAdd'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['rtcNumber','customSentence','rxAge','rxMeridian1','rxMeridian2','supportAdd','clRxSphere','clRxCyl','clRxAxis','clRxAdd'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   ['rtcUnit','rxPediatric','rxSafety','supportSymptoms','supportInsurance'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id==='rxSafety'?'no':'';});
   document.getElementById('soonerPrn').checked=false;
   document.getElementById('understanding').checked=true;
@@ -1322,7 +1402,7 @@ document.addEventListener('change',e=>{
     syncInsuranceExtras(eco);
     if(document.getElementById('rxMeridian1').value||document.getElementById('rxMeridian2').value) applyRxMaterial();
   }
-  if(['rxPediatric','rxSafety'].includes(e.target.id) && (document.getElementById('rxMeridian1').value||document.getElementById('rxMeridian2').value)) applyRxMaterial();
+  if(['rxPediatric','rxSafety','rxAge'].includes(e.target.id) && (document.getElementById('rxMeridian1').value||document.getElementById('rxMeridian2').value)) applyRxMaterial();
   if(e.target.matches('input[type=checkbox], select') && e.target.id!=='diagnosisSelect'){
     generateNote(); generateLensNote();
   }
