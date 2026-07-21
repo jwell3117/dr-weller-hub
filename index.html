@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dr. Weller's Chart Builder v0.32</title>
+<title>Dr. Weller's Chart Builder v0.33</title>
 <style>
 :root{
   --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#64748b;--border:#d9e2ef;
@@ -71,13 +71,16 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 .icd-code{font-family:Consolas,Monaco,monospace;font-size:24px;font-weight:800;letter-spacing:.4px;color:#1d4ed8;margin:6px 0}
 .icd-description{font-size:14px;line-height:1.45;margin-bottom:10px}
 .icd-warning{font-size:11px;color:#64748b;line-height:1.35;margin-top:10px}
+
+.paste-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.paste-box{min-height:118px}.compact-preview{white-space:pre-wrap;padding:12px;border:1px solid var(--border);border-radius:10px;background:#fbfdff;font:13px/1.5 Consolas,Monaco,monospace}.chip-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.chip{background:#eef2ff;color:#3730a3;padding:7px 10px;border-radius:999px;font-size:12px}.three-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.favorite-box{margin-top:10px;padding:10px;border:1px dashed var(--border);border-radius:9px;background:#f8fafc}.interpretation-input{min-height:95px}.hidden{display:none!important}
+@media(max-width:900px){.paste-grid,.three-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header>
 <div class="header-inner">
-<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.32 umbrella diagnoses + ICD-10 assistant</div></div>
-<div class="badge">v0.32 • No patient data stored</div>
+<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.33 clinic workflow upgrade</div></div>
+<div class="badge">v0.33 • No patient data stored</div>
 </div>
 </header>
 <div class="container">
@@ -370,27 +373,34 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 </div></div>
 </section>
 <section class="section" id="contact">
-<div class="card"><h2>Contact Lens Annual</h2><div class="small">Use the EHR's contact lens diagnosis and refractive code families as applicable.</div></div>
-<div class="card">
-<h2>Lens Status</h2>
-<div class="grid">
-<label class="option"><input data-text="Contact lens prescription was finalized without change." type="checkbox"/>No change / finalized</label>
-<label class="option"><input data-text="New contact lens trials were dispensed to improve visual acuity and function." type="checkbox"/>Trials dispensed</label>
-<label class="option"><input data-text="Patient will return for contact lens evaluation after trial wear." type="checkbox"/>Return for CLC</label>
+<div class="card"><h2>Contact Lens Builder</h2><div class="small">Enter the fit and prescription details once; the builder creates a concise assessment and cohesive plan/education paragraph.</div></div>
+<div class="card"><h2>Lens &amp; Prescription</h2><div class="three-grid">
+<div class="field"><label>Laterality</label><select id="clLaterality"><option value="">Select...</option><option>OD</option><option>OS</option><option>OU</option></select></div>
+<div class="field"><label>Brand / design</label><input id="clBrand" placeholder="e.g. Biofinity Toric" type="text"/></div>
+<div class="field"><label>Modality</label><select id="clModality"><option value="">Select...</option><option>Daily disposable</option><option>2-week replacement</option><option>Monthly replacement</option><option>RGP</option><option>Scleral</option><option>Other</option></select></div>
+<div class="field"><label>Power / Rx</label><input id="clPower" placeholder="e.g. -5.50 -1.25 x 180" type="text"/></div>
+<div class="field"><label>BC</label><input id="clBc" placeholder="e.g. 8.6" type="text"/></div>
+<div class="field"><label>Diameter</label><input id="clDia" placeholder="e.g. 14.2" type="text"/></div>
+<div class="field"><label>Over-refraction</label><input id="clOr" placeholder="e.g. plano / +0.25" type="text"/></div>
+<div class="field"><label>Vision</label><input id="clVision" placeholder="e.g. 20/20" type="text"/></div>
+<div class="field"><label>Wearing schedule</label><input id="clWear" placeholder="e.g. daily wear" type="text"/></div>
+</div></div>
+<div class="card"><h2>Fit Assessment</h2><div class="three-grid">
+<div class="field"><label>Comfort</label><select id="clComfort"><option value="">Select...</option><option>Good comfort</option><option>Acceptable comfort</option><option>Reduced comfort</option><option>Symptomatic</option></select></div>
+<div class="field"><label>Centration</label><select id="clCentration"><option value="">Select...</option><option>Well centered</option><option>Slight decentration</option><option>Decentered</option></select></div>
+<div class="field"><label>Movement</label><select id="clMovement"><option value="">Select...</option><option>Appropriate movement</option><option>Minimal movement</option><option>Excessive movement</option></select></div>
+<div class="field"><label>Rotation (toric)</label><input id="clRotation" placeholder="e.g. stable, 5° temporal" type="text"/></div>
+<div class="field"><label>Surface wetting</label><select id="clWetting"><option value="">Select...</option><option>Good surface wetting</option><option>Mild surface drying</option><option>Poor surface wetting</option></select></div>
+<div class="field"><label>Fit impression</label><select id="clFit"><option value="">Select...</option><option>Acceptable fit</option><option>Needs modification</option><option>Not acceptable</option></select></div>
+</div></div>
+<div class="card"><h2>Plan &amp; Education</h2><div class="grid">
+<label class="option"><input data-text="Contact lens prescription was finalized." type="checkbox"/>Finalize prescription</label>
+<label class="option"><input data-text="New contact lens trials were dispensed; patient will return after trial wear for evaluation and finalization." type="checkbox"/>Trials + return</label>
+<label class="option"><input data-text="Recommended backup spectacles and reviewed lens replacement, hand hygiene, and avoidance of overnight wear and water exposure." type="checkbox"/>Core education</label>
 <label class="option"><input data-text="Recommended daily disposable contact lenses when clinically and financially feasible." type="checkbox"/>Recommend daily disposable</label>
-</div>
-</div>
-<div class="card">
-<h2>Education</h2>
-<div class="grid">
-<label class="option"><input data-text="Reviewed handwashing, lens handling, replacement schedule, and case hygiene." type="checkbox"/>General hygiene</label>
-<label class="option"><input data-text="Educated patient on the risks of overnight wear and contact lens overwear." type="checkbox"/>No overnight/overwear</label>
-<label class="option"><input data-text="Educated patient to avoid water exposure while wearing contact lenses." type="checkbox"/>Avoid water exposure</label>
-<label class="option"><input data-text="Recommended backup spectacles." type="checkbox"/>Backup glasses</label>
-<label class="option"><input data-text="Discussed periodic hydrogen peroxide-based disinfection with Clear Care for reusable lenses and reviewed proper neutralization." type="checkbox"/>Clear Care</label>
-<label class="option"><input data-text="Reviewed that contact lenses with UV filtering do not replace UV-blocking sunglasses because they do not cover the entire ocular surface and adnexa." type="checkbox"/>UV-filtering CL counseling</label>
-</div>
-</div>
+<label class="option"><input data-text="Discussed hydrogen peroxide-based disinfection with proper neutralization for reusable lenses." type="checkbox"/>Clear Care</label>
+<label class="option"><input data-text="Patient was instructed to discontinue lens wear and return promptly for pain, redness, photophobia, discharge, or decreased vision." type="checkbox"/>Urgent CL precautions</label>
+</div></div>
 </section>
 <section class="section" id="blepharitis">
 <div class="card"><h2>Blepharitis</h2><div class="small">ICD-10 family: H01.0 — select type and laterality in EHR.</div></div>
@@ -458,35 +468,40 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 </div>
 
 <section class="section" id="visualfield">
-<div class="card"><h2>Visual Field Interpretation</h2><div class="small">Independent test-interpretation module. Review raw thresholds, probability plots, gaze tracking, structure-function agreement, and prior fields before using generated language.</div></div>
-<div class="card"><h2>Test &amp; Reliability</h2><div class="inline-grid">
+<div class="card"><h2>Visual Field Interpretation</h2><div class="small">Paste the reliability block and global-index block separately. Values remain in the form while you move between the printout and EHR.</div></div>
+<div class="card"><h2>Test</h2><div class="three-grid">
 <div class="field"><label>Test</label><select id="vfTest"><option value="">Select...</option><option>Humphrey 24-2</option><option>Humphrey 24-2C</option><option>Humphrey 30-2</option><option>Humphrey 10-2</option><option>Humphrey 60-4</option><option>Other automated perimetry</option></select></div>
-<div class="field"><label>Laterality</label><select id="vfLaterality"><option value="">Select...</option><option>OD</option><option>OS</option><option>OU</option></select></div>
-<div class="field"><label>Reliability grade</label><select id="vfReliability"><option value="">Select...</option><option>Excellent</option><option>Good</option><option>Fair</option><option>Poor</option></select></div>
-<div class="field"><label>VQI / quality index</label><input id="vfVqi" inputmode="decimal" placeholder="e.g. 92" type="number"/></div>
-<div class="field"><label>Fixation losses</label><input id="vfFl" placeholder="e.g. 2/14" type="text"/></div>
-<div class="field"><label>False positives (%)</label><input id="vfFp" min="0" max="100" type="number"/></div>
-<div class="field"><label>False negatives (%)</label><input id="vfFn" min="0" max="100" type="number"/></div>
-<div class="field"><label>Test duration</label><input id="vfDuration" placeholder="e.g. 4:18" type="text"/></div>
+<div class="field"><label>Eye</label><select id="vfLaterality"><option value="">Select...</option><option>OD</option><option>OS</option><option>OU</option></select></div>
+<div class="field"><label>Quality</label><select id="vfReliability"><option value="">Auto / select...</option><option>Excellent</option><option>Good</option><option>Fair</option><option>Poor</option></select></div>
 </div></div>
-<div class="card"><h2>Global Indices &amp; Pattern</h2><div class="inline-grid">
-<div class="field"><label>Mean deviation (dB)</label><input id="vfMd" step="0.01" type="number"/></div>
-<div class="field"><label>MD interpretation</label><select id="vfMdGrade"><option value="">Auto from MD or select...</option><option>No depression noted</option><option>Mild generalized depression</option><option>Moderate generalized depression</option><option>Severe generalized depression</option></select></div>
+<div class="card"><h2>Two-Step Paste</h2><div class="paste-grid">
+<div class="field"><label>1. Reliability block</label><textarea class="paste-box" id="vfReliabilityPaste" placeholder="Paste Fixation Losses or HK, False POS, False NEG, and Test Duration" oninput="parseVisualFieldPaste()"></textarea></div>
+<div class="field"><label>2. Global indices</label><textarea class="paste-box" id="vfIndicesPaste" placeholder="Paste or type GHT, VFI, MD, and PSD" oninput="parseVisualFieldPaste()"></textarea></div>
+</div><div class="actions"><button class="secondary" type="button" onclick="parseVisualFieldPaste()">Parse Values</button><button class="secondary" type="button" onclick="clearVfPastes()">Clear VF Values</button></div>
+<div class="compact-preview" id="vfParsedPreview">Parsed values will appear here.</div>
+</div>
+<div class="card"><h2>Parsed / Manual Values</h2><div class="three-grid">
+<div class="field"><label>Fixation losses</label><input id="vfFl" placeholder="0/20" type="text"/></div>
+<div class="field"><label>HK</label><input id="vfHk" placeholder="e.g. acceptable / tracked" type="text"/></div>
+<div class="field"><label>FP (%)</label><input id="vfFp" min="0" max="100" type="number"/></div>
+<div class="field"><label>FN (%)</label><input id="vfFn" min="0" max="100" type="number"/></div>
+<div class="field"><label>Duration</label><input id="vfDuration" placeholder="8:17" type="text"/></div>
+<div class="field"><label>GHT</label><input id="vfGht" placeholder="Outside normal limits" type="text"/></div>
+<div class="field"><label>VFI (%)</label><input id="vfVfi" min="0" max="100" type="number"/></div>
+<div class="field"><label>MD (dB)</label><input id="vfMd" step="0.01" type="number"/></div>
 <div class="field"><label>PSD (dB)</label><input id="vfPsd" step="0.01" type="number"/></div>
-<div class="field"><label>Defect pattern</label><select id="vfPattern"><option value="">Select...</option><option>No localized defect noted</option><option>Generalized depression</option><option>Superior nasal step</option><option>Inferior nasal step</option><option>Superior arcuate defect</option><option>Inferior arcuate defect</option><option>Paracentral defect</option><option>Central scotoma</option><option>Cecocentral scotoma</option><option>Altitudinal defect</option><option>Temporal wedge</option><option>Hemianopic defect</option><option>Quadrantanopic defect</option><option>Scattered nonspecific defects</option><option>Other localized defect</option></select></div>
-<div class="field"><label>Comparison</label><select id="vfProgression"><option value="">Select...</option><option>Baseline study</option><option>Stable compared with prior</option><option>Possible progression</option><option>Likely progression</option><option>Improved compared with prior</option><option>Not comparable with prior</option></select></div>
-<div class="field"><label>Correlation</label><select id="vfCorrelation"><option value="">Select...</option><option>Correlates with OCT/optic nerve findings</option><option>Does not correlate with structural findings</option><option>Structure-function correlation is equivocal</option><option>No structural comparison available</option></select></div>
 </div></div>
-<div class="card"><h2>Education &amp; Plan</h2><div class="grid">
-<label class="option"><input data-text="Reviewed the visual field findings and their significance with the patient." type="checkbox"/>Discussed results</label>
-<label class="option"><input data-text="Discussed the importance of repeatable serial testing to distinguish true change from test variability." type="checkbox"/>Serial testing education</label>
-<label class="option"><input data-text="Repeat visual field testing was recommended to confirm the finding." type="checkbox"/>Repeat to confirm</label>
-<label class="option"><input data-text="Continue serial visual field monitoring." type="checkbox"/>Continue monitoring</label>
-</div></div>
+<div class="card"><h2>Clinical Interpretation</h2><div class="three-grid">
+<div class="field"><label>Defect pattern</label><select id="vfPattern" onchange="suggestVfInterpretation()"><option value="">Select...</option><option>No significant visual field defect</option><option>Generalized depression</option><option>Superior nasal step</option><option>Inferior nasal step</option><option>Superior arcuate defect</option><option>Inferior arcuate defect</option><option>Paracentral defect</option><option>Central scotoma</option><option>Cecocentral scotoma</option><option>Altitudinal defect</option><option>Hemianopic defect</option><option>Quadrantanopic defect</option><option>Scattered nonspecific defects</option><option>Other localized defect</option></select></div>
+<div class="field"><label>Density / severity</label><select id="vfDefectSeverity" onchange="suggestVfInterpretation()"><option value="">Select...</option><option>Mild</option><option>Moderate</option><option>Dense</option></select></div>
+<div class="field"><label>Comparison</label><select id="vfProgression" onchange="suggestVfInterpretation()"><option value="">Select...</option><option>Baseline study</option><option>Stable compared with previous testing</option><option>Possible progression compared with previous testing</option><option>Progression compared with previous testing</option><option>Improved compared with previous testing</option><option>Not comparable with previous testing</option></select></div>
+</div><div class="field" style="margin-top:12px"><label>Editable interpretation</label><textarea class="interpretation-input" id="vfInterpretation" placeholder="Generated interpretation appears here; edit freely."></textarea></div>
+<div class="actions"><button class="primary" type="button" onclick="suggestVfInterpretation()">Generate Interpretation</button><button class="secondary" type="button" onclick="saveVfFavorite()">Save Edited Wording</button></div><div class="favorite-box small" id="vfFavoriteStatus">Saved wording is stored only in this browser.</div>
+</div>
 </section>
 <section class="section" id="oct">
-<div class="card"><h2>OCT Interpretation</h2><div class="small">Independent test-interpretation module for optic nerve/RNFL/GCC or macular OCT. Verify segmentation, centration, signal quality, artifacts, and comparison validity.</div></div>
-<div class="card"><h2>Study</h2><div class="inline-grid">
+<div class="card"><h2>OCT Interpretation</h2><div class="small">Use the EHR's dedicated measurement fields for numeric values. This tool creates the concise interpretation sentence and follow-up language.</div></div>
+<div class="card"><h2>Study</h2><div class="three-grid">
 <div class="field"><label>Study type</label><select id="octType"><option value="">Select...</option><option>OCT RNFL/GCC</option><option>Macular OCT</option><option>Anterior segment OCT</option></select></div>
 <div class="field"><label>Laterality</label><select id="octLaterality"><option value="">Select...</option><option>OD</option><option>OS</option><option>OU</option></select></div>
 <div class="field"><label>Image quality</label><select id="octQuality"><option value="">Select...</option><option>Good quality</option><option>Acceptable quality</option><option>Limited quality</option><option>Poor quality / not interpretable</option></select></div>
@@ -494,8 +509,8 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <div class="field"><label>Progression</label><select id="octProgression"><option value="">Select...</option><option>Baseline study</option><option>Stable compared with prior</option><option>Possible progression</option><option>Likely progression</option><option>Improved compared with prior</option><option>Not comparable with prior</option></select></div>
 <div class="field"><label>Correlation</label><select id="octCorrelation"><option value="">Select...</option><option>Correlates with clinical examination</option><option>Correlates with visual field findings</option><option>Does not correlate with other findings</option><option>Correlation is equivocal</option></select></div>
 </div></div>
-<div class="card"><h2>Education &amp; Plan</h2><div class="grid">
-<label class="option"><input data-text="Reviewed the OCT findings and their significance with the patient." type="checkbox"/>Discussed results</label>
+<div class="card"><h2>Plan &amp; Education</h2><div class="grid">
+<label class="option"><input data-text="Reviewed the OCT findings with the patient and discussed their clinical significance." type="checkbox"/>Discussed results</label>
 <label class="option"><input data-text="Continue serial OCT monitoring for structural change." type="checkbox"/>Continue monitoring</label>
 <label class="option"><input data-text="Repeat OCT was recommended due to limited image quality or possible artifact." type="checkbox"/>Repeat OCT</label>
 <label class="option"><input data-text="Additional clinical correlation and/or specialty referral was recommended based on the OCT findings." type="checkbox"/>Additional evaluation</label>
@@ -513,7 +528,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 </div>
 <div class="small" id="copyStatus" style="margin-top:9px"></div>
 </div>
-<div class="card icd-card">
+<div class="card icd-card hidden">
 <h2>ICD-10 Assistant</h2>
 <div class="icd-status" id="icdStatus">Select a diagnosis and required details.</div>
 <div class="icd-code" id="icdCode">—</div>
@@ -700,35 +715,50 @@ function testNameFromText(text){
   return '';
 }
 
-function buildVisualFieldInterpretation(){
-  const lines=[];
-  const test=document.getElementById('vfTest').value;
-  const lat=document.getElementById('vfLaterality').value;
-  if(test) lines.push(test+(lat?' '+lat:'')+' was reviewed and interpreted.');
-  const rel=document.getElementById('vfReliability').value;
-  const vqi=document.getElementById('vfVqi').value;
-  const fl=document.getElementById('vfFl').value.trim();
-  const fp=document.getElementById('vfFp').value;
-  const fn=document.getElementById('vfFn').value;
-  const dur=document.getElementById('vfDuration').value.trim();
-  const metrics=[];
-  if(vqi) metrics.push('VQI '+vqi);
-  if(fl) metrics.push('FL '+fl);
-  if(fp!=='') metrics.push('FP '+fp+'%');
-  if(fn!=='') metrics.push('FN '+fn+'%');
-  if(dur) metrics.push('duration '+dur);
-  if(rel) lines.push('Reliability is '+rel.toLowerCase()+(metrics.length?' ('+metrics.join(', ')+')':'')+'.');
-  else if(metrics.length) lines.push('Reliability indices: '+metrics.join(', ')+'.');
-  const mdRaw=document.getElementById('vfMd').value;
-  const md=mdRaw===''?NaN:Number(mdRaw);
-  let mdGrade=document.getElementById('vfMdGrade').value;
-  if(!mdGrade && !Number.isNaN(md)) mdGrade=md>-1.5?'No depression noted':md>=-6?'Mild generalized depression':md>=-12?'Moderate generalized depression':'Severe generalized depression';
-  if(!Number.isNaN(md)) lines.push('Mean deviation is '+md.toFixed(2)+' dB; '+(mdGrade||'interpretation not selected').toLowerCase()+'.');
-  else if(mdGrade) lines.push(mdGrade+'.');
-  const psd=document.getElementById('vfPsd').value;
-  if(psd!=='') lines.push('Pattern standard deviation is '+Number(psd).toFixed(2)+' dB.');
-  ['vfPattern','vfProgression','vfCorrelation'].forEach(id=>{const v=document.getElementById(id).value;if(v)lines.push(ensurePeriod(v));});
-  return lines;
+function cleanVfLabel(value){return (value||'').trim().replace(/\s+/g,' ')}
+function parsePercent(text,patterns){for(const p of patterns){const m=text.match(p);if(m)return m[1]}return ''}
+function parseVisualFieldPaste(){
+  const text=((document.getElementById('vfReliabilityPaste').value||'')+'\n'+(document.getElementById('vfIndicesPaste').value||'')).replace(/,/g,' ');
+  const set=(id,v)=>{if(v!==''&&v!=null)document.getElementById(id).value=cleanVfLabel(v)};
+  let m=text.match(/fixation\s*loss(?:es)?\s*[:\-]?\s*(\d+\s*\/\s*\d+)/i); if(m)set('vfFl',m[1].replace(/\s/g,''));
+  m=text.match(/\bHK\b\s*[:\-]?\s*([^\n;]+)/i); if(m)set('vfHk',m[1]);
+  set('vfFp',parsePercent(text,[/false\s*pos(?:itive)?(?:\s*errors?)?\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*%?/i,/\bFP\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*%?/i]));
+  set('vfFn',parsePercent(text,[/false\s*neg(?:ative)?(?:\s*errors?)?\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*%?/i,/\bFN\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*%?/i]));
+  m=text.match(/test\s*duration\s*[:\-]?\s*(\d{1,2}:\d{2})/i); if(m)set('vfDuration',m[1]);
+  m=text.match(/\bGHT\b\s*[:\-]?\s*([^\n;]+)/i); if(m)set('vfGht',m[1]);
+  m=text.match(/\bVFI\b\s*[:\-]?\s*(\d+(?:\.\d+)?)\s*%?/i); if(m)set('vfVfi',m[1]);
+  m=text.match(/\bMD\b\s*[:\-]?\s*([+\-−]?\d+(?:\.\d+)?)/i); if(m)set('vfMd',m[1].replace('−','-'));
+  m=text.match(/\bPSD\b\s*[:\-]?\s*([+\-−]?\d+(?:\.\d+)?)/i); if(m)set('vfPsd',m[1].replace('−','-'));
+  updateVfPreview();
+}
+function qualityFromVf(){
+ const chosen=document.getElementById('vfReliability').value;if(chosen)return chosen;
+ const fp=Number(document.getElementById('vfFp').value),fn=Number(document.getElementById('vfFn').value),fl=document.getElementById('vfFl').value;
+ let flBad=false;if(fl.includes('/')){const [a,b]=fl.split('/').map(Number);flBad=b>0&&a/b>0.2}
+ if((!Number.isNaN(fp)&&fp>=15)||(!Number.isNaN(fn)&&fn>=25)||flBad)return 'Poor';
+ if((!Number.isNaN(fp)&&fp>=8)||(!Number.isNaN(fn)&&fn>=15))return 'Fair';
+ return 'Good';
+}
+function updateVfPreview(){document.getElementById('vfParsedPreview').textContent=buildVisualFieldInterpretation(false)}
+function suggestVfInterpretation(){
+ const pattern=document.getElementById('vfPattern').value,sev=document.getElementById('vfDefectSeverity').value,prog=document.getElementById('vfProgression').value;
+ let sentence='';
+ if(pattern==='No significant visual field defect')sentence='Visual field is full without a statistically significant defect.';
+ else if(pattern){sentence=((sev?sev+' ':'')+pattern).trim()+'.';sentence=sentence.charAt(0).toUpperCase()+sentence.slice(1)}
+ if(prog)sentence+=(sentence?' ':'')+prog+'.';
+ const favorites=JSON.parse(localStorage.getItem('wellerVfFavorites')||'{}');const key=[pattern,sev,prog].join('|');
+ document.getElementById('vfInterpretation').value=favorites[key]||sentence;
+ updateVfPreview();
+}
+function saveVfFavorite(){const text=document.getElementById('vfInterpretation').value.trim();if(!text)return;const key=[document.getElementById('vfPattern').value,document.getElementById('vfDefectSeverity').value,document.getElementById('vfProgression').value].join('|');const f=JSON.parse(localStorage.getItem('wellerVfFavorites')||'{}');f[key]=text;localStorage.setItem('wellerVfFavorites',JSON.stringify(f));document.getElementById('vfFavoriteStatus').textContent='Saved this wording for the same pattern/severity/comparison combination in this browser.'}
+function clearVfPastes(){['vfReliabilityPaste','vfIndicesPaste','vfFl','vfHk','vfFp','vfFn','vfDuration','vfGht','vfVfi','vfMd','vfPsd','vfInterpretation'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});updateVfPreview()}
+function buildVisualFieldInterpretation(includeInterpretation=true){
+ const eye=document.getElementById('vfLaterality').value||'Eye';const quality=qualityFromVf();const rel=[];
+ const fl=document.getElementById('vfFl').value.trim(),hk=document.getElementById('vfHk').value.trim(),fp=document.getElementById('vfFp').value,fn=document.getElementById('vfFn').value,dur=document.getElementById('vfDuration').value.trim(),ght=document.getElementById('vfGht').value.trim(),vfi=document.getElementById('vfVfi').value,md=document.getElementById('vfMd').value,psd=document.getElementById('vfPsd').value;
+ if(fl)rel.push('FL '+fl);else if(hk)rel.push('HK '+hk);if(fp!=='')rel.push('FP '+fp+'%');if(fn!=='')rel.push('FN '+fn+'%');
+ const lines=[eye+':',quality+' quality'+(rel.length?'; '+rel.join(', '):'')+'.'];if(dur)lines.push('Test duration: '+dur+'.');if(ght)lines.push('GHT: '+ght.replace(/\.$/,'')+'.');
+ const indices=[];if(vfi!=='')indices.push('VFI: '+vfi+'%');if(md!=='')indices.push('MD: '+Number(md).toFixed(2)+' dB');if(psd!=='')indices.push('PSD: '+Number(psd).toFixed(2)+' dB');if(indices.length)lines.push(indices.join('. ')+'.');
+ const interp=document.getElementById('vfInterpretation').value.trim();if(includeInterpretation&&interp)lines.push('', 'Interpretation:',ensurePeriod(interp));return lines.join('\n');
 }
 
 function buildOctInterpretation(){
@@ -743,15 +773,11 @@ function buildOctInterpretation(){
 }
 
 function renderStructuredNote(groups){
+  const assessment=uniqueItems([...groups.assessment,...groups.testing].map(ensurePeriod));
+  const plan=uniqueItems([...groups.plan,...groups.education].map(ensurePeriod));
   const blocks=[];
-  const add=(heading,items)=>{
-    const clean=uniqueItems(items.map(ensurePeriod));
-    if(clean.length) blocks.push(heading+'\n'+clean.join(' '));
-  };
-  add('Assessment',groups.assessment);
-  add('Diagnostic Testing',groups.testing);
-  add('Patient Education',groups.education);
-  add('Plan',groups.plan);
+  if(assessment.length)blocks.push('Assessment\n'+assessment.join(' '));
+  if(plan.length)blocks.push('Plan\n'+plan.join(' '));
   return blocks.join('\n\n');
 }
 
@@ -995,6 +1021,15 @@ function generateNote(){
     if(dx) groups.assessment.push(dx+'.');
     if(status) groups.assessment.push('Current ocular surface status: '+status.toLowerCase()+'.');
   }
+  if(section.id==='contact'){
+    const lat=document.getElementById('clLaterality').value,brand=document.getElementById('clBrand').value.trim(),power=document.getElementById('clPower').value.trim(),bc=document.getElementById('clBc').value.trim(),dia=document.getElementById('clDia').value.trim(),vision=document.getElementById('clVision').value.trim(),orx=document.getElementById('clOr').value.trim();
+    const lens=[brand,power,bc&&'BC '+bc,dia&&'DIA '+dia].filter(Boolean).join(', ');
+    if(lens)groups.assessment.push((lat?lat+': ':'')+lens+'.');
+    const fit=['clComfort','clCentration','clMovement','clWetting','clFit'].map(id=>document.getElementById(id).value).filter(Boolean);
+    const rotation=document.getElementById('clRotation').value.trim();if(rotation)fit.push('rotation '+rotation);if(vision)fit.push('VA '+vision);if(orx)fit.push('over-refraction '+orx);
+    if(fit.length)groups.assessment.push(fit.join('; ')+'.');
+    const modality=document.getElementById('clModality').value,wear=document.getElementById('clWear').value.trim();if(modality||wear)groups.plan.push('Lens schedule: '+[modality,wear].filter(Boolean).join(', ')+'.');
+  }
 
   section.querySelectorAll('input[type=checkbox]:checked').forEach(el=>{
     const text=el.dataset.text;
@@ -1007,9 +1042,8 @@ function generateNote(){
   });
 
   if(section.id==='visualfield'){
-    const test=document.getElementById('vfTest').value;
-    if(test) testNames.push(test);
-    groups.testing.push(...buildVisualFieldInterpretation());
+    document.getElementById('output').value=buildVisualFieldInterpretation(true);
+    return;
   }
   if(section.id==='oct'){
     const type=document.getElementById('octType').value;
@@ -1298,6 +1332,8 @@ document.addEventListener('input',e=>{
   if(['rxAge','rxMeridian1','rxMeridian2'].includes(e.target.id) && (document.getElementById('rxMeridian1').value||document.getElementById('rxMeridian2').value)) applyRxMaterial();
 });
 generateNote(); generateLensNote();
+
+document.addEventListener('DOMContentLoaded',()=>{if(document.getElementById('vfParsedPreview'))updateVfPreview();});
 </script>
 </body>
 </html>
