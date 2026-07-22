@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dr. Weller's Chart Builder v0.36</title>
+<title>Dr. Weller's Chart Builder v0.43</title>
 <style>
 :root{
   --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#64748b;--border:#d9e2ef;
@@ -46,7 +46,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 .search-item:hover{background:var(--primary2);color:var(--primary)}
 .toolbar{grid-template-columns:minmax(260px,1fr) minmax(260px,1fr) auto}
 
-.insurance-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.insurance-groups{display:grid;gap:14px}.insurance-group{padding:12px;border:1px solid var(--border);border-radius:10px;background:#fbfdff}.insurance-group h3{margin:0 0 9px;font-size:14px;color:#334155}.insurance-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .insurance-btn{border:1px solid var(--border);background:#fff;color:#1e293b;text-align:left}
 .insurance-btn:hover{background:var(--primary2);border-color:#a8b9ee}
 .insurance-note{margin-top:10px;padding:10px;border-radius:8px;background:#f8fafc;border:1px dashed var(--border);font-size:12px;color:var(--muted)}
@@ -80,8 +80,8 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <body>
 <header>
 <div class="header-inner">
-<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.36 streamlined plan update</div></div>
-<div class="badge">v0.36 • No patient data stored</div>
+<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.43 compact vision-plan selector</div></div>
+<div class="badge">v0.43 • No patient data stored</div>
 </div>
 </header>
 <div class="container">
@@ -105,35 +105,27 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <div class="layout">
 <main id="forms">
 <section class="section active" id="refractive">
-<div class="card"><h2>Refractive Workflow</h2><div class="small">Select insurance once, enter only the refractive powers needed for lens guidance, then add optional modifiers. Routine spectacle release, glasses recommendation, and annual follow-up are assumed.</div></div>
+<div class="card"><h2>Refractive Workflow</h2><div class="small">Select a vision plan once, enter only the refractive powers needed for lens guidance, then add optional modifiers. Routine spectacle release, glasses recommendation, and annual follow-up are assumed.</div></div>
 <div class="card">
-<h2>1. Insurance</h2>
-<div class="insurance-grid">
-<button class="insurance-btn" onclick="applyInsurance('eyemed')" type="button"><strong>EyeMed</strong><br/><span class="small">Essilor / Crizal ecosystem</span></button>
-<button class="insurance-btn" onclick="applyInsurance('vsp')" type="button"><strong>VSP</strong><br/><span class="small">Unity / TechShield ecosystem</span></button>
-<button class="insurance-btn" onclick="applyInsurance('spectera')" type="button"><strong>UHC / Spectera</strong><br/><span class="small">Verify current formulary</span></button>
-<button class="insurance-btn" onclick="applyInsurance('davis')" type="button"><strong>Davis Vision</strong><br/><span class="small">Verify current formulary</span></button>
-<button class="insurance-btn" onclick="applyInsurance('superior')" type="button"><strong>Superior Vision</strong><br/><span class="small">Verify current formulary</span></button>
-<button class="insurance-btn" onclick="applyInsurance('march')" type="button"><strong>March Vision</strong><br/><span class="small">Verify authorization and formulary</span></button>
-<button class="insurance-btn" onclick="applyInsurance('aetna')" type="button"><strong>Aetna Vision</strong><br/><span class="small">Often EyeMed-based; verify plan</span></button>
-<button class="insurance-btn" onclick="applyInsurance('metlife')" type="button"><strong>MetLife Vision</strong><br/><span class="small">Often VSP-based; verify plan</span></button>
-<button class="insurance-btn" onclick="applyInsurance('anthem')" type="button"><strong>Anthem / Blue View Vision</strong><br/><span class="small">Verify network and formulary</span></button>
-<button class="insurance-btn" onclick="applyInsurance('medicare')" type="button"><strong>Original Medicare</strong><br/><span class="small">Routine eyewear generally not a standard benefit</span></button>
-<button class="insurance-btn" onclick="applyInsurance('uhcma')" type="button"><strong>UHC / AARP Medicare Advantage</strong><br/><span class="small">Supplemental vision benefit varies</span></button>
-<button class="insurance-btn" onclick="applyInsurance('aetnama')" type="button"><strong>Aetna Medicare Advantage</strong><br/><span class="small">Supplemental vision benefit varies</span></button>
-<button class="insurance-btn" onclick="applyInsurance('anthemma')" type="button"><strong>Anthem Medicare Advantage</strong><br/><span class="small">Supplemental vision benefit varies</span></button>
-<button class="insurance-btn" onclick="applyInsurance('humanama')" type="button"><strong>Humana Medicare Advantage</strong><br/><span class="small">Supplemental vision benefit varies</span></button>
-<button class="insurance-btn" onclick="applyInsurance('wellcarema')" type="button"><strong>Wellcare Medicare Advantage</strong><br/><span class="small">Supplemental vision benefit varies</span></button>
-<button class="insurance-btn" onclick="applyInsurance('medicaid')" type="button"><strong>Virginia Medicaid / Cardinal Care</strong><br/><span class="small">Verify covered benefit and authorization</span></button>
-<button class="insurance-btn" onclick="applyInsurance('aetnamedicaid')" type="button"><strong>Aetna Better Health</strong><br/><span class="small">Cardinal Care MCO</span></button>
-<button class="insurance-btn" onclick="applyInsurance('anthemmedicaid')" type="button"><strong>Anthem HealthKeepers Plus</strong><br/><span class="small">Cardinal Care MCO</span></button>
-<button class="insurance-btn" onclick="applyInsurance('humanamedicaid')" type="button"><strong>Humana Healthy Horizons</strong><br/><span class="small">Cardinal Care MCO</span></button>
-<button class="insurance-btn" onclick="applyInsurance('sentaramedicaid')" type="button"><strong>Sentara Community Plan</strong><br/><span class="small">Cardinal Care MCO</span></button>
-<button class="insurance-btn" onclick="applyInsurance('uhcmedicaid')" type="button"><strong>UHC Community Plan</strong><br/><span class="small">Cardinal Care MCO</span></button>
-<button class="insurance-btn" onclick="applyInsurance('private')" type="button"><strong>Private Pay</strong><br/><span class="small">No plan-specific formulary</span></button>
-<button class="insurance-btn" onclick="applyInsurance('other')" type="button"><strong>Other</strong><br/><span class="small">Verify plan</span></button>
+<h2>1. Vision Plan</h2>
+<div class="insurance-groups">
+<div class="insurance-group"><h3>Commercial Vision</h3><div class="insurance-grid">
+<button class="insurance-btn" onclick="applyInsurance('eyemed')" type="button"><strong>EyeMed</strong></button>
+<button class="insurance-btn" onclick="applyInsurance('vsp')" type="button"><strong>VSP</strong></button>
+<button class="insurance-btn" onclick="applyInsurance('spectera')" type="button"><strong>Spectera</strong></button>
+<button class="insurance-btn" onclick="applyInsurance('davis')" type="button"><strong>Davis Vision</strong></button>
+<button class="insurance-btn" onclick="applyInsurance('superior')" type="button"><strong>Superior Vision</strong></button>
+<button class="insurance-btn" onclick="applyInsurance('other')" type="button"><strong>Other Vision Plan</strong></button>
+</div></div>
+<div class="insurance-group"><h3>Government</h3><div class="insurance-grid">
+<button class="insurance-btn" onclick="applyInsurance('medicare')" type="button"><strong>Medicare</strong></button>
+<button class="insurance-btn" onclick="applyInsurance('medicaid')" type="button"><strong>Medicaid</strong></button>
+</div></div>
+<div class="insurance-group"><h3>Other</h3><div class="insurance-grid">
+<button class="insurance-btn" onclick="applyInsurance('private')" type="button"><strong>Private Pay</strong></button>
+</div></div>
 </div>
-<div class="insurance-note" id="insuranceSummary">Select insurance to drive the lens recommendation.</div>
+<div class="insurance-note" id="insuranceSummary">Select a vision plan to set the recommendation system.</div>
 </div>
 <div class="card">
 <h2>2. Prescription Snapshot</h2>
@@ -550,29 +542,15 @@ const diagnosisMap=[
 ];
 
 const insuranceProfiles={
- eyemed:{ecosystem:'eyemed',label:'EyeMed',summary:'EyeMed selected. Essilor lens and Crizal AR defaults applied; verify the patient-specific benefit.'},
- vsp:{ecosystem:'vsp',label:'VSP',summary:'VSP selected. Unity lens and TechShield AR defaults applied; verify the patient-specific benefit.'},
- spectera:{ecosystem:'manual',label:'UHC / Spectera',summary:'UHC / Spectera selected. Generic covered-design defaults applied; verify the current formulary.'},
- davis:{ecosystem:'manual',label:'Davis Vision',summary:'Davis Vision selected. Generic covered-design defaults applied; verify the current formulary.'},
- superior:{ecosystem:'manual',label:'Superior Vision',summary:'Superior Vision selected. Generic covered-design defaults applied; verify the current formulary.'},
- march:{ecosystem:'manual',label:'March Vision',summary:'March Vision selected. Verify authorization and the covered lens formulary.'},
- aetna:{ecosystem:'eyemed',label:'Aetna Vision',summary:'Aetna Vision selected. EyeMed-style defaults applied; verify the actual network and benefit.'},
- metlife:{ecosystem:'vsp',label:'MetLife Vision',summary:'MetLife Vision selected. VSP-style defaults applied; verify the actual network and benefit.'},
- anthem:{ecosystem:'manual',label:'Anthem / Blue View Vision',summary:'Anthem / Blue View Vision selected. Verify the current network and lens formulary.'},
- medicare:{ecosystem:'medical',label:'Original Medicare',summary:'Original Medicare selected. Routine refraction and eyewear are generally not standard Medicare benefits; verify medical necessity and any secondary coverage.'},
- uhcma:{ecosystem:'manual',label:'UHC / AARP Medicare Advantage',summary:'UHC / AARP Medicare Advantage selected. Verify the supplemental vision allowance and network.'},
- aetnama:{ecosystem:'eyemed',label:'Aetna Medicare Advantage',summary:'Aetna Medicare Advantage selected. Verify the supplemental vision allowance and network.'},
- anthemma:{ecosystem:'manual',label:'Anthem Medicare Advantage',summary:'Anthem Medicare Advantage selected. Verify the supplemental vision allowance and network.'},
- humanama:{ecosystem:'manual',label:'Humana Medicare Advantage',summary:'Humana Medicare Advantage selected. Verify the supplemental vision allowance and network.'},
- wellcarema:{ecosystem:'manual',label:'Wellcare Medicare Advantage',summary:'Wellcare Medicare Advantage selected. Verify the supplemental vision allowance and network.'},
- medicaid:{ecosystem:'medicaid',label:'Virginia Medicaid / Cardinal Care',summary:'Virginia Medicaid / Cardinal Care selected. Verify eligibility, age-based benefit, authorization, and covered materials.'},
- aetnamedicaid:{ecosystem:'medicaid',label:'Aetna Better Health',summary:'Aetna Better Health / Cardinal Care selected. Verify eligibility, authorization, and eyewear benefit.'},
- anthemmedicaid:{ecosystem:'medicaid',label:'Anthem HealthKeepers Plus',summary:'Anthem HealthKeepers Plus / Cardinal Care selected. Verify eligibility, authorization, and eyewear benefit.'},
- humanamedicaid:{ecosystem:'medicaid',label:'Humana Healthy Horizons',summary:'Humana Healthy Horizons / Cardinal Care selected. Verify eligibility, authorization, and eyewear benefit.'},
- sentaramedicaid:{ecosystem:'medicaid',label:'Sentara Community Plan',summary:'Sentara Community Plan / Cardinal Care selected. Verify eligibility, authorization, and eyewear benefit.'},
- uhcmedicaid:{ecosystem:'medicaid',label:'UHC Community Plan',summary:'UHC Community Plan / Cardinal Care selected. Verify eligibility, authorization, and eyewear benefit.'},
- private:{ecosystem:'manual',label:'Private Pay',summary:'Private pay selected. Clinically appropriate lens defaults applied without a plan-specific formulary.'},
- other:{ecosystem:'manual',label:'Other',summary:'Other insurance selected. Verify the network, authorization, and formulary.'}
+ eyemed:{ecosystem:'eyemed',label:'EyeMed',summary:'EyeMed selected. Eyezen, Varilux, and Crizal defaults applied.'},
+ vsp:{ecosystem:'vsp',label:'VSP',summary:'VSP selected. Unity and TechShield defaults applied.'},
+ spectera:{ecosystem:'eyemed',label:'Spectera',summary:'Spectera selected. Essilor-style defaults applied; optical can verify benefits.'},
+ davis:{ecosystem:'eyemed',label:'Davis Vision',summary:'Davis Vision selected. Essilor-style defaults applied; optical can verify benefits.'},
+ superior:{ecosystem:'eyemed',label:'Superior Vision',summary:'Superior Vision selected. Essilor-style defaults applied; optical can verify benefits.'},
+ medicare:{ecosystem:'eyemed',label:'Medicare',summary:'Medicare selected. General lens recommendations applied; optical can verify benefits.'},
+ medicaid:{ecosystem:'eyemed',label:'Medicaid',summary:'Medicaid selected. General lens recommendations applied; optical can verify benefits.'},
+ private:{ecosystem:'eyemed',label:'Private Pay',summary:'Private pay selected. General Essilor-style defaults applied.'},
+ other:{ecosystem:'eyemed',label:'Other Vision Plan',summary:'Other vision plan selected. General Essilor-style defaults applied; optical can verify benefits.'}
 };
 let currentInsurancePreset='';
 function setSelectOptions(id, options, preferred){
@@ -599,13 +577,13 @@ function getRefractiveRecommendation(){
 
   let design;
   if(presbyopic){
-    design=ecosystem==='vsp'?'Unity Via progressive':ecosystem==='eyemed'?'Varilux progressive':'Progressive addition lens';
+    design=ecosystem==='vsp'?'Unity Via Progressive':'Varilux XR';
   }else if(earlyPresbyopicSupport){
-    design=ecosystem==='vsp'?'Unity Relieve 70':ecosystem==='eyemed'?'Eyezen 4':'Anti-fatigue digital single-vision lens';
+    design=ecosystem==='vsp'?'Unity Relieve 70':'Eyezen 4';
   }else if(age>=18&&age<40){
-    design=ecosystem==='vsp'?'Unity Relieve 50 / Unity SVx':ecosystem==='eyemed'?'Eyezen Start':'Digital single-vision lens';
+    design=ecosystem==='vsp'?'Unity Relieve 50':'Eyezen Start';
   }else{
-    design=ecosystem==='vsp'?'Unity single vision':ecosystem==='eyemed'?'Eyezen single vision':'Single-vision lens';
+    design=ecosystem==='vsp'?'Unity SV':'Single Vision';
   }
 
   let material;
@@ -615,24 +593,18 @@ function getRefractiveRecommendation(){
   else if(sphere>=4||cyl>=1.5) material='1.60 high-index';
   else material='CR-39 or plan-standard plastic';
 
-  let ar=ecosystem==='vsp'?'TechShield AR':ecosystem==='eyemed'?'Crizal Sapphire HR':'Premium anti-reflective coating';
-  if(ecosystem==='medicaid'||ecosystem==='medical') ar='Plan-covered anti-reflective coating, if eligible';
+  let ar=ecosystem==='vsp'?'TechShield Elite':'Crizal Sapphire HR';
   return {design,material,ar,profile,pediatric,presbyopic,earlyPresbyopicSupport,highMyopia,age,sphere,cyl};
 }
 function refreshRefractiveRecommendations(){
   const r=getRefractiveRecommendation();
-  setSelectOptions('autoLensDesign',[r.design,'Single-vision lens','Digital single-vision lens','Eyezen Start','Eyezen 4','Unity Relieve 50 / Unity SVx','Unity Relieve 70','Progressive addition lens','Varilux progressive','Unity Via progressive','Occupational / computer lens'],r.design);
+  const designOptions=r.profile.ecosystem==='vsp'
+    ? [r.design,'Unity SV','Unity Relieve 50','Unity Relieve 70','Unity Via Progressive','Occupational / computer lens']
+    : [r.design,'Single Vision','Eyezen Start','Eyezen 1','Eyezen 2','Eyezen 3','Eyezen 4','Varilux Comfort Max','Varilux Physio W3+','Varilux XR','Occupational / computer lens'];
+  setSelectOptions('autoLensDesign',designOptions,r.design);
   setSelectOptions('autoMaterial',[r.material,'CR-39 or plan-standard plastic','Polycarbonate','Trivex','1.60 high-index','1.67 high-index','1.74 high-index'],r.material);
-  setSelectOptions('autoAr',[r.ar,'Crizal Sapphire HR','TechShield AR','Premium anti-reflective coating','Plan-covered anti-reflective coating, if eligible'],r.ar);
-  const reason=[];
-  if(r.pediatric) reason.push('Pediatric status recognized; polycarbonate prioritized');
-  else if(r.highMyopia) reason.push('High myopia recognized from sphere range; high-index prioritized');
-  else reason.push('Material selected from sphere/cylinder range');
-  if(r.presbyopic) reason.push('Presbyopia recognized; progressive selected');
-  else if(r.earlyPresbyopicSupport) reason.push('Age 40–44 recognized; strongest anti-fatigue option selected');
-  else reason.push('Lens design selected from age and insurance');
-  reason.push((r.profile?.label||'Selected insurance')+' ecosystem controls AR and branded lens defaults');
-  document.getElementById('materialSummary').textContent=reason.join('; ')+'. Recommendations remain editable.';
+  setSelectOptions('autoAr',r.profile.ecosystem==='vsp'?[r.ar,'TechShield Elite','TechShield Blue','No AR']:[r.ar,'Crizal Sapphire HR','Crizal Rock','Crizal Easy Pro','No AR'],r.ar);
+  document.getElementById('materialSummary').textContent='Recommendations are prepopulated and remain editable.';
   generateLensNote();
   generateNote();
 }
@@ -1178,18 +1150,25 @@ function generateLensNote(){
     const design=document.getElementById('autoLensDesign')?.value||'';
     const material=document.getElementById('autoMaterial')?.value||'';
     const ar=document.getElementById('autoAr')?.value||'';
-    const reasons=[];
-    if(design) reasons.push(design+' — selected for the patient’s age, visual demands, and insurance ecosystem');
-    if(material){
-      let why='selected from the entered sphere and cylinder range';
-      if(/Polycarbonate/i.test(material)) why='impact resistance for pediatric, monocular, safety, or occupational needs';
-      else if(/high-index/i.test(material)) why='reduced lens thickness and weight at higher powers';
-      else if(/CR-39|standard plastic/i.test(material)) why='routine low-power option with good optical quality';
-      else if(/Trivex/i.test(material)) why='optional impact-resistant material with good optical quality';
-      reasons.push(material+' — '+why);
+    const lines=[];
+    if(design){
+      let text=design;
+      if(/Eyezen|Unity Relieve/i.test(design)) text+=' — for digital and near-work eyestrain';
+      lines.push(text);
     }
-    if(ar) reasons.push(ar+' — anti-reflection, glare reduction, and improved scratch resistance');
-    document.getElementById('lensOutput').value=reasons.map(x=>'• '+x).join('\n');
+    if(material){
+      let text=material;
+      if(/Polycarbonate/i.test(material)) text+=' — impact resistance';
+      else if(/Trivex/i.test(material)) text+=' — improved optics with impact resistance';
+      else if(/1\.60|1\.67|1\.74|high-index/i.test(material)) text+=' — decreased lens weight and thickness';
+      lines.push(text);
+    }
+    if(ar&&ar!=='No AR'){
+      let text=ar;
+      if(/Crizal|TechShield/i.test(ar)) text+=' — anti-glare, reflection, and scratch resistance';
+      lines.push(text);
+    }
+    document.getElementById('lensOutput').value=lines.map(x=>'• '+x).join('\n');
     return;
   }
   const parts=[];
