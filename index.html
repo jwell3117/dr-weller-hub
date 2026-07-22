@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dr. Weller's Chart Builder v0.44</title>
+<title>Dr. Weller's Chart Builder v0.46</title>
 <style>
 :root{
   --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#64748b;--border:#d9e2ef;
@@ -80,8 +80,8 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <body>
 <header>
 <div class="header-inner">
-<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.44 streamlined clinical defaults</div></div>
-<div class="badge">v0.44 • No patient data stored</div>
+<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.46 repaired disease-note generation</div></div>
+<div class="badge">v0.46 • No patient data stored</div>
 </div>
 </header>
 <div class="container">
@@ -386,7 +386,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <h2>Generated Chart Documentation</h2>
 <textarea id="output" placeholder="Select options to generate chart documentation."></textarea>
 <div class="actions">
-<button class="primary" onclick="generateNote()">Generate Chart Note</button>
+<button class="primary" type="button" onclick="generateNote()">Generate Chart Note</button>
 <button class="success" onclick="copyChartNote()">Copy Chart Note</button>
 <button class="secondary" onclick="clearChartOutput()">Clear</button>
 </div>
@@ -409,7 +409,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <h2>Lens Recommendations for Rx Printout</h2>
 <textarea id="lensOutput" placeholder="Lens recommendations will appear here separately."></textarea>
 <div class="actions">
-<button class="primary" onclick="generateLensNote()">Generate Lens Recommendations</button>
+<button class="primary" type="button" onclick="generateLensNote()">Generate Lens Recommendations</button>
 <button class="success" onclick="copyLensNote()">Copy Lens Recommendations</button>
 <button class="secondary" onclick="clearLensOutput()">Clear</button>
 </div>
@@ -543,12 +543,18 @@ function activeSection(){return document.querySelector('.section.active')}
 
 function showDiagnosis(){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(select.value).classList.add('active');
+  const next=document.getElementById(select.value);
+  if(!next) return;
+  next.classList.add('active');
   clearChartOutput();
   clearLensOutput();
-  updateIcdOutput();
   if(document.getElementById('materialSummary')) document.getElementById('materialSummary').textContent='No Rx-based material recommendation applied.';
   if(select.value==='refractive') refreshRefractiveRecommendations();
+  else {
+    generateNote();
+    try{ generateLensNote(); }catch(error){ console.warn('Lens output update skipped:',error); }
+    try{ updateIcdOutput(); }catch(error){ console.warn('ICD output update skipped:',error); }
+  }
 }
 
 function formatDiagnosisList(items){
@@ -648,11 +654,19 @@ function suggestVfInterpretation(){
  if(pattern==='No significant visual field defect')sentence='Visual field is full without a statistically significant defect.';
  else if(pattern){sentence=((sev?sev+' ':'')+pattern).trim()+'.';sentence=sentence.charAt(0).toUpperCase()+sentence.slice(1)}
  if(prog)sentence+=(sentence?' ':'')+prog+'.';
- const favorites=JSON.parse(localStorage.getItem('wellerVfFavorites')||'{}');const key=[pattern,sev,prog].join('|');
+ let favorites={};
+ try{ favorites=JSON.parse(localStorage.getItem('wellerVfFavorites')||'{}'); }catch(error){ favorites={}; }
+ const key=[pattern,sev,prog].join('|');
  document.getElementById('vfInterpretation').value=favorites[key]||sentence;
  updateVfPreview();
 }
-function saveVfFavorite(){const text=document.getElementById('vfInterpretation').value.trim();if(!text)return;const key=[document.getElementById('vfPattern').value,document.getElementById('vfDefectSeverity').value,document.getElementById('vfProgression').value].join('|');const f=JSON.parse(localStorage.getItem('wellerVfFavorites')||'{}');f[key]=text;localStorage.setItem('wellerVfFavorites',JSON.stringify(f));document.getElementById('vfFavoriteStatus').textContent='Saved this wording for the same pattern/severity/comparison combination in this browser.'}
+function saveVfFavorite(){
+ const text=document.getElementById('vfInterpretation').value.trim();if(!text)return;
+ const key=[document.getElementById('vfPattern').value,document.getElementById('vfDefectSeverity').value,document.getElementById('vfProgression').value].join('|');
+ let f={};
+ try{f=JSON.parse(localStorage.getItem('wellerVfFavorites')||'{}');f[key]=text;localStorage.setItem('wellerVfFavorites',JSON.stringify(f));document.getElementById('vfFavoriteStatus').textContent='Saved this wording for the same pattern/severity/comparison combination in this browser.';}
+ catch(error){document.getElementById('vfFavoriteStatus').textContent='Wording is ready to use, but this browser blocked local saving.';}
+}
 function clearVfPastes(){['vfReliabilityPaste','vfIndicesPaste','vfFl','vfHk','vfFp','vfFn','vfDuration','vfGht','vfVfi','vfMd','vfPsd','vfInterpretation'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});updateVfPreview()}
 function buildVisualFieldInterpretation(includeInterpretation=true){
  const eye=document.getElementById('vfLaterality').value||'Eye';const quality=qualityFromVf();const rel=[];
@@ -976,6 +990,7 @@ function buildDefaultClinicalPlan(id){
 
 function generateNote(){
   const section=activeSection();
+  if(!section) return;
   if(section.id==='refractive'){
     const recommendation=getRefractiveRecommendation();
     const diagnosis=document.getElementById('rxDiagnosis')?.value||'refractive error';
@@ -1001,7 +1016,7 @@ function generateNote(){
     let u=document.getElementById('rtcUnit')?.value||'year'; if(n==='1')u=u.replace(/s$/,'');
     sentences.push('RTC '+n+' '+u+', or sooner PRN.');
     document.getElementById('output').value=sentences.join(' ');
-    generateLensNote(); updateIcdOutput(); return;
+    generateLensNote(); try{ updateIcdOutput(); }catch(error){ console.warn('ICD output update skipped:',error); } return;
   }
   if(!section) return;
   const groups={assessment:[],testing:[],education:[],plan:[]};
@@ -1048,17 +1063,24 @@ function generateNote(){
   const uniqueTests=uniqueItems(testNames);
   if(uniqueTests.length) groups.testing.unshift('Diagnostic testing performed and reviewed today: '+uniqueTests.join(', ')+'.');
 
-  const custom=document.getElementById('customSentence').value.trim();
+  // These universal fields were removed from the streamlined interface.
+  // Read them only when present so every disease page can generate independently.
+  const customEl=document.getElementById('customSentence');
+  const custom=customEl ? customEl.value.trim() : '';
   if(custom) groups.plan.push(custom);
 
-  const n=document.getElementById('rtcNumber').value.trim();
-  let u=document.getElementById('rtcUnit').value;
-  if(n==='1') u=u.replace(/s$/,'');
-  let closing=[];
-  if(document.getElementById('understanding').checked) closing.push('Patient confirms understanding and denies further questions.');
+  const rtcNumberEl=document.getElementById('rtcNumber');
+  const rtcUnitEl=document.getElementById('rtcUnit');
+  const understandingEl=document.getElementById('understanding');
+  const soonerPrnEl=document.getElementById('soonerPrn');
+  const n=rtcNumberEl ? rtcNumberEl.value.trim() : '';
+  let u=rtcUnitEl ? rtcUnitEl.value : '';
+  if(n==='1' && u) u=u.replace(/s$/,'');
+  const closing=[];
+  if(!understandingEl || understandingEl.checked) closing.push('Patient confirms understanding and denies further questions.');
   if(n && u){
-    let rtc='RTC x '+n+' '+u;
-    if(document.getElementById('soonerPrn').checked) rtc+=', or sooner PRN';
+    let rtc='RTC '+n+' '+u;
+    if(soonerPrnEl?.checked) rtc+=', or sooner PRN';
     closing.push(rtc+'.');
   }
 
@@ -1083,7 +1105,7 @@ function generateNote(){
   }
   if(closing.length) note=(note?note+' ':'')+closing.join(' ');
   document.getElementById('output').value=note;
-  updateIcdOutput();
+  try{ updateIcdOutput(); }catch(error){ console.warn('ICD output update skipped:',error); }
 }
 
 async function copyChartNote(){
@@ -1106,6 +1128,7 @@ function clearChartOutput(){
 
 function generateLensNote(){
   const section=activeSection();
+  if(!section) return;
   if(section.id==='refractive'){
     const design=document.getElementById('autoLensDesign')?.value||'';
     const material=document.getElementById('autoMaterial')?.value||'';
@@ -1389,16 +1412,23 @@ document.addEventListener('change',e=>{
   if(e.target.id==='supportInsurance'){
     const eco=insuranceEcosystem(e.target.value);
     syncInsuranceExtras(eco);
-    if(document.getElementById('rxMeridian1').value||document.getElementById('rxMeridian2').value) applyRxMaterial();
+    const m1=document.getElementById('rxMeridian1'), m2=document.getElementById('rxMeridian2');
+    if((m1&&m1.value)||(m2&&m2.value)) applyRxMaterial();
   }
-  if(['rxPediatric','rxSafety','rxAge'].includes(e.target.id) && (document.getElementById('rxMeridian1').value||document.getElementById('rxMeridian2').value)) applyRxMaterial();
+  if(['rxPediatric','rxSafety','rxAge'].includes(e.target.id)){
+    const m1=document.getElementById('rxMeridian1'), m2=document.getElementById('rxMeridian2');
+    if((m1&&m1.value)||(m2&&m2.value)) applyRxMaterial();
+  }
   if(e.target.matches('input[type=checkbox], select') && e.target.id!=='diagnosisSelect'){
     generateNote(); generateLensNote();
   }
 });
 document.addEventListener('input',e=>{
   if(e.target.matches('input, select, textarea')) generateNote();
-  if(['rxAge','rxMeridian1','rxMeridian2'].includes(e.target.id) && (document.getElementById('rxMeridian1').value||document.getElementById('rxMeridian2').value)) applyRxMaterial();
+  if(['rxAge','rxMeridian1','rxMeridian2'].includes(e.target.id)){
+    const m1=document.getElementById('rxMeridian1'), m2=document.getElementById('rxMeridian2');
+    if((m1&&m1.value)||(m2&&m2.value)) applyRxMaterial();
+  }
 });
 generateNote(); generateLensNote();
 
