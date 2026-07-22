@@ -162,6 +162,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <label class="option"><input id="rxSafety" type="checkbox" onchange="refreshRefractiveRecommendations()"/>Safety / monocular protection</label>
 <label class="option"><input id="rxPediatric" type="checkbox" onchange="refreshRefractiveRecommendations()"/>Pediatric impact resistance</label>
 <label class="option"><input id="rxOccupational" type="checkbox" onchange="refreshRefractiveRecommendations()"/>Occupational impact risk</label>
+<label class="option"><input id="rxForcePresbyopia" type="checkbox" onchange="refreshRefractiveRecommendations()"/>Presbyopia / progressive override</label>
 </div>
 </div>
 <div class="card">
@@ -576,9 +577,9 @@ const insuranceProfiles={
 let currentInsurancePreset='';
 function setSelectOptions(id, options, preferred){
   const el=document.getElementById(id); if(!el)return;
-  const current=el.value;
-  el.innerHTML=options.map(o=>'<option value="'+o+'">'+o+'</option>').join('');
-  el.value=options.includes(current)?current:(options.includes(preferred)?preferred:options[0]);
+  const unique=[...new Set(options.filter(Boolean))];
+  el.innerHTML=unique.map(o=>'<option value="'+o+'">'+o+'</option>').join('');
+  el.value=unique.includes(preferred)?preferred:(unique[0]||'');
 }
 function getRefractiveRecommendation(){
   const profile=insuranceProfiles[currentInsurancePreset]||insuranceProfiles.other;
@@ -588,33 +589,50 @@ function getRefractiveRecommendation(){
   const cyl=Number(document.getElementById('rxCylinder')?.value||0);
   const diagnosis=document.getElementById('rxDiagnosis')?.value||'myopia';
   const safety=!!document.getElementById('rxSafety')?.checked;
-  const pediatric=!!document.getElementById('rxPediatric')?.checked || (age>0&&age<18);
+  const pediatricModifier=!!document.getElementById('rxPediatric')?.checked;
+  const pediatric=(age>0&&age<18)||pediatricModifier;
   const occupational=!!document.getElementById('rxOccupational')?.checked;
-  const presbyopic=diagnosis==='presbyopia'||age>=45;
+  const forcePresbyopia=!!document.getElementById('rxForcePresbyopia')?.checked;
+  const presbyopic=diagnosis==='presbyopia'||age>=45||forcePresbyopia;
+  const earlyPresbyopicSupport=age>=40&&age<45&&!presbyopic;
+  const highMyopia=diagnosis==='myopia'&&sphere>=6;
+
   let design;
-  if(presbyopic) design=ecosystem==='vsp'?'Unity Via progressive':ecosystem==='eyemed'?'Varilux progressive':'Progressive addition lens';
-  else if(age>=18&&age<45) design=ecosystem==='vsp'?'Unity Relieve / SVx':ecosystem==='eyemed'?'Eyezen Start':'Digital single-vision lens';
-  else design=ecosystem==='vsp'?'Unity single vision':ecosystem==='eyemed'?'Eyezen single vision':'Single-vision lens';
+  if(presbyopic){
+    design=ecosystem==='vsp'?'Unity Via progressive':ecosystem==='eyemed'?'Varilux progressive':'Progressive addition lens';
+  }else if(earlyPresbyopicSupport){
+    design=ecosystem==='vsp'?'Unity Relieve 70':ecosystem==='eyemed'?'Eyezen 4':'Anti-fatigue digital single-vision lens';
+  }else if(age>=18&&age<40){
+    design=ecosystem==='vsp'?'Unity Relieve 50 / Unity SVx':ecosystem==='eyemed'?'Eyezen Start':'Digital single-vision lens';
+  }else{
+    design=ecosystem==='vsp'?'Unity single vision':ecosystem==='eyemed'?'Eyezen single vision':'Single-vision lens';
+  }
+
   let material;
   if(safety||pediatric||occupational) material='Polycarbonate';
   else if(sphere>=8||cyl>=4) material='1.74 high-index';
   else if(sphere>=6||cyl>=2.5) material='1.67 high-index';
   else if(sphere>=4||cyl>=1.5) material='1.60 high-index';
   else material='CR-39 or plan-standard plastic';
+
   let ar=ecosystem==='vsp'?'TechShield AR':ecosystem==='eyemed'?'Crizal Sapphire HR':'Premium anti-reflective coating';
   if(ecosystem==='medicaid'||ecosystem==='medical') ar='Plan-covered anti-reflective coating, if eligible';
-  return {design,material,ar,profile};
+  return {design,material,ar,profile,pediatric,presbyopic,earlyPresbyopicSupport,highMyopia,age,sphere,cyl};
 }
 function refreshRefractiveRecommendations(){
   const r=getRefractiveRecommendation();
-  setSelectOptions('autoLensDesign',[r.design,'Single-vision lens','Digital single-vision lens','Progressive addition lens','Occupational / computer lens'],r.design);
+  setSelectOptions('autoLensDesign',[r.design,'Single-vision lens','Digital single-vision lens','Eyezen Start','Eyezen 4','Unity Relieve 50 / Unity SVx','Unity Relieve 70','Progressive addition lens','Varilux progressive','Unity Via progressive','Occupational / computer lens'],r.design);
   setSelectOptions('autoMaterial',[r.material,'CR-39 or plan-standard plastic','Polycarbonate','Trivex','1.60 high-index','1.67 high-index','1.74 high-index'],r.material);
   setSelectOptions('autoAr',[r.ar,'Crizal Sapphire HR','TechShield AR','Premium anti-reflective coating','Plan-covered anti-reflective coating, if eligible'],r.ar);
   const reason=[];
-  reason.push('Design follows age and insurance ecosystem');
-  reason.push('material follows sphere/cylinder range and safety modifiers');
-  reason.push('AR follows the selected insurance ecosystem');
-  document.getElementById('materialSummary').textContent=reason.join('; ')+'. All fields remain editable.';
+  if(r.pediatric) reason.push('Pediatric status recognized; polycarbonate prioritized');
+  else if(r.highMyopia) reason.push('High myopia recognized from sphere range; high-index prioritized');
+  else reason.push('Material selected from sphere/cylinder range');
+  if(r.presbyopic) reason.push('Presbyopia recognized; progressive selected');
+  else if(r.earlyPresbyopicSupport) reason.push('Age 40–44 recognized; strongest anti-fatigue option selected');
+  else reason.push('Lens design selected from age and insurance');
+  reason.push((r.profile?.label||'Selected insurance')+' ecosystem controls AR and branded lens defaults');
+  document.getElementById('materialSummary').textContent=reason.join('; ')+'. Recommendations remain editable.';
   generateLensNote();
   generateNote();
 }
@@ -978,9 +996,15 @@ function clearIcdOutput(){document.getElementById('icdCode').textContent='—';d
 function generateNote(){
   const section=activeSection();
   if(section.id==='refractive'){
+    const recommendation=getRefractiveRecommendation();
     const diagnosis=document.getElementById('rxDiagnosis')?.value||'refractive error';
     const cyl=Number(document.getElementById('rxCylinder')?.value||0);
-    const dx=[diagnosis]; if(cyl>=0.75)dx.push('astigmatism');
+    const dx=[diagnosis];
+    if(cyl>=0.75)dx.push('astigmatism');
+    if(recommendation.presbyopic && !dx.includes('presbyopia'))dx.push('presbyopia');
+    if(recommendation.highMyopia){
+      const i=dx.indexOf('myopia'); if(i>=0)dx[i]='high myopia'; else dx.push('high myopia');
+    }
     const sentences=['Educated patient on diagnosis'+(dx.length>1?'es':'')+' of '+formatDiagnosisList(dx)+'.','Released updated spectacle prescription for full-time wear.'];
     const contact=document.querySelector('input[name=contactDiscussion]:checked')?.value;
     if(contact==='interested')sentences.push('Educated patient on options for glasses and contact lenses. Patient is interested in contact lenses and will return for fitting as indicated.');
@@ -988,7 +1012,7 @@ function generateNote(){
     if(contact==='wearer')sentences.push('Patient is a current contact lens wearer; contact lens management is documented separately.');
     if(document.getElementById('rxLargeChange')?.checked)sentences.push('Discussed expected adaptation to the change in prescription.');
     if(document.getElementById('rxUv')?.checked)sentences.push('Educated patient on the importance of UV protection.');
-    if(document.getElementById('rxHighMyopiaPrecautions')?.checked)sentences.push('Reviewed retinal detachment precautions associated with high myopia, including new flashes, floaters, curtain or shadow, and sudden vision loss.');
+    if(recommendation.highMyopia||document.getElementById('rxHighMyopiaPrecautions')?.checked)sentences.push('Reviewed retinal detachment precautions associated with high myopia, including new flashes, floaters, curtain or shadow, and sudden vision loss.');
     sentences.push('Recommend glasses for full-time wear.');
     const custom=document.getElementById('customSentence')?.value.trim(); if(custom)sentences.push(ensurePeriod(custom));
     sentences.push('Patient confirms understanding and denies further questions.');
