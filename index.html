@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dr. Weller's Chart Builder v0.46</title>
+<title>Dr. Weller's Chart Builder v0.47</title>
 <style>
 :root{
   --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#64748b;--border:#d9e2ef;
@@ -80,8 +80,8 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <body>
 <header>
 <div class="header-inner">
-<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.46 repaired disease-note generation</div></div>
-<div class="badge">v0.46 • No patient data stored</div>
+<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v0.47 refractive and contact-lens workflow</div></div>
+<div class="badge">v0.47 • No patient data stored</div>
 </div>
 </header>
 <div class="container">
@@ -98,7 +98,6 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <option value="cataract">Cataracts</option>
 <option value="pvd">PVD / Symptomatic Floaters</option>
 <option value="diabetes">Diabetes Mellitus / Diabetic Retinopathy</option>
-<option value="contact">Contact Lens Annual</option>
 <option value="blepharitis">Blepharitis</option><option value="allergy">Allergic Conjunctivitis</option><option value="bacterial">Bacterial Conjunctivitis</option><option value="abrasion">Corneal Abrasion</option><option value="visualfield">Visual Field Interpretation</option><option value="oct">OCT Interpretation</option></select>
 <button class="secondary" onclick="clearAll()">Clear Current Diagnosis</button>
 </div>
@@ -133,16 +132,29 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <div class="field"><label>Age range</label><select id="rxAge" onchange="refreshRefractiveRecommendations()"><option value="">Select...</option><option value="12">0–17</option><option value="24">18–29</option><option value="34">30–39</option><option value="42">40–44</option><option value="47">45–49</option><option value="54">50–59</option><option value="65">60–69</option><option value="75">70+</option></select></div>
 <div class="field"><label>Primary diagnosis</label><select id="rxDiagnosis" onchange="refreshRefractiveRecommendations()"><option value="myopia">Myopia</option><option value="hyperopia">Hyperopia</option><option value="presbyopia">Presbyopia</option><option value="anisometropia">Anisometropia</option></select></div>
 <div class="field"><label>Sphere power</label><select id="rxSphere" onchange="refreshRefractiveRecommendations()"><option value="0">Plano to ±1.75</option><option value="2">±2.00 to ±3.75</option><option value="4">±4.00 to ±5.75</option><option value="6">±6.00 to ±7.75</option><option value="8">±8.00 or greater</option></select></div>
-<div class="field"><label>Astigmatism</label><select id="rxCylinder" onchange="refreshRefractiveRecommendations()"><option value="0">None / under -0.75</option><option value="0.75">-0.75 to -1.25</option><option value="1.5">-1.50 to -2.25</option><option value="2.5">-2.50 to -3.75</option><option value="4">-4.00 or greater</option></select></div>
+<div class="field"><label>Cylinder status</label><select id="rxCylinder" onchange="refreshRefractiveRecommendations()"><option value="0.75" selected>Cylinder present / standard astigmatism</option><option value="0">No cylinder</option><option value="1.5">-1.50 to -2.25</option><option value="2.5">-2.50 to -3.75</option><option value="4">-4.00 or greater</option></select><div class="compact-field-note">Astigmatism is included automatically unless “No cylinder” is selected.</div></div>
 </div>
 </div>
 <div class="card">
-<h2>3. Contact Lens Discussion</h2>
+<h2>3. Contact Lenses</h2>
+<div class="small">Document only the discussion or lens released. Hygiene and backup-glasses education are added automatically from the wear schedule.</div>
+<div class="grid" style="margin-top:10px">
+<label class="option"><input checked name="contactDiscussion" type="radio" value="notdiscussed" onchange="updateContactLensFields()"/>Not discussed</label>
+<label class="option"><input name="contactDiscussion" type="radio" value="interested" onchange="updateContactLensFields()"/>Discussed — interested</label>
+<label class="option"><input name="contactDiscussion" type="radio" value="notinterested" onchange="updateContactLensFields()"/>Discussed — not interested</label>
+<label class="option"><input name="contactDiscussion" type="radio" value="wearer" onchange="updateContactLensFields()"/>Current contact lens wearer</label>
+</div>
+<div id="currentClFields" class="hidden" style="margin-top:14px">
+<h3>Current Wearer Plan</h3>
 <div class="grid">
-<label class="option"><input checked name="contactDiscussion" type="radio" value="notdiscussed" onchange="generateNote()"/>Not discussed</label>
-<label class="option"><input name="contactDiscussion" type="radio" value="interested" onchange="generateNote()"/>Discussed — interested</label>
-<label class="option"><input name="contactDiscussion" type="radio" value="notinterested" onchange="generateNote()"/>Discussed — not interested</label>
-<label class="option"><input name="contactDiscussion" type="radio" value="wearer" onchange="generateNote()"/>Current contact lens wearer</label>
+<label class="option"><input checked name="contactWearerPlan" type="radio" value="release" onchange="generateNote()"/>Happy with current lenses — release updated CL Rx</label>
+<label class="option"><input name="contactWearerPlan" type="radio" value="trial" onchange="generateNote()"/>Start contact lens trial</label>
+</div>
+<div class="inline-grid" style="margin-top:12px">
+<div class="field"><label>Lens to release or trial</label><input id="contactLensName" list="contactLensChoices" placeholder="Select or type lens name" type="text" oninput="generateNote()"/>
+<datalist id="contactLensChoices"><option value="Acuvue Oasys"></option><option value="Acuvue Oasys 1-Day"></option><option value="Acuvue Vita"></option><option value="MyDay"></option><option value="Precision1"></option><option value="Dailies Total1"></option><option value="Biofinity"></option><option value="Bausch + Lomb ULTRA"></option><option value="Air Optix plus HydraGlyde"></option></datalist></div>
+<div class="field"><label>Wear schedule</label><select id="contactWearSchedule" onchange="generateNote()"><option value="daily">Daily disposable</option><option value="monthly">Monthly replacement</option></select></div>
+</div>
 </div>
 </div>
 <div class="card">
@@ -269,45 +281,6 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <label class="option"><input data-text="Closer retinal follow-up was recommended based on the severity of today's findings." type="checkbox"/>Closer follow-up</label>
 </div></div>
 </section>
-<section class="section" id="contact">
-<div class="card"><h2>Contact Lens Builder</h2><div class="small">Enter the fit and prescription details once; the builder creates a concise assessment and cohesive plan/education paragraph.</div></div>
-<div class="card"><h2>Lens &amp; Prescription</h2><div class="three-grid">
-<div class="field"><label>Laterality</label><select id="clLaterality"><option value="">Select...</option><option>OD</option><option>OS</option><option>OU</option></select></div>
-<div class="field"><label>Brand / design</label><input id="clBrand" placeholder="e.g. Biofinity Toric" type="text"/></div>
-<div class="field"><label>Modality</label><select id="clModality"><option value="">Select...</option><option>Daily disposable</option><option>2-week replacement</option><option>Monthly replacement</option><option>RGP</option><option>Scleral</option><option>Other</option></select></div>
-<div class="field"><label>Power / Rx</label><input id="clPower" placeholder="e.g. -5.50 -1.25 x 180" type="text"/></div>
-<div class="field"><label>BC</label><input id="clBc" placeholder="e.g. 8.6" type="text"/></div>
-<div class="field"><label>Diameter</label><input id="clDia" placeholder="e.g. 14.2" type="text"/></div>
-<div class="field"><label>Over-refraction</label><input id="clOr" placeholder="e.g. plano / +0.25" type="text"/></div>
-<div class="field"><label>Vision</label><input id="clVision" placeholder="e.g. 20/20" type="text"/></div>
-<div class="field"><label>Wearing schedule</label><input id="clWear" placeholder="e.g. daily wear" type="text"/></div>
-</div></div>
-<div class="card"><h2>Prescription-Based Lens Options</h2><div class="small">Optional screening tool for unusual prescriptions. Enter the spectacle or intended contact-lens powers. Results identify likely stock, extended-range, or custom options to verify—not guaranteed availability.</div>
-<div class="three-grid" style="margin-top:12px">
-<div class="field"><label>Sphere</label><input id="clRxSphere" placeholder="e.g. -9.50" step="0.25" type="number"/></div>
-<div class="field"><label>Cylinder</label><input id="clRxCyl" placeholder="e.g. -2.75" step="0.25" type="number"/></div>
-<div class="field"><label>Axis</label><input id="clRxAxis" min="1" max="180" placeholder="e.g. 180" type="number"/></div>
-<div class="field"><label>Near add</label><input id="clRxAdd" placeholder="e.g. +2.00" step="0.25" type="number"/></div>
-<div class="field"><label>Preferred modality</label><select id="clRxModality"><option value="">Any</option><option>Daily disposable</option><option>Monthly</option><option>2-week</option><option>Custom soft</option></select></div>
-</div><div class="actions"><button class="secondary" type="button" onclick="recommendContactLensOptions()">Show Lens Options</button><button class="secondary" type="button" onclick="clearContactLensOptions()">Clear</button></div>
-<div class="cl-options" id="clOptionResults">Enter an Rx to screen likely contact-lens categories and products.</div></div>
-<div class="card"><h2>Fit Assessment</h2><div class="three-grid">
-<div class="field"><label>Comfort</label><select id="clComfort"><option value="">Select...</option><option>Good comfort</option><option>Acceptable comfort</option><option>Reduced comfort</option><option>Symptomatic</option></select></div>
-<div class="field"><label>Centration</label><select id="clCentration"><option value="">Select...</option><option>Well centered</option><option>Slight decentration</option><option>Decentered</option></select></div>
-<div class="field"><label>Movement</label><select id="clMovement"><option value="">Select...</option><option>Appropriate movement</option><option>Minimal movement</option><option>Excessive movement</option></select></div>
-<div class="field"><label>Rotation (toric)</label><input id="clRotation" placeholder="e.g. stable, 5° temporal" type="text"/></div>
-<div class="field"><label>Surface wetting</label><select id="clWetting"><option value="">Select...</option><option>Good surface wetting</option><option>Mild surface drying</option><option>Poor surface wetting</option></select></div>
-<div class="field"><label>Fit impression</label><select id="clFit"><option value="">Select...</option><option>Acceptable fit</option><option>Needs modification</option><option>Not acceptable</option></select></div>
-</div></div>
-<div class="card"><h2>Plan &amp; Education</h2><div class="grid">
-<label class="option"><input data-text="Contact lens prescription was finalized." type="checkbox"/>Finalize prescription</label>
-<label class="option"><input data-text="New contact lens trials were dispensed; patient will return after trial wear for evaluation and finalization." type="checkbox"/>Trials + return</label>
-<label class="option"><input data-text="Recommended backup spectacles and reviewed lens replacement, hand hygiene, and avoidance of overnight wear and water exposure." type="checkbox"/>Core education</label>
-<label class="option"><input data-text="Recommended daily disposable contact lenses when clinically and financially feasible." type="checkbox"/>Recommend daily disposable</label>
-<label class="option"><input data-text="Discussed hydrogen peroxide-based disinfection with proper neutralization for reusable lenses." type="checkbox"/>Clear Care</label>
-<label class="option"><input data-text="Patient was instructed to discontinue lens wear and return promptly for pain, redness, photophobia, discharge, or decreased vision." type="checkbox"/>Urgent CL precautions</label>
-</div></div>
-</section>
 <section class="section" id="blepharitis">
 <div class="card"><h2>Blepharitis</h2><div class="small">Standard education, warm compresses, lid hygiene, and artificial tears populate automatically.</div></div>
 <div class="card"><h2>Optional Changes</h2><div class="grid">
@@ -430,7 +403,6 @@ const diagnosisMap=[
 {id:'cataract',label:'Cataract / Lens Opacity',keywords:'cataract lens opacity nuclear sclerosis cortical posterior subcapsular psc mixed pco posterior capsule yag surgery glare night driving'},
 {id:'pvd',label:'PVD / Symptomatic Floaters',keywords:'pvd floaters flashes retinal detachment vitreous'},
 {id:'diabetes',label:'Diabetes Mellitus / Diabetic Retinopathy',keywords:'diabetes diabetic retinopathy type 1 type 2 npdr pdr proliferative nonproliferative macular edema dme dfe fundus oct'},
-{id:'contact',label:'Contact Lens Annual',keywords:'contact lens annual cl fitting hygiene daily monthly'},
 {id:'blepharitis',label:'Blepharitis',keywords:'blepharitis lids crusting lid hygiene'},
 {id:'allergy',label:'Allergic Conjunctivitis',keywords:'allergy allergic conjunctivitis itching pataday olopatadine'},
 {id:'bacterial',label:'Bacterial Conjunctivitis',keywords:'bacterial conjunctivitis pink eye polytrim moxifloxacin besivance'},
@@ -981,11 +953,13 @@ function buildDefaultClinicalPlan(id){
     plans.push('Reviewed infection precautions and instructed patient to return immediately for increased pain, redness, discharge, photophobia, or reduced vision.');
     plans.push('RTC 1 day for surface check, or sooner PRN.');
   }
-  if(id==='contact'){
-    plans.push('Reviewed proper lens replacement, hand hygiene, avoidance of overnight wear and water exposure, and the importance of backup spectacles.');
-    plans.push('Patient was instructed to discontinue lens wear and return promptly for pain, redness, photophobia, discharge, or decreased vision.');
-  }
   return plans;
+}
+
+function updateContactLensFields(){
+  const status=document.querySelector('input[name=contactDiscussion]:checked')?.value||'notdiscussed';
+  document.getElementById('currentClFields')?.classList.toggle('hidden',status!=='wearer');
+  generateNote();
 }
 
 function generateNote(){
@@ -1001,15 +975,24 @@ function generateNote(){
     if(recommendation.highMyopia){
       const i=dx.indexOf('myopia'); if(i>=0)dx[i]='high myopia'; else dx.push('high myopia');
     }
-    const sentences=['Educated patient on diagnosis'+(dx.length>1?'es':'')+' of '+formatDiagnosisList(dx)+'.','Released updated spectacle prescription for full-time wear.'];
+    const diagnosisLabel=dx.length===1?'diagnosis':'diagnoses';
+    const sentences=['Educated patient on '+diagnosisLabel+' of '+formatDiagnosisList(dx)+'.','Released updated spectacle prescription recommended for full-time wear.'];
     const contact=document.querySelector('input[name=contactDiscussion]:checked')?.value;
-    if(contact==='interested')sentences.push('Educated patient on options for glasses and contact lenses. Patient is interested in contact lenses and will return for fitting as indicated.');
-    if(contact==='notinterested')sentences.push('Educated patient on options for glasses and contact lenses. Patient does not express interest in contact lenses at this time.');
-    if(contact==='wearer')sentences.push('Patient is a current contact lens wearer; contact lens management is documented separately.');
+    if(contact==='interested')sentences.push('Discussed contact lens options; patient may proceed with a contact lens fitting when ready.');
+    if(contact==='notinterested')sentences.push('Discussed contact lens options; patient elects to continue spectacle wear at this time.');
+    if(contact==='wearer'){
+      const plan=document.querySelector('input[name=contactWearerPlan]:checked')?.value||'release';
+      const lens=document.getElementById('contactLensName')?.value.trim();
+      const lensPhrase=lens?' '+lens:'';
+      if(plan==='trial') sentences.push('Started trial of'+lensPhrase+' contact lenses; patient will return for contact lens follow-up after trial wear.');
+      else sentences.push('Patient is happy with current'+lensPhrase+' contact lenses; released updated contact lens prescription for full-time wear.');
+      const schedule=document.getElementById('contactWearSchedule')?.value||'daily';
+      if(schedule==='monthly') sentences.push('Reviewed monthly replacement, proper cleaning and storage, case hygiene, and avoidance of overnight wear and water exposure. Recommended routine breaks from contact lens wear and maintaining a backup pair of spectacles.');
+      else sentences.push('Reviewed daily disposable contact lens hygiene and avoidance of overnight wear and water exposure. Recommended routine breaks from contact lens wear and maintaining a backup pair of spectacles.');
+    }
     if(document.getElementById('rxLargeChange')?.checked)sentences.push('Discussed expected adaptation to the change in prescription.');
     if(document.getElementById('rxUv')?.checked)sentences.push('Educated patient on the importance of UV protection.');
     if(recommendation.highMyopia||document.getElementById('rxHighMyopiaPrecautions')?.checked)sentences.push('Reviewed retinal detachment precautions associated with high myopia, including new flashes, floaters, curtain or shadow, and sudden vision loss.');
-    sentences.push('Recommend glasses for full-time wear.');
     const custom=document.getElementById('customSentence')?.value.trim(); if(custom)sentences.push(ensurePeriod(custom));
     sentences.push('Patient confirms understanding and denies further questions.');
     const n=document.getElementById('rtcNumber')?.value.trim()||'1';
