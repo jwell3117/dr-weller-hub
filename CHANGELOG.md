@@ -1,14 +1,12 @@
-# Chart Builder v1.03 — Predeployment audit update
+# Chart Builder v1.04 — Glaucoma testing workflow refinement
 
-- Reordered managing-physician communication into a separate final paragraph.
-- Separated optional future treatment discussion from future treatment to consider.
-- Added true multi-select checkbox controls for both future-treatment sections and future testing.
-- Standardized non-dry-eye testing language to: “[tests] performed. See test interpretation.”
-- Kept concise dry-eye testing results within the chart note.
-- Removed routine DFE from the separate test-interpretation output workflow.
-- Improved glaucoma and diabetes diagnosis grammar and laterality wording.
-- Added partial ICD-10 family output when the available selections do not support a complete code.
-- Added copyable broad families such as H40 for glaucoma, H10 for conjunctivitis, and H35 for retinal disorders.
-- Prevented advanced nonexudative AMD from presenting a complete code without subfoveal-status detail.
-- Removed obsolete medical-plan generation logic that could reintroduce duplicated findings or outdated wording.
-- Preserved the validated refractive and contact-lens workflows.
+- Preserved the requested status wording: “Condition is stable.”
+- Added a dedicated glaucoma IOP status selector.
+- Standardized current glaucoma testing names to OCT ONH/RNFL, GCC, and HVF terminology.
+- Current testing now documents only the tests performed followed by “See test interpretation.”
+- Replaced the single glaucoma future-testing field with two true multi-select sections:
+  - Repeat testing → “Repeat ___ at next visit.”
+  - First-time/additional testing → “Perform ___ at next visit.”
+- Added multi-select options for OCT ONH/RNFL, GCC, HVF 24-2, HVF 24-2C, HVF 10-2, gonioscopy, pachymetry, optic nerve photography, IOP checks, and custom entries.
+- Preserved the refractive workflow, ICD-10 assistant, and other existing medical modules.
+- Restored the missing contact-lens status handler so the current-wearer fields open and close correctly.
