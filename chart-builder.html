@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dr. Weller's Chart Builder v1.0</title>
+<title>Dr. Weller's Chart Builder v1.01</title>
 <style>
 :root{
   --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#64748b;--border:#d9e2ef;
@@ -81,8 +81,8 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <body>
 <header>
 <div class="header-inner">
-<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v1.0 medical framework update</div></div>
-<div class="badge">v1.0 • No patient data stored</div>
+<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v1.01 medical workflow fixes update</div></div>
+<div class="badge">v1.01 • No patient data stored</div>
 </div>
 </header>
 <div class="container">
@@ -133,7 +133,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <div class="field"><label>Age range</label><select id="rxAge" onchange="refreshRefractiveRecommendations()"><option value="">Select...</option><option value="12">0–17</option><option value="24">18–29</option><option value="34">30–39</option><option value="42">40–44</option><option value="47">45–49</option><option value="54">50–59</option><option value="65">60–69</option><option value="75">70+</option></select></div>
 <div class="field"><label>Primary diagnosis</label><select id="rxDiagnosis" onchange="refreshRefractiveRecommendations()"><option value="myopia">Myopia</option><option value="hyperopia">Hyperopia</option><option value="astigmatism">Astigmatism</option><option value="presbyopia">Presbyopia</option><option value="anisometropia">Anisometropia</option></select></div>
 <div class="field"><label>Sphere power</label><select id="rxSphere" onchange="refreshRefractiveRecommendations()"><option value="0">Plano to ±1.75</option><option value="2">±2.00 to ±3.75</option><option value="4">±4.00 to ±5.75</option><option value="6">±6.00 to ±7.75</option><option value="8">±8.00 or greater</option></select></div>
-<div class="field"><label>Cylinder status</label><select id="rxCylinder" onchange="refreshRefractiveRecommendations()"><option selected="" value="0.75">Cylinder present / standard astigmatism</option><option value="0">No cylinder</option><option value="1.5">-1.50 to -2.25</option><option value="2.5">-2.50 to -3.75</option><option value="4">-4.00 or greater</option></select><div class="compact-field-note">Astigmatism is included automatically unless “No cylinder” is selected.</div></div>
+<div class="field"><label>Cylinder status</label><select id="rxCylinder" onchange="refreshRefractiveRecommendations()"><option selected="" value="0.75">Cylinder present / standard astigmatism</option><option value="0">No cylinder</option><option value="1.5">-1.50 to -2.25</option><option value="2.5">-2.50 to -3.75</option><option value="4">-4.00 or greater</option></select><div class="compact-field-note">Astigmatism is added automatically when cylinder is present, unless it is already selected as the primary diagnosis.</div></div>
 </div>
 </div>
 <div class="card">
@@ -188,7 +188,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <div class="field"><label>Laterality</label><select id="amdLaterality"><option>OD</option><option>OS</option><option selected="">OU</option></select></div>
 <div class="field"><label>Course</label><select id="amdCourse"><option selected="">Stable</option><option>Newly diagnosed</option><option>Possible progression</option><option>Progression noted</option></select></div>
 <div class="field"><label>Management status</label><select id="amdManagement"><option>Initiated treatment with</option><option selected="">Continue treatment with</option><option>Monitor without treatment</option><option>Refer to retina</option></select></div>
-<div class="field"><label>Current management</label><input id="amdTherapy" type="text" value="AREDS2 supplementation and home Amsler grid monitoring"/></div>
+<div class="field"><label>Current management</label><input id="amdTherapy" list="amdTherapyChoices" type="text" value="AREDS2 supplementation and home Amsler grid monitoring"/></div>
 </div><div class="grid" style="margin-top:10px"><label class="option"><input checked="" id="amdDiet" type="checkbox"/>Add diet / smoking / UV education</label><label class="option"><input checked="" id="amdPrecautions" type="checkbox"/>Add CNV warning symptoms</label></div></div>
 <div class="card"><h2>Testing Performed</h2><div class="testing-grid">
 <div class="test-row"><label class="option"><input id="amdTestOct" type="checkbox"/>Macular OCT</label><select id="amdOctResult"><option>stable drusen without exudation</option><option>drusen and RPE irregularity</option><option>geographic atrophy</option><option>intraretinal or subretinal fluid</option><option>stable compared with prior</option><option>possible progression</option></select></div>
@@ -201,9 +201,9 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <label class="option"><input checked="" class="med-understanding" type="checkbox"/>Add understanding statement</label></div>
 <div class="card"><h2>Optional Future Management</h2>
 <label class="option"><input class="med-add-future-treatment" type="checkbox"/>Add future treatment discussion</label>
-<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="futureTreatmentChoices" placeholder="Select or type one or more options" type="text"/></div></div>
+<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="amdFutureTreatmentChoices" placeholder="Select or type future treatment options" type="text"/></div></div>
 <label class="option"><input class="med-add-future-testing" type="checkbox"/>Add future testing plan</label>
-<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" placeholder="Select or type future testing" type="text"/></div></div></div>
+<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" list="amdFutureTestingChoices" placeholder="Select or type future testing" type="text"/></div></div></div>
 </section>
 <section class="section medical-framework" id="dryeye">
 <div class="card"><h2>Dry Eye / MGD</h2><div class="small">Education, present treatment, testing, follow-up, and optional future planning are generated in a consistent clinical rhythm.</div></div>
@@ -229,9 +229,9 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <label class="option"><input checked="" class="med-understanding" type="checkbox"/>Add understanding statement</label></div>
 <div class="card"><h2>Optional Future Management</h2>
 <label class="option"><input class="med-add-future-treatment" type="checkbox"/>Add future treatment discussion</label>
-<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="futureTreatmentChoices" placeholder="Select or type one or more options" type="text"/></div></div>
+<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="dryEyeFutureTreatmentChoices" placeholder="Select or type future treatment options" type="text"/></div></div>
 <label class="option"><input class="med-add-future-testing" type="checkbox"/>Add future testing plan</label>
-<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" placeholder="Select or type future testing" type="text"/></div></div></div>
+<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" list="dryEyeFutureTestingChoices" placeholder="Select or type future testing" type="text"/></div></div></div>
 <datalist id="tearChoices"><option value="preservative-free artificial tears"></option><option value="Refresh Relieva PF"></option><option value="Refresh Mega-3 PF"></option><option value="Systane Complete PF"></option><option value="Systane Hydration PF"></option><option value="iVIZIA"></option><option value="Retaine MGD"></option></datalist>
 <datalist id="futureTreatmentChoices"><option value="Miebo"></option><option value="Xiidra"></option><option value="Restasis"></option><option value="Cequa"></option><option value="Vevye"></option><option value="short topical steroid pulse"></option><option value="punctal plugs"></option><option value="IPL and meibomian gland expression"></option><option value="thermal pulsation"></option><option value="serum tears"></option><option value="scleral lenses"></option></datalist>
 </section>
@@ -243,7 +243,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <div class="field"><label>Laterality</label><select id="glLaterality"><option>OD</option><option>OS</option><option selected="">OU</option></select></div>
 <div class="field"><label>Course</label><select id="glCourse"><option selected="">Stable</option><option>Possible progression</option><option>Progression noted</option><option>Above target IOP</option><option>At target IOP</option></select></div>
 <div class="field"><label>Management status</label><select id="glManagement"><option>Monitor without treatment</option><option selected="">Continue treatment with</option><option>Initiated treatment with</option><option>Modify treatment to</option><option>Refer for glaucoma evaluation</option></select></div>
-<div class="field"><label>Therapy</label><input id="glTherapy" placeholder="e.g., latanoprost QHS OU" type="text"/></div>
+<div class="field"><label>Therapy</label><input id="glTherapy" list="glaucomaTherapyChoices" placeholder="e.g., latanoprost QHS OU" type="text"/></div>
 </div></div>
 <div class="card"><h2>Testing Performed</h2><div class="testing-grid">
 <div class="test-row"><label class="option"><input id="glTestOct" type="checkbox"/>OCT ONH/RNFL</label><select id="glOctResult"><option>within normal limits</option><option>borderline thinning</option><option>superior thinning</option><option>inferior thinning</option><option>superior and inferior thinning</option><option>stable compared with prior</option><option>possible progression</option><option>progression noted</option></select></div>
@@ -258,9 +258,9 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <label class="option"><input checked="" class="med-understanding" type="checkbox"/>Add understanding statement</label></div>
 <div class="card"><h2>Optional Future Management</h2>
 <label class="option"><input class="med-add-future-treatment" type="checkbox"/>Add future treatment discussion</label>
-<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="futureTreatmentChoices" placeholder="Select or type one or more options" type="text"/></div></div>
+<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="glaucomaFutureTreatmentChoices" placeholder="Select or type future treatment options" type="text"/></div></div>
 <label class="option"><input class="med-add-future-testing" type="checkbox"/>Add future testing plan</label>
-<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" placeholder="Select or type future testing" type="text"/></div></div></div>
+<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" list="glaucomaFutureTestingChoices" placeholder="Select or type future testing" type="text"/></div></div></div>
 </section>
 <section class="section" id="cataract">
 <div class="card"><h2>Cataracts</h2><div class="small">Choose whether the patient is ready for surgery. The standard education and plan populate automatically.</div></div>
@@ -311,9 +311,9 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <label class="option"><input checked="" class="med-understanding" type="checkbox"/>Add understanding statement</label></div>
 <div class="card"><h2>Optional Future Management</h2>
 <label class="option"><input class="med-add-future-treatment" type="checkbox"/>Add future treatment discussion</label>
-<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="futureTreatmentChoices" placeholder="Select or type one or more options" type="text"/></div></div>
+<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="diabetesFutureTreatmentChoices" placeholder="Select or type future treatment options" type="text"/></div></div>
 <label class="option"><input class="med-add-future-testing" type="checkbox"/>Add future testing plan</label>
-<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" placeholder="Select or type future testing" type="text"/></div></div></div>
+<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" list="diabetesFutureTestingChoices" placeholder="Select or type future testing" type="text"/></div></div></div>
 </section>
 <section class="section" id="blepharitis">
 <div class="card"><h2>Blepharitis</h2><div class="small">Standard education, warm compresses, lid hygiene, and artificial tears populate automatically.</div></div>
@@ -329,7 +329,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <div class="field"><label>Severity</label><select id="allergySeverity"><option>Mild allergic conjunctivitis</option><option selected="">Moderate allergic conjunctivitis</option><option>Severe allergic conjunctivitis</option><option>Vernal / atopic keratoconjunctivitis</option></select></div>
 <div class="field"><label>Laterality</label><select id="allergyLaterality"><option>OD</option><option>OS</option><option selected="">OU</option></select></div>
 <div class="field"><label>Management status</label><select id="allergyManagement"><option selected="">Initiated treatment with</option><option>Continue treatment with</option><option>Modify treatment to</option></select></div>
-<div class="field"><label>Therapy</label><input id="allergyTherapy" list="allergyChoices" type="text" value="olopatadine 0.7% once daily"/></div>
+<div class="field"><label>Therapy</label><input id="allergyTherapy" list="allergyTherapyChoices" type="text" value="olopatadine 0.7% once daily"/></div>
 </div><div class="grid" style="margin-top:10px"><label class="option"><input checked="" id="allergySupport" type="checkbox"/>Add cold compresses, tears, and allergen avoidance</label><label class="option"><input id="allergySteroid" type="checkbox"/>Add short topical steroid course</label></div></div>
 <div class="card"><h2>Testing Performed</h2><div class="testing-grid"><div class="test-row"><label class="option"><input id="allergyTestStain" type="checkbox"/>Fluorescein staining</label><select id="allergyStainResult"><option>no corneal staining</option><option>mild superficial punctate keratitis</option><option>significant epithelial involvement</option></select></div><div class="test-row"><label class="option"><input id="allergyTestLids" type="checkbox"/>Palpebral conjunctival evaluation</label><select id="allergyLidResult"><option>mild papillary reaction</option><option>moderate papillary reaction</option><option>giant papillary reaction</option></select></div></div></div>
 <div class="card"><h2>Follow-up &amp; Closing</h2><div class="inline-grid">
@@ -338,9 +338,9 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <label class="option"><input checked="" class="med-understanding" type="checkbox"/>Add understanding statement</label></div>
 <div class="card"><h2>Optional Future Management</h2>
 <label class="option"><input class="med-add-future-treatment" type="checkbox"/>Add future treatment discussion</label>
-<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="futureTreatmentChoices" placeholder="Select or type one or more options" type="text"/></div></div>
+<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="allergyFutureTreatmentChoices" placeholder="Select or type future treatment options" type="text"/></div></div>
 <label class="option"><input class="med-add-future-testing" type="checkbox"/>Add future testing plan</label>
-<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" placeholder="Select or type future testing" type="text"/></div></div></div>
+<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" list="allergyFutureTestingChoices" placeholder="Select or type future testing" type="text"/></div></div></div>
 <datalist id="allergyChoices"><option value="olopatadine 0.2% once daily"></option><option value="olopatadine 0.7% once daily"></option><option value="alcaftadine once daily"></option><option value="ketotifen twice daily"></option><option value="prednisolone acetate 1% short course"></option><option value="loteprednol short course"></option></datalist>
 </section>
 <section class="section" id="bacterial">
@@ -416,39 +416,39 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <label class="option"><input checked="" class="med-understanding" type="checkbox"/>Add understanding statement</label></div>
 <div class="card"><h2>Optional Future Management</h2>
 <label class="option"><input class="med-add-future-treatment" type="checkbox"/>Add future treatment discussion</label>
-<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="futureTreatmentChoices" placeholder="Select or type one or more options" type="text"/></div></div>
+<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="hypertensiveFutureTreatmentChoices" placeholder="Select or type future treatment options" type="text"/></div></div>
 <label class="option"><input class="med-add-future-testing" type="checkbox"/>Add future testing plan</label>
-<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" placeholder="Select or type future testing" type="text"/></div></div></div>
-</section><section class="section medical-framework" id="hordeolum"><div class="card"><h2>Hordeolum</h2></div><div class="card"><h2>Diagnosis &amp; Management</h2><div class="inline-grid"><div class="field"><label>Type</label><select id="horType"><option>External hordeolum</option><option>Internal hordeolum</option></select></div><div class="field"><label>Location</label><input id="horLocation" placeholder="e.g., right upper lid" type="text"/></div><div class="field"><label>Management status</label><select id="horManagement"><option selected="">Initiated treatment with</option><option>Continue treatment with</option><option>Modify treatment to</option></select></div><div class="field"><label>Therapy</label><input id="horTherapy" type="text" value="hot compresses for 10-15 minutes QID with gentle lid massage"/></div></div><div class="grid" style="margin-top:10px"><label class="option"><input id="horAntibiotic" type="checkbox"/>Add topical antibiotic/ointment</label><label class="option"><input id="horOral" type="checkbox"/>Add oral antibiotic discussion</label></div></div>
+<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" list="hypertensiveFutureTestingChoices" placeholder="Select or type future testing" type="text"/></div></div></div>
+</section><section class="section medical-framework" id="hordeolum"><div class="card"><h2>Hordeolum</h2></div><div class="card"><h2>Diagnosis &amp; Management</h2><div class="inline-grid"><div class="field"><label>Type</label><select id="horType"><option>External hordeolum</option><option>Internal hordeolum</option></select></div><div class="field"><label>Location</label><input id="horLocation" placeholder="e.g., right upper lid" type="text"/></div><div class="field"><label>Management status</label><select id="horManagement"><option selected="">Initiated treatment with</option><option>Continue treatment with</option><option>Modify treatment to</option></select></div><div class="field"><label>Therapy</label><input id="horTherapy" list="hordeolumTherapyChoices" type="text" value="hot compresses for 10-15 minutes QID with gentle lid massage"/></div></div><div class="grid" style="margin-top:10px"><label class="option"><input id="horAntibiotic" type="checkbox"/>Add topical antibiotic/ointment</label><label class="option"><input id="horOral" type="checkbox"/>Add oral antibiotic discussion</label></div></div>
 <div class="card"><h2>Follow-up &amp; Closing</h2><div class="inline-grid">
 <div class="field"><label>RTC interval</label><select class="med-rtc"><option>1 week</option><option>2 weeks</option><option>1 month</option><option>2 months</option><option>3 months</option><option selected="">6 months</option><option>1 year</option><option>As indicated</option></select></div>
 <div class="field"><label>Return wording</label><select class="med-prn"><option selected="">or sooner PRN</option><option>or sooner with changes</option><option>No additional wording</option></select></div></div>
 <label class="option"><input checked="" class="med-understanding" type="checkbox"/>Add understanding statement</label></div>
 <div class="card"><h2>Optional Future Management</h2>
 <label class="option"><input class="med-add-future-treatment" type="checkbox"/>Add future treatment discussion</label>
-<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="futureTreatmentChoices" placeholder="Select or type one or more options" type="text"/></div></div>
+<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="hordeolumFutureTreatmentChoices" placeholder="Select or type future treatment options" type="text"/></div></div>
 <label class="option"><input class="med-add-future-testing" type="checkbox"/>Add future testing plan</label>
-<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" placeholder="Select or type future testing" type="text"/></div></div></div>
-</section><section class="section medical-framework" id="chalazion"><div class="card"><h2>Chalazion</h2></div><div class="card"><h2>Diagnosis &amp; Management</h2><div class="inline-grid"><div class="field"><label>Location</label><input id="chalLocation" placeholder="e.g., left lower lid" type="text"/></div><div class="field"><label>Course</label><select id="chalCourse"><option>New</option><option selected="">Persistent</option><option>Improving</option><option>Recurrent</option></select></div><div class="field"><label>Management status</label><select id="chalManagement"><option selected="">Initiated treatment with</option><option>Continue treatment with</option><option>Modify treatment to</option></select></div><div class="field"><label>Therapy</label><input id="chalTherapy" type="text" value="hot compresses for 10-15 minutes QID with lid massage"/></div></div><div class="grid" style="margin-top:10px"><label class="option"><input id="chalRefer" type="checkbox"/>Discuss oculoplastics referral if persistent</label><label class="option"><input id="chalBiopsy" type="checkbox"/>Add atypical/recurrent lesion precautions</label></div></div>
+<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" list="hordeolumFutureTestingChoices" placeholder="Select or type future testing" type="text"/></div></div></div>
+</section><section class="section medical-framework" id="chalazion"><div class="card"><h2>Chalazion</h2></div><div class="card"><h2>Diagnosis &amp; Management</h2><div class="inline-grid"><div class="field"><label>Location</label><input id="chalLocation" placeholder="e.g., left lower lid" type="text"/></div><div class="field"><label>Course</label><select id="chalCourse"><option>New</option><option selected="">Persistent</option><option>Improving</option><option>Recurrent</option></select></div><div class="field"><label>Management status</label><select id="chalManagement"><option selected="">Initiated treatment with</option><option>Continue treatment with</option><option>Modify treatment to</option></select></div><div class="field"><label>Therapy</label><input id="chalTherapy" list="chalazionTherapyChoices" type="text" value="hot compresses for 10-15 minutes QID with lid massage"/></div></div><div class="grid" style="margin-top:10px"><label class="option"><input id="chalRefer" type="checkbox"/>Discuss oculoplastics referral if persistent</label><label class="option"><input id="chalBiopsy" type="checkbox"/>Add atypical/recurrent lesion precautions</label></div></div>
 <div class="card"><h2>Follow-up &amp; Closing</h2><div class="inline-grid">
 <div class="field"><label>RTC interval</label><select class="med-rtc"><option>1 week</option><option>2 weeks</option><option>1 month</option><option>2 months</option><option>3 months</option><option selected="">6 months</option><option>1 year</option><option>As indicated</option></select></div>
 <div class="field"><label>Return wording</label><select class="med-prn"><option selected="">or sooner PRN</option><option>or sooner with changes</option><option>No additional wording</option></select></div></div>
 <label class="option"><input checked="" class="med-understanding" type="checkbox"/>Add understanding statement</label></div>
 <div class="card"><h2>Optional Future Management</h2>
 <label class="option"><input class="med-add-future-treatment" type="checkbox"/>Add future treatment discussion</label>
-<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="futureTreatmentChoices" placeholder="Select or type one or more options" type="text"/></div></div>
+<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="chalazionFutureTreatmentChoices" placeholder="Select or type future treatment options" type="text"/></div></div>
 <label class="option"><input class="med-add-future-testing" type="checkbox"/>Add future testing plan</label>
-<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" placeholder="Select or type future testing" type="text"/></div></div></div>
-</section><section class="section medical-framework" id="foreignbody"><div class="card"><h2>Corneal Foreign Body</h2></div><div class="card"><h2>Procedure &amp; Management</h2><div class="inline-grid"><div class="field"><label>Laterality</label><select id="fbLaterality"><option selected="">OD</option><option>OS</option></select></div><div class="field"><label>Foreign body</label><select id="fbType"><option>Metallic corneal foreign body</option><option>Nonmetallic corneal foreign body</option><option>Conjunctival foreign body</option></select></div><div class="field"><label>Removal status</label><select id="fbRemoval"><option selected="">Removed completely</option><option>Removed with residual rust ring</option><option>Partially removed</option><option>Unable to remove</option></select></div><div class="field"><label>Post-procedure therapy</label><input id="fbTherapy" type="text" value="topical fluoroquinolone QID"/></div></div><div class="grid" style="margin-top:10px"><label class="option"><input id="fbBcl" type="checkbox"/>Bandage contact lens placed</label><label class="option"><input id="fbTetanus" type="checkbox"/>Tetanus status reviewed</label><label class="option"><input checked="" id="fbSeidel" type="checkbox"/>Seidel negative</label></div></div>
+<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" list="chalazionFutureTestingChoices" placeholder="Select or type future testing" type="text"/></div></div></div>
+</section><section class="section medical-framework" id="foreignbody"><div class="card"><h2>Corneal Foreign Body</h2></div><div class="card"><h2>Procedure &amp; Management</h2><div class="inline-grid"><div class="field"><label>Laterality</label><select id="fbLaterality"><option selected="">OD</option><option>OS</option></select></div><div class="field"><label>Foreign body</label><select id="fbType"><option>Metallic corneal foreign body</option><option>Nonmetallic corneal foreign body</option><option>Conjunctival foreign body</option></select></div><div class="field"><label>Removal status</label><select id="fbRemoval"><option selected="">Removed completely</option><option>Removed with residual rust ring</option><option>Partially removed</option><option>Unable to remove</option></select></div><div class="field"><label>Post-procedure therapy</label><input id="fbTherapy" list="foreignBodyTherapyChoices" type="text" value="topical fluoroquinolone QID"/></div></div><div class="grid" style="margin-top:10px"><label class="option"><input id="fbBcl" type="checkbox"/>Bandage contact lens placed</label><label class="option"><input id="fbTetanus" type="checkbox"/>Tetanus status reviewed</label><label class="option"><input checked="" id="fbSeidel" type="checkbox"/>Seidel negative</label></div></div>
 <div class="card"><h2>Follow-up &amp; Closing</h2><div class="inline-grid">
 <div class="field"><label>RTC interval</label><select class="med-rtc"><option>1 week</option><option>2 weeks</option><option>1 month</option><option>2 months</option><option>3 months</option><option selected="">6 months</option><option>1 year</option><option>As indicated</option></select></div>
 <div class="field"><label>Return wording</label><select class="med-prn"><option selected="">or sooner PRN</option><option>or sooner with changes</option><option>No additional wording</option></select></div></div>
 <label class="option"><input checked="" class="med-understanding" type="checkbox"/>Add understanding statement</label></div>
 <div class="card"><h2>Optional Future Management</h2>
 <label class="option"><input class="med-add-future-treatment" type="checkbox"/>Add future treatment discussion</label>
-<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="futureTreatmentChoices" placeholder="Select or type one or more options" type="text"/></div></div>
+<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="foreignBodyFutureTreatmentChoices" placeholder="Select or type future treatment options" type="text"/></div></div>
 <label class="option"><input class="med-add-future-testing" type="checkbox"/>Add future testing plan</label>
-<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" placeholder="Select or type future testing" type="text"/></div></div></div>
+<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" list="foreignBodyFutureTestingChoices" placeholder="Select or type future testing" type="text"/></div></div></div>
 </section><section class="section medical-framework" id="retinal"><div class="card"><h2>Retinal Findings / Lesions</h2><div class="small">For benign and peripheral retinal findings such as nevi, CHRPE, lattice, retinal holes, and white without pressure.</div></div><div class="card"><h2>Diagnosis &amp; Management</h2><div class="inline-grid"><div class="field"><label>Finding</label><select id="retType"><option>Choroidal nevus</option><option>CHRPE</option><option>Lattice degeneration</option><option>White without pressure</option><option>Atrophic retinal hole</option><option>Operculated retinal hole</option><option>Retinoschisis</option><option>Pavingstone degeneration</option><option>Peripheral retinal degeneration</option></select></div><div class="field"><label>Laterality</label><select id="retLaterality"><option>OD</option><option>OS</option><option selected="">OU</option></select></div><div class="field"><label>Course</label><select id="retCourse"><option selected="">Stable</option><option>Newly documented</option><option>Possible change</option><option>Progression noted</option></select></div><div class="field"><label>Management</label><select id="retManagement"><option selected="">Monitor</option><option>Refer to retina</option><option>Urgent retina evaluation</option></select></div></div><div class="grid" style="margin-top:10px"><label class="option"><input id="retRdPrecautions" type="checkbox"/>Add retinal detachment precautions</label><label class="option"><input id="retMalignant" type="checkbox"/>Add lesion-change warning symptoms</label></div></div><div class="card"><h2>Testing Performed</h2><div class="testing-grid"><div class="test-row"><label class="option"><input checked="" id="retTestDfe" type="checkbox"/>Dilated fundus examination</label><select id="retDfeResult"><option>stable appearance</option><option>no associated fluid, hemorrhage, or retinal break</option><option>associated retinal hole without detachment</option><option>concerning change noted</option></select></div><div class="test-row"><label class="option"><input id="retTestPhotos" type="checkbox"/>Fundus photography / Optos</label><select id="retPhotoResult"><option>baseline documentation obtained</option><option>stable compared with prior</option><option>possible interval change</option></select></div><div class="test-row"><label class="option"><input id="retTestOct" type="checkbox"/>OCT through lesion</label><select id="retOctResult"><option>no subretinal fluid</option><option>overlying drusen / chronic features</option><option>subretinal fluid or suspicious features</option></select></div></div></div>
 <div class="card"><h2>Follow-up &amp; Closing</h2><div class="inline-grid">
 <div class="field"><label>RTC interval</label><select class="med-rtc"><option>1 week</option><option>2 weeks</option><option>1 month</option><option>2 months</option><option>3 months</option><option selected="">6 months</option><option>1 year</option><option>As indicated</option></select></div>
@@ -456,9 +456,9 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <label class="option"><input checked="" class="med-understanding" type="checkbox"/>Add understanding statement</label></div>
 <div class="card"><h2>Optional Future Management</h2>
 <label class="option"><input class="med-add-future-treatment" type="checkbox"/>Add future treatment discussion</label>
-<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="futureTreatmentChoices" placeholder="Select or type one or more options" type="text"/></div></div>
+<div class="future-treatment-panel"><div class="field"><label>Future treatment options</label><input class="med-future-treatment" list="retinalFutureTreatmentChoices" placeholder="Select or type future treatment options" type="text"/></div></div>
 <label class="option"><input class="med-add-future-testing" type="checkbox"/>Add future testing plan</label>
-<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" placeholder="Select or type future testing" type="text"/></div></div></div>
+<div class="future-testing-panel"><div class="field"><label>Future testing</label><input class="med-future-testing" list="retinalFutureTestingChoices" placeholder="Select or type future testing" type="text"/></div></div></div>
 </section></main>
 <aside><div class="output-stack">
 <div class="card output-card">
@@ -988,10 +988,28 @@ function medFutureParagraphs(section){
   }
   if(section.querySelector('.med-add-future-testing')?.checked){
     const value=section.querySelector('.med-future-testing')?.value.trim();
-    if(value)p.push('At a future visit, consider '+value+'.');
+    if(value)p.push('At a future visit, plan to perform or consider '+value+'.');
   }
   return p;
 }
+function medicalCourseSentence(course, context='condition'){
+  const value=(course||'').trim();
+  const lower=value.toLowerCase();
+  if(!value)return '';
+  if(lower==='stable')return 'Condition is stable.';
+  if(lower==='newly diagnosed')return 'This is a newly diagnosed condition.';
+  if(lower==='possible progression' || lower==='possible change')return 'Possible progression was noted.';
+  if(lower==='progression noted' || lower==='progressed')return 'Progression was noted.';
+  if(lower==='improving' || lower==='improved')return 'Condition is improving.';
+  if(lower==='persistent')return 'Condition remains persistent.';
+  if(lower==='recurrent')return 'Condition is recurrent.';
+  if(lower==='new')return 'This is a new finding.';
+  if(lower==='newly documented')return 'This is a newly documented finding.';
+  if(lower==='above target iop')return 'Intraocular pressure is above target.';
+  if(lower==='at target iop')return 'Intraocular pressure is at target.';
+  return context.charAt(0).toUpperCase()+context.slice(1)+' is '+lower+'.';
+}
+
 function buildMedicalStructuredNote(id){
   const section=document.getElementById(id); const main=[]; const tests=[];
   if(id==='dryeye'){
@@ -1013,7 +1031,7 @@ function buildMedicalStructuredNote(id){
   if(id==='glaucoma'){
     const dx=[medValue('glType'),medValue('glStage')&&medValue('glStage')!=='Suspect / no established damage'?medValue('glStage')+' stage':'',medValue('glLaterality')].filter(Boolean).join(', ');
     main.push('Educated patient on diagnosis of '+dx+'.');
-    const course=medValue('glCourse'); if(course)main.push('Condition is '+course.toLowerCase()+'.');
+    const course=medValue('glCourse'); if(course)main.push(medicalCourseSentence(course));
     const mgmt=medValue('glManagement'),tx=medValue('glTherapy');
     if(mgmt==='Monitor without treatment')main.push('Plan is to monitor without treatment at this time.');
     else if(mgmt==='Refer for glaucoma evaluation')main.push('Referred for glaucoma evaluation and management.');
@@ -1026,7 +1044,7 @@ function buildMedicalStructuredNote(id){
   }
   if(id==='amd'){
     main.push('Educated patient on diagnosis of '+medValue('amdType').toLowerCase()+' '+medValue('amdLaterality')+'.');
-    main.push('Condition is '+medValue('amdCourse').toLowerCase()+'.');
+    main.push(medicalCourseSentence(medValue('amdCourse')));
     const mgmt=medValue('amdManagement'),tx=medValue('amdTherapy');
     if(mgmt==='Monitor without treatment')main.push('Plan is to monitor without treatment at this time.');
     else if(mgmt==='Refer to retina')main.push('Referred to retina for further evaluation and management.');
@@ -1048,7 +1066,7 @@ function buildMedicalStructuredNote(id){
   }
   if(id==='hypertensive'){
     main.push('Educated patient on diagnosis of '+medValue('htnSeverity').toLowerCase()+' '+medValue('htnLaterality')+'.');
-    main.push('Condition is '+medValue('htnCourse').toLowerCase()+'.');
+    main.push(medicalCourseSentence(medValue('htnCourse')));
     if(medChecked('htnControl'))main.push('Discussed the ocular effects of hypertension and the importance of systemic blood-pressure control and continued care with the managing physician.');
     if(medChecked('htnTestDfe'))tests.push(['dilated fundus examination','Dilated fundus examination demonstrated '+medValue('htnDfeResult')]);
     if(medChecked('htnTestPhotos'))tests.push(['fundus photography','Fundus photography '+medValue('htnPhotoResult')]);
@@ -1070,7 +1088,7 @@ function buildMedicalStructuredNote(id){
   }
   if(id==='chalazion'){
     main.push('Educated patient on diagnosis of chalazion'+(medValue('chalLocation')?' involving the '+medValue('chalLocation'):'')+'.');
-    main.push('Course is '+medValue('chalCourse').toLowerCase()+'.'); main.push(medValue('chalManagement')+' '+medValue('chalTherapy')+'.');
+    main.push(medicalCourseSentence(medValue('chalCourse'))); main.push(medValue('chalManagement')+' '+medValue('chalTherapy')+'.');
     if(medChecked('chalRefer'))main.push('Discussed oculoplastics referral for incision and curettage or steroid injection if the lesion persists.');
     if(medChecked('chalBiopsy'))main.push('Reviewed that recurrent or atypical lesions may require biopsy or additional evaluation.');
   }
@@ -1082,7 +1100,7 @@ function buildMedicalStructuredNote(id){
   }
   if(id==='retinal'){
     main.push('Educated patient on diagnosis of '+medValue('retType').toLowerCase()+' '+medValue('retLaterality')+'.');
-    main.push('Finding is '+medValue('retCourse').toLowerCase()+'.');
+    main.push(medicalCourseSentence(medValue('retCourse'),'finding'));
     const m=medValue('retManagement'); if(m==='Monitor')main.push('Plan is to monitor for change.'); else main.push(m+'.');
     if(medChecked('retRdPrecautions'))main.push('Reviewed retinal detachment precautions, including new flashes, floaters, curtain or shadow, and sudden vision loss.');
     if(medChecked('retMalignant'))main.push('Reviewed the importance of monitoring for lesion growth, new symptoms, or other concerning change.');
@@ -1216,7 +1234,7 @@ function generateNote(){
     const diagnosis=document.getElementById('rxDiagnosis')?.value||'refractive error';
     const cyl=Number(document.getElementById('rxCylinder')?.value||0);
     const dx=[diagnosis];
-    if(cyl>=0.75)dx.push('astigmatism');
+    if(cyl>=0.75 && !dx.includes('astigmatism'))dx.push('astigmatism');
     if(recommendation.presbyopic && !dx.includes('presbyopia'))dx.push('presbyopia');
     if(recommendation.highMyopia){
       const i=dx.indexOf('myopia'); if(i>=0)dx[i]='high myopia'; else dx.push('high myopia');
@@ -1669,5 +1687,5 @@ generateNote(); generateLensNote();
 document.addEventListener('DOMContentLoaded',()=>{if(document.getElementById('vfParsedPreview'))updateVfPreview();});
 document.addEventListener('DOMContentLoaded',()=>{ if(document.getElementById('autoLensDesign')) refreshRefractiveRecommendations(); });
 </script>
-</body>
+<datalist id="glaucomaTherapyChoices"><option value="latanoprost QHS OU"></option><option value="timolol QAM OU"></option><option value="dorzolamide BID OU"></option><option value="brimonidine BID OU"></option><option value="Rocklatan QHS OU"></option><option value="Vyzulta QHS OU"></option><option value="selective laser trabeculoplasty"></option><option value="current glaucoma medications as previously prescribed"></option></datalist><datalist id="glaucomaFutureTreatmentChoices"><option value="latanoprost"></option><option value="selective laser trabeculoplasty"></option><option value="additional topical therapy"></option><option value="combination glaucoma therapy"></option><option value="laser peripheral iridotomy"></option><option value="glaucoma specialist referral"></option><option value="surgical glaucoma evaluation"></option></datalist><datalist id="glaucomaFutureTestingChoices"><option value="IOP check"></option><option value="gonioscopy"></option><option value="pachymetry"></option><option value="OCT ONH/RNFL"></option><option value="GCC"></option><option value="visual field 24-2"></option><option value="visual field 24-2C"></option><option value="visual field 10-2"></option><option value="optic nerve photography"></option></datalist><datalist id="dryEyeFutureTreatmentChoices"><option value="Miebo"></option><option value="Xiidra"></option><option value="Restasis"></option><option value="Cequa"></option><option value="Vevye"></option><option value="short topical steroid pulse"></option><option value="punctal plugs"></option><option value="IPL and meibomian gland expression"></option><option value="thermal pulsation"></option><option value="serum tears"></option><option value="scleral lenses"></option></datalist><datalist id="dryEyeFutureTestingChoices"><option value="repeat TBUT"></option><option value="Schirmer testing"></option><option value="meibography"></option><option value="tear osmolarity"></option><option value="MMP-9 testing"></option><option value="repeat ocular surface staining"></option><option value="meibomian gland expression"></option></datalist><datalist id="amdTherapyChoices"><option value="AREDS2 supplementation and home Amsler grid monitoring"></option><option value="home Amsler grid monitoring"></option><option value="observation with lifestyle modification"></option><option value="retina-directed anti-VEGF therapy"></option></datalist><datalist id="amdFutureTreatmentChoices"><option value="AREDS2 supplementation"></option><option value="retina referral"></option><option value="anti-VEGF therapy if exudative conversion occurs"></option><option value="low-vision evaluation"></option></datalist><datalist id="amdFutureTestingChoices"><option value="macular OCT"></option><option value="fundus photography"></option><option value="fundus autofluorescence"></option><option value="Amsler grid review"></option><option value="retina evaluation"></option></datalist><datalist id="diabetesFutureTreatmentChoices"><option value="closer retinal monitoring"></option><option value="retina referral"></option><option value="anti-VEGF therapy if diabetic macular edema develops"></option><option value="laser treatment if proliferative disease develops"></option></datalist><datalist id="diabetesFutureTestingChoices"><option value="dilated fundus examination"></option><option value="macular OCT"></option><option value="fundus photography"></option><option value="widefield retinal imaging"></option></datalist><datalist id="hypertensiveFutureTreatmentChoices"><option value="closer systemic blood-pressure management"></option><option value="urgent medical evaluation"></option><option value="retina referral"></option></datalist><datalist id="hypertensiveFutureTestingChoices"><option value="dilated fundus examination"></option><option value="fundus photography"></option><option value="macular OCT"></option><option value="blood-pressure recheck"></option></datalist><datalist id="allergyTherapyChoices"><option value="olopatadine 0.2% once daily"></option><option value="olopatadine 0.7% once daily"></option><option value="alcaftadine once daily"></option><option value="ketotifen twice daily"></option><option value="prednisolone acetate 1% short course"></option><option value="loteprednol short course"></option></datalist><datalist id="allergyFutureTreatmentChoices"><option value="olopatadine 0.7% once daily"></option><option value="alcaftadine once daily"></option><option value="short topical corticosteroid course"></option><option value="contact lens holiday"></option><option value="allergy specialist evaluation"></option></datalist><datalist id="allergyFutureTestingChoices"><option value="repeat ocular surface staining"></option><option value="palpebral conjunctival evaluation"></option><option value="IOP check after steroid therapy"></option></datalist><datalist id="hordeolumTherapyChoices"><option value="hot compresses for 10-15 minutes QID with gentle lid massage"></option><option value="erythromycin ophthalmic ointment"></option><option value="antibiotic-steroid ointment"></option><option value="oral doxycycline"></option><option value="oral amoxicillin-clavulanate"></option></datalist><datalist id="hordeolumFutureTreatmentChoices"><option value="topical antibiotic ointment"></option><option value="oral antibiotic therapy"></option><option value="incision and drainage"></option><option value="oculoplastics referral"></option></datalist><datalist id="hordeolumFutureTestingChoices"><option value="eyelid evaluation"></option><option value="preseptal cellulitis evaluation"></option><option value="follow-up photography"></option></datalist><datalist id="chalazionTherapyChoices"><option value="hot compresses for 10-15 minutes QID with lid massage"></option><option value="antibiotic-steroid ointment"></option><option value="intralesional steroid injection"></option><option value="incision and curettage"></option></datalist><datalist id="chalazionFutureTreatmentChoices"><option value="intralesional steroid injection"></option><option value="incision and curettage"></option><option value="oculoplastics referral"></option><option value="biopsy for recurrent or atypical lesion"></option></datalist><datalist id="chalazionFutureTestingChoices"><option value="eyelid evaluation"></option><option value="lesion photography"></option><option value="biopsy if recurrent or atypical"></option></datalist><datalist id="foreignBodyTherapyChoices"><option value="moxifloxacin QID"></option><option value="ofloxacin QID"></option><option value="erythromycin ophthalmic ointment QID"></option><option value="topical fluoroquinolone QID"></option></datalist><datalist id="foreignBodyFutureTreatmentChoices"><option value="repeat rust-ring removal"></option><option value="bandage contact lens"></option><option value="cornea referral"></option><option value="additional topical antibiotic therapy"></option></datalist><datalist id="foreignBodyFutureTestingChoices"><option value="next-day corneal surface check"></option><option value="repeat Seidel testing"></option><option value="repeat slit-lamp examination"></option><option value="dilated fundus examination if indicated"></option></datalist><datalist id="retinalFutureTreatmentChoices"><option value="continued observation"></option><option value="retina referral"></option><option value="prophylactic laser evaluation"></option><option value="urgent retina evaluation"></option></datalist><datalist id="retinalFutureTestingChoices"><option value="dilated fundus examination"></option><option value="fundus photography / Optos"></option><option value="OCT through lesion"></option><option value="fundus autofluorescence"></option><option value="B-scan ultrasonography"></option></datalist></body>
 </html>
