@@ -1,16 +1,40 @@
-# Changelog
+# Chart Builder v1.0 — Medical Framework Update
 
-## v0.21 — Umbrella diagnoses and test interpretation
+## Refractive updates
+- Added Astigmatism as a primary diagnosis option.
+- Changed routine low-power lens material default to Polycarbonate.
+- Preserved the validated refractive and contact-lens workflow.
 
-- Converted **Early Dry AMD** into an **Age-Related Macular Degeneration** umbrella module with phenotype, stage, laterality, and status selections.
-- Converted **Glaucoma Suspect** into a **Glaucoma** umbrella module with angle class, type, stage, laterality, and status selections.
-- Added independent searchable **Visual Field Interpretation** and **OCT Interpretation** modules.
-- Added visual-field reliability fields for VQI/quality index, fixation losses, false positives, false negatives, and duration.
-- Added automatic MD wording using the current working thresholds:
-  - greater than -1.50 dB: no depression noted
-  - -1.50 through -6.00 dB: mild generalized depression
-  - worse than -6.00 through -12.00 dB: moderate generalized depression
-  - worse than -12.00 dB: severe generalized depression
-- Preserved the existing diagnosis modules, spectacle recommendation tools, output, and copy functions.
+## Unified medical workflow
+Medical pages now follow the same order:
+1. Diagnosis education
+2. Current treatment or monitoring
+3. Testing performed with concise findings
+4. Follow-up and understanding statement
+5. Optional future treatment discussion
+6. Optional future testing plan
+7. Managing-physician communication when applicable
 
-Clinical reminder: generated language is a documentation aid. Review the underlying study and confirm diagnosis, stage, laterality, coding, and plan before signing the medical record.
+## Redesigned pages
+- Dry Eye / MGD
+- Glaucoma / Glaucoma Suspect
+- Age-Related Macular Degeneration
+- Diabetes / Diabetic Retinopathy
+- Hypertensive Retinopathy
+- Allergic Conjunctivitis
+- Hordeolum
+- Chalazion
+- Corneal Foreign Body
+- Retinal Findings / Lesions
+
+## Preserved pages
+- Refractive Error
+- Cataracts
+- PVD / Symptomatic Floaters
+- Blepharitis
+- Bacterial Conjunctivitis
+- Corneal Abrasion
+- Visual Field Interpretation
+- OCT Interpretation
+
+Review all generated documentation against the actual examination and current clinical judgment before placing it in the medical record.
