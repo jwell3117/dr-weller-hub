@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Dr. Weller's Chart Builder v1.04</title>
+<title>Dr. Weller's Chart Builder v1.06</title>
 <style>
 :root{
   --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#64748b;--border:#d9e2ef;
@@ -78,13 +78,20 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 
 .testing-grid{display:grid;gap:10px}.test-row{display:grid;grid-template-columns:minmax(190px,.8fr) minmax(220px,1.2fr);gap:10px;align-items:center;padding:8px;border:1px solid var(--border);border-radius:9px;background:#fbfdff}.future-treatment-panel,.future-consider-panel,.future-testing-panel,.repeat-testing-panel,.additional-testing-panel{margin:8px 0 12px 28px}.future-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px;margin-top:8px}.future-choice-grid label{display:flex;gap:7px;align-items:flex-start;font-size:13px}.future-other{margin-top:8px}@media(max-width:900px){.future-choice-grid{grid-template-columns:1fr}}.medical-framework .card h2{margin-bottom:10px}@media(max-width:900px){.test-row{grid-template-columns:1fr}}
 .multi-select-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 12px;margin-top:8px}.multi-select-grid label{display:flex;align-items:flex-start;gap:7px;padding:7px 8px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:13px}.multi-select-custom{margin-top:9px}.future-treatment-panel,.future-consider-panel,.future-testing-panel,.repeat-testing-panel,.additional-testing-panel{display:none}.future-treatment-panel.open,.future-consider-panel.open,.future-testing-panel.open,.repeat-testing-panel.open,.additional-testing-panel.open{display:block}@media(max-width:900px){.multi-select-grid{grid-template-columns:1fr}}
+
+.cl-tool-card{border:1px solid #c7d2fe;background:#f8fbff}
+.calc-output{white-space:pre-wrap;padding:10px;border:1px solid var(--border);border-radius:9px;background:#fff;font:13px/1.5 Consolas,Monaco,monospace;min-height:70px}
+.quick-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.checklist-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px}
+.checklist-grid label{display:flex;gap:7px;align-items:flex-start;padding:6px 8px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:13px}
+@media(max-width:900px){.checklist-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header>
 <div class="header-inner">
-<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v1.04 glaucoma testing workflow refinement</div></div>
-<div class="badge">v1.04 • No patient data stored</div>
+<div><h1>Dr. Weller's Chart Builder</h1><div class="subtitle">Clinical documentation builder • v1.06 contact lens fitting + PVD workflow refinement</div></div>
+<div class="badge">v1.06 • No patient data stored</div>
 </div>
 </header>
 <div class="container">
@@ -101,7 +108,7 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <option value="cataract">Cataracts</option>
 <option value="pvd">PVD / Symptomatic Floaters</option>
 <option value="diabetes">Diabetes Mellitus / Diabetic Retinopathy</option>
-<option value="blepharitis">Blepharitis</option><option value="allergy">Allergic Conjunctivitis</option><option value="bacterial">Bacterial Conjunctivitis</option><option value="abrasion">Corneal Abrasion</option><option value="hypertensive">Hypertensive Retinopathy</option><option value="hordeolum">Hordeolum</option><option value="chalazion">Chalazion</option><option value="foreignbody">Corneal Foreign Body</option><option value="retinal">Retinal Findings / Lesions</option><option value="visualfield">Visual Field Interpretation</option><option value="oct">OCT Interpretation</option></select>
+<option value="blepharitis">Blepharitis</option><option value="allergy">Allergic Conjunctivitis</option><option value="bacterial">Bacterial Conjunctivitis</option><option value="abrasion">Corneal Abrasion</option><option value="hypertensive">Hypertensive Retinopathy</option><option value="hordeolum">Hordeolum</option><option value="chalazion">Chalazion</option><option value="foreignbody">Corneal Foreign Body</option><option value="retinal">Retinal Findings / Lesions</option><option value="pediatric">Pediatric Exam Checklist</option><option value="limitedexam">Limited Exam / Dilation Deferred</option><option value="visualfield">Visual Field Interpretation</option><option value="oct">OCT Interpretation</option></select>
 <button class="secondary" onclick="clearAll()">Clear Current Diagnosis</button>
 </div>
 <div class="layout">
@@ -154,9 +161,26 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <label class="option"><input name="contactWearerPlan" onchange="generateNote()" type="radio" value="trial"/>Start contact lens trial</label>
 </div>
 <div class="inline-grid" style="margin-top:12px">
-<div class="field"><label>Lens to release or trial</label><input id="contactLensName" list="contactLensChoices" oninput="generateNote()" placeholder="Select or type lens name" type="text"/>
-<datalist id="contactLensChoices"><option value="Acuvue Oasys"></option><option value="Acuvue Oasys 1-Day"></option><option value="Acuvue Vita"></option><option value="MyDay"></option><option value="Precision1"></option><option value="Dailies Total1"></option><option value="Biofinity"></option><option value="Bausch + Lomb ULTRA"></option><option value="Air Optix plus HydraGlyde"></option></datalist></div>
+<div class="field"><label>Lens to release or trial</label><input id="contactLensName" list="contactLensChoices" oninput="generateNote();updateContactLensParameterMatch()" placeholder="Select or type lens name" type="text"/>
+<datalist id="contactLensChoices"><option value="DAILIES TOTAL1"></option><option value="DAILIES TOTAL1 Multifocal"></option><option value="TOTAL30"></option><option value="TOTAL30 Multifocal"></option><option value="MyDay"></option><option value="MyDay Multifocal"></option><option value="Biofinity"></option><option value="Biofinity Multifocal"></option><option value="Acuvue Oasys"></option><option value="Acuvue Oasys 1-Day"></option><option value="Precision1"></option><option value="Bausch + Lomb ULTRA"></option><option value="Air Optix plus HydraGlyde"></option></datalist></div>
 <div class="field"><label>Wear schedule</label><select id="contactWearSchedule" onchange="generateNote()"><option value="daily">Daily disposable</option><option value="monthly">Monthly replacement</option></select></div>
+</div>
+
+<div class="card cl-tool-card" style="margin-top:14px">
+<h3>Contact Lens Tools</h3>
+<div class="small">Enter spectacle Rx in minus cylinder. Vertexing is applied by principal meridian using a 12 mm vertex distance when clinically meaningful.</div>
+<div class="three-grid" style="margin-top:10px">
+<div class="field"><label>Sphere</label><input id="clVertexSphere" type="number" step="0.25" placeholder="-7.00" oninput="calculateClVertex()"/></div>
+<div class="field"><label>Minus cylinder</label><input id="clVertexCyl" type="number" step="0.25" max="0" placeholder="-1.25" oninput="calculateClVertex()"/></div>
+<div class="field"><label>Axis</label><input id="clVertexAxis" type="number" min="1" max="180" step="1" placeholder="180" oninput="calculateClVertex()"/></div>
+</div>
+<div class="calc-output" id="clVertexOutput">Enter spectacle Rx to calculate vertexed contact lens power.</div>
+<div class="calc-output" id="clParamOutput" style="margin-top:8px">Select a lens above to compare the vertexed result with available manufactured sphere powers.</div>
+<div class="quick-links">
+<a class="secondary" style="text-decoration:none;padding:10px 14px;border-radius:9px" href="https://fittinghub.myalcon.com/calculator?both-bvd=12" target="_blank" rel="noopener">Alcon Multifocal FittingHub</a>
+<a class="secondary" style="text-decoration:none;padding:10px 14px;border-radius:9px" href="https://coopervision.com/practitioner/tools-and-calculators/optiexpert/optiexpert-web#/calculator" target="_blank" rel="noopener">CooperVision OptiExpert</a>
+</div>
+<div class="small" style="margin-top:8px">The calculator below recommends the closest manufactured lens parameters from the spectacle Rx entered. Use the Alcon FittingHub link for Alcon multifocal add selection and multifocal troubleshooting.</div>
 </div>
 </div>
 </div>
@@ -274,15 +298,14 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <div class="additional-testing-panel"><div class="field"><label>Testing to perform at next visit</label><input class="med-additional-testing" list="glaucomaAdditionalTestingChoices" placeholder="Select multiple tests or type another" type="text"/></div></div></div>
 </section>
 <section class="section" id="cataract">
-<div class="card"><h2>Cataracts</h2><div class="small">Choose whether the patient is ready for surgery. The standard education and plan populate automatically.</div></div>
-<div class="card"><h2>Diagnosis</h2><div class="inline-grid">
+<div class="card"><h2>Cataracts</h2><div class="small">Use a streamlined surgery-readiness workflow with concise education and follow-up.</div></div>
+<div class="card"><h2>Diagnosis &amp; Surgical Readiness</h2><div class="inline-grid">
 <div class="field"><label>Type</label><select id="catType"><option selected="">Nuclear sclerotic cataract</option><option>Cortical cataract</option><option>Posterior subcapsular cataract</option><option>Anterior subcapsular cataract</option><option>Mixed age-related cataract</option><option>Posterior capsular opacification</option><option>Other lens opacity</option></select></div>
 <div class="field"><label>Laterality</label><select id="catLaterality"><option>OD</option><option>OS</option><option selected="">OU</option></select></div>
-<div class="field"><label>Surgical status</label><select id="catSurgery"><option selected="">Not ready for surgery</option><option>Ready for surgery</option><option>Post-operative / PCO</option></select></div>
+<div class="field"><label>Surgical status</label><select id="catSurgery"><option selected="">Not ready for surgery</option><option>Ready for surgery</option><option>Surgery discussed — patient defers</option><option>Post-operative / PCO</option></select></div>
 <div class="field"><label>Course</label><select id="catStatus"><option selected="">Stable</option><option>Newly diagnosed</option><option>Progressed</option><option>Postoperative</option></select></div>
-<input id="catSignificance" type="hidden" value="Not visually significant"/>
 </div></div>
-<div class="card"><h2>Optional Changes</h2><div class="grid">
+<div class="card"><h2>Optional Details</h2><div class="grid">
 <label class="option"><input data-text="Cataract is contributing to glare, halos, or reduced night-driving function." type="checkbox"/>Glare / night driving</label>
 <label class="option"><input data-text="Cataract is limiting best-corrected visual acuity and activities of daily living." type="checkbox"/>Reduced BCVA / ADLs</label>
 <label class="option"><input data-text="Updated spectacle correction was recommended while monitoring cataract progression." type="checkbox"/>Update glasses</label>
@@ -290,17 +313,15 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 </div></div>
 </section>
 <section class="section" id="pvd">
-<div class="card"><h2>PVD / Symptomatic Floaters</h2><div class="small">A negative retinal-break examination, diagnosis education, and retinal-detachment precautions populate automatically.</div></div>
+<div class="card"><h2>PVD / Symptomatic Floaters</h2><div class="small">Diagnosis education, peripheral retinal findings, retinal-detachment precautions, and follow-up generate automatically.</div></div>
 <div class="card"><h2>Visit</h2><div class="inline-grid">
 <div class="field"><label>Diagnosis</label><select id="pvdType"><option selected="">Acute posterior vitreous detachment</option><option>Vitreous floaters without PVD</option><option>Chronic / stable PVD</option></select></div>
 <div class="field"><label>Laterality</label><select id="pvdLaterality"><option>OD</option><option>OS</option><option selected="">OU</option></select></div>
 <div class="field"><label>Retinal finding</label><select id="pvdRetina"><option selected="">No hole, tear, or detachment</option><option>Retinal hole / tear identified</option><option>Examination limited / uncertain</option></select></div>
-<div class="field"><label>Follow-up</label><select id="pvdFollow"><option selected="">Repeat DFE in 4–6 weeks</option><option>Routine annual monitoring</option><option>Same-day retina referral</option></select></div>
+<div class="field"><label>Follow-up</label><select id="pvdFollow"><option selected="">Repeat DFE in 4–6 weeks</option><option>Repeat DFE in 2 weeks</option><option>Routine annual monitoring</option><option>Same-day retina referral</option><option>Custom follow-up</option></select></div>
 </div></div>
-<div class="card"><h2>Optional Changes</h2><div class="grid">
-<label class="option"><input data-text="Shafer sign was negative." type="checkbox"/>Negative Shafer</label>
-<label class="option"><input data-text="Scleral depression was performed where clinically appropriate." type="checkbox"/>Scleral depression</label>
-<label class="option"><input data-text="Retina consultation was arranged due to a retinal break, detachment, or uncertain peripheral examination." type="checkbox"/>Retina referral</label>
+<div class="card"><h2>Referral</h2><div class="grid">
+<label class="option"><input id="pvdRetinaReferral" type="checkbox" onchange="generateNote()"/>Refer to retinal specialist</label>
 </div></div>
 </section>
 <section class="section medical-framework" id="diabetes">
@@ -368,6 +389,60 @@ button{border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:point
 <div class="card"><h2>Management</h2><div class="inline-grid"><div class="field"><label>Laterality</label><select id="abrasionLaterality"><option>OD</option><option>OS</option><option selected="">OU</option></select></div><div class="field"><label>Antibiotic</label><select id="abrasionTreatment"><option selected="">Fluoroquinolone QID</option><option>Erythromycin ointment QID</option><option>Medication documented separately</option></select></div></div></div>
 <div class="card"><h2>Optional Changes</h2><div class="grid"><label class="option"><input data-text="A bandage contact lens was placed for comfort and epithelial healing." type="checkbox"/>Bandage contact lens</label><label class="option"><input data-text="A cycloplegic drop was used or prescribed for pain and photophobia." type="checkbox"/>Cycloplegic</label><label class="option"><input data-text="Oral analgesics were recommended as medically appropriate." type="checkbox"/>Oral pain control</label><label class="option"><input data-text="Referral was arranged due to infiltrate, retained foreign body, poor healing, or other concerning findings." type="checkbox"/>Refer</label></div></div>
 </section>
+<section class="section" id="pediatric">
+<div class="card"><h2>Pediatric Exam Checklist</h2><div class="small">A fast reminder checklist for pediatric-specific examination elements. This page is primarily a checklist and does not automatically add every item to the chart note.</div></div>
+<div class="card"><h2>Age / History</h2><div class="checklist-grid">
+<label><input type="checkbox"/>Age-appropriate VA method selected</label>
+<label><input type="checkbox"/>Parent/guardian concerns reviewed</label>
+<label><input type="checkbox"/>Birth/developmental history reviewed when indicated</label>
+<label><input type="checkbox"/>Family history of amblyopia/strabismus/significant Rx reviewed</label>
+<label><input type="checkbox"/>School/reading/headache concerns reviewed</label>
+<label><input type="checkbox"/>Prior glasses/patching/atropine/VT history reviewed</label>
+</div></div>
+<div class="card"><h2>Binocular Vision / Amblyopia</h2><div class="checklist-grid">
+<label><input type="checkbox"/>Cover test distance</label>
+<label><input type="checkbox"/>Cover test near</label>
+<label><input type="checkbox"/>Stereoacuity</label>
+<label><input type="checkbox"/>NPC</label>
+<label><input type="checkbox"/>EOMs</label>
+<label><input type="checkbox"/>Interocular VA difference assessed</label>
+<label><input type="checkbox"/>Fixation preference assessed if needed</label>
+<label><input type="checkbox"/>Accommodation/vergence testing when indicated</label>
+</div></div>
+<div class="card"><h2>Refraction / Ocular Health</h2><div class="checklist-grid">
+<label><input type="checkbox"/>Retinoscopy</label>
+<label><input type="checkbox"/>Cycloplegic refraction considered</label>
+<label><input type="checkbox"/>Cycloplegic refraction completed if indicated</label>
+<label><input type="checkbox"/>Amblyogenic refractive error considered</label>
+<label><input type="checkbox"/>Anterior segment exam</label>
+<label><input type="checkbox"/>IOP when age/cooperation/indication appropriate</label>
+<label><input type="checkbox"/>Dilated fundus exam</label>
+<label><input type="checkbox"/>Optic nerve / macula / peripheral retina reviewed</label>
+</div></div>
+<div class="card"><h2>Plan Reminders</h2><div class="checklist-grid">
+<label><input type="checkbox"/>Full-time glasses</label>
+<label><input type="checkbox"/>Patching</label>
+<label><input type="checkbox"/>Atropine penalization</label>
+<label><input type="checkbox"/>Strabismus referral</label>
+<label><input type="checkbox"/>Pediatric ophthalmology referral</label>
+<label><input type="checkbox"/>Vision therapy / binocular evaluation</label>
+<label><input type="checkbox"/>School accommodations</label>
+<label><input type="checkbox"/>Short-interval follow-up</label>
+</div></div>
+</section>
+
+<section class="section" id="limitedexam">
+<div class="card"><h2>Limited Exam / Dilation Deferred</h2><div class="small">Use when the visit is intentionally limited or when dilation is deferred/refused.</div></div>
+<div class="card"><h2>Limited Ocular Health Assessment</h2><div class="inline-grid">
+<div class="field"><label>Visit type</label><select id="limitedType"><option value="">Not applicable</option><option>Refraction only</option><option>Contact lens service only</option><option>Other limited service</option></select></div>
+<div class="field"><label>Ocular health management</label><select id="limitedManaged"><option value="">Not specified</option><option>Followed by another eye care provider</option><option>Followed by ophthalmology</option><option>Followed by retina specialist</option></select></div>
+</div></div>
+<div class="card"><h2>Dilation</h2><div class="inline-grid">
+<div class="field"><label>Status</label><select id="dilationStatus"><option value="">Not applicable</option><option>Deferred by patient</option><option>Declined / refused by patient</option><option>Unable to dilate today</option></select></div>
+<div class="field"><label>Return for DFE</label><select id="dilationRtc"><option>1 week</option><option>2 weeks</option><option selected="">1 month</option><option>3 months</option><option>Next scheduled visit</option><option>Custom / as directed</option></select></div>
+</div></div>
+</section>
+
 <section class="section" id="visualfield">
 <div class="card"><h2>Visual Field Interpretation</h2><div class="small">Paste the reliability block and global-index block separately. Values remain in the form while you move between the printout and EHR.</div></div>
 <div class="card"><h2>Test</h2><div class="three-grid">
@@ -544,7 +619,9 @@ const diagnosisMap=[
 {id:'hordeolum',label:'Hordeolum',keywords:'hordeolum stye lid bump'},
 {id:'chalazion',label:'Chalazion',keywords:'chalazion lid lesion meibomian'},
 {id:'foreignbody',label:'Corneal Foreign Body',keywords:'foreign body rust ring metal cornea'},
-{id:'retinal',label:'Retinal Findings / Lesions',keywords:'nevus chrpe lattice retinal hole white without pressure retinoschisis'}
+{id:'retinal',label:'Retinal Findings / Lesions',keywords:'nevus chrpe lattice retinal hole white without pressure retinoschisis'},
+{id:'pediatric',label:'Pediatric Exam Checklist',keywords:'pediatric child kid cycloplegic stereo cover test amblyopia strabismus'},
+{id:'limitedexam',label:'Limited Exam / Dilation Deferred',keywords:'refraction only contact lens only ocular health not performed dilation deferred refused'}
 ];
 
 const insuranceProfiles={
@@ -958,6 +1035,7 @@ function currentIcdResult(){
   if(id==='glaucoma') return glaucomaIcd();
   if(id==='amd') return amdIcd();
   if(id==='refractive') return refractiveIcd();
+  if(id==='limitedexam'||id==='pediatric') return icdNeeds('ICD-10 output is not applicable to this utility page.');
   const familyMap={
     pvd:['H43','Vitreous disorder ICD-10 family'],
     blepharitis:['H01','Inflammation of eyelid ICD-10 family'],
@@ -1180,6 +1258,66 @@ function buildMedicalStructuredNote(id){
   return [main.join(' '),...medFutureParagraphs(section),...communication].filter(Boolean).join('\n\n');
 }
 
+
+function buildPvdNote(){
+  const type=medValue('pvdType'), lat=medValue('pvdLaterality'), retina=medValue('pvdRetina'), follow=medValue('pvdFollow');
+  const s=[];
+  s.push('Educated patient on diagnosis of '+type.toLowerCase()+(lat?' '+lat:'')+'.');
+  if(retina==='No hole, tear, or detachment')s.push('No retinal hole, tear, or detachment was identified on today\'s dilated examination.');
+  else if(retina==='Retinal hole / tear identified')s.push('Retinal hole or tear was identified on today\'s examination.');
+  else if(retina==='Examination limited / uncertain')s.push('Peripheral retinal examination was limited or uncertain.');
+  s.push('Reviewed retinal detachment precautions including new or increased flashes, floaters, curtain or shadow, and sudden vision loss, with instructions to return immediately if symptoms occur.');
+  if(follow==='Repeat DFE in 4–6 weeks')s.push('RTC x 4-6 weeks for repeat dilated fundus examination, or sooner PRN.');
+  else if(follow==='Repeat DFE in 2 weeks')s.push('RTC x 2 weeks for repeat dilated fundus examination, or sooner PRN.');
+  else if(follow==='Routine annual monitoring')s.push('RTC x 1 year, or sooner PRN.');
+  else if(follow==='Same-day retina referral')s.push('Same-day retina evaluation was recommended.');
+  s.push('Patient confirms understanding and denies further questions.');
+  let note=s.join(' ');
+  if(document.getElementById('pvdRetinaReferral')?.checked){
+    note+='\n\nPatient referred to retinal specialist.';
+  }
+  return note;
+}
+
+function buildCataractNote(){
+  const type=medValue('catType'),lat=medValue('catLaterality'),status=medValue('catStatus'),surg=medValue('catSurgery');
+  const s=[];
+  s.push('Educated patient on diagnosis of '+type.toLowerCase()+(lat?' '+lat:'')+'.');
+  if(status)s.push(medicalCourseSentence(status));
+  if(surg==='Not ready for surgery'){
+    s.push('Discussed UV protection and that cataract surgery becomes indicated when visual symptoms begin to interfere with daily activities.');
+    s.push('Plan is to monitor at this time.');
+  }else if(surg==='Ready for surgery'){
+    s.push('Discussed cataract surgery and patient elects referral for surgical evaluation.');
+  }else if(surg==='Surgery discussed — patient defers'){
+    s.push('Discussed cataract surgery; patient elects to defer surgical evaluation at this time and continue monitoring.');
+  }else if(surg==='Post-operative / PCO'){
+    s.push('Discussed postoperative lens status and posterior capsular opacification management as clinically indicated.');
+  }
+  activeSection().querySelectorAll('input[type=checkbox]:checked').forEach(el=>{if(el.dataset.text)s.push(el.dataset.text);});
+  s.push('Patient confirms understanding and denies further questions.');
+  s.push('RTC x 1 year, or sooner PRN.');
+  return uniqueItems(s.map(ensurePeriod)).join(' ');
+}
+
+function buildLimitedExamNote(){
+  const type=medValue('limitedType'), managed=medValue('limitedManaged'), dil=medValue('dilationStatus'), rtc=medValue('dilationRtc');
+  const p=[];
+  if(type){
+    p.push('Ocular health assessment was not performed at today\'s visit. Today\'s examination was limited to '+type.toLowerCase()+'.');
+    if(managed)p.push('Patient reports ongoing ocular health management with '+(managed==='Followed by another eye care provider'?'another eye care provider':managed.replace('Followed by ','').toLowerCase())+' and was advised to continue follow-up as directed.');
+  }
+  if(dil){
+    const verb=dil==='Deferred by patient'?'deferred':dil==='Declined / refused by patient'?'declined':'could not undergo';
+    p.push('Patient '+verb+' dilation today. Educated patient on the limitations of an undilated examination, including the possibility of undetected peripheral retinal pathology. Discussed the risks of not completing dilation and recommended completion of a dilated fundus examination.');
+    if(rtc==='Next scheduled visit')p.push('Recommended completion of DFE at the next scheduled visit, or sooner with new visual symptoms.');
+    else if(rtc==='Custom / as directed')p.push('Recommended completion of DFE as clinically directed, or sooner with new visual symptoms.');
+    else p.push('RTC within '+rtc+' for completion of DFE, or sooner with new visual symptoms.');
+    p.push('Patient confirms understanding.');
+  }
+  return p.join(' ');
+}
+
 function buildDefaultClinicalPlan(id){
   return [];
 }
@@ -1187,6 +1325,24 @@ function buildDefaultClinicalPlan(id){
 function generateNote(){
   const section=activeSection();
   if(!section) return;
+  if(section.id==='pvd'){
+    document.getElementById('output').value=buildPvdNote();
+    try{updateIcdOutput();}catch(error){}
+    return;
+  }
+  if(section.id==='cataract'){
+    document.getElementById('output').value=buildCataractNote();
+    try{updateIcdOutput();}catch(error){}
+    return;
+  }
+  if(section.id==='limitedexam'){
+    document.getElementById('output').value=buildLimitedExamNote();
+    return;
+  }
+  if(section.id==='pediatric'){
+    document.getElementById('output').value='Pediatric checklist is for exam completion reminders and does not automatically generate chart text.';
+    return;
+  }
   if(section.id==='refractive'){
     const recommendation=getRefractiveRecommendation();
     const diagnosis=document.getElementById('rxDiagnosis')?.value||'refractive error';
@@ -1565,6 +1721,65 @@ function applySupportRecommendation(){
   generateLensNote();
 }
 
+
+function vertexPower(F,d=0.012){
+  if(!Number.isFinite(F))return NaN;
+  return F/(1-d*F);
+}
+function roundQuarter(v){return Math.round(v*4)/4}
+function formatDiopter(v){
+  if(!Number.isFinite(v))return '';
+  const r=Math.abs(v)<0.001?0:v;
+  return (r>0?'+':'')+r.toFixed(2);
+}
+function calculateClVertex(){
+  const s=parseFloat(document.getElementById('clVertexSphere')?.value);
+  const cyl=parseFloat(document.getElementById('clVertexCyl')?.value||0);
+  const axis=document.getElementById('clVertexAxis')?.value||'';
+  const out=document.getElementById('clVertexOutput');
+  if(!Number.isFinite(s)){if(out)out.textContent='Enter spectacle Rx to calculate vertexed contact lens power.';return;}
+  const c=Number.isFinite(cyl)?cyl:0;
+  const m1=s, m2=s+c;
+  const v1=Math.abs(m1)>=4?vertexPower(m1):m1;
+  const v2=Math.abs(m2)>=4?vertexPower(m2):m2;
+  const rs=roundQuarter(v1), rc=roundQuarter(v2-v1);
+  const se=roundQuarter(rs+rc/2);
+  window.currentClVertex={sphere:rs,cyl:rc,axis:axis,se};
+  out.textContent='Vertexed Rx: '+formatDiopter(rs)+(Math.abs(rc)>=0.125?' '+formatDiopter(rc)+' x '+(axis||'---'):' DS')+'\\nSpherical equivalent: '+formatDiopter(se);
+  updateContactLensParameterMatch();
+}
+function availableSphereForLens(name,power){
+  if(!Number.isFinite(power))return null;
+  const n=(name||'').toLowerCase();
+  let step=.25, maxPlus=6, maxMinus=-12;
+  if(n.includes('biofinity')){maxPlus=8;maxMinus=-12;}
+  if(n.includes('myday')){maxPlus=8;maxMinus=-12;}
+  if(n.includes('total30')){maxPlus=8;maxMinus=-12;}
+  if(n.includes('dailies total1')){maxPlus=6;maxMinus=-12;}
+  let p=Math.max(maxMinus,Math.min(maxPlus,power));
+  if(Math.abs(p)>6) step=.50;
+  return Math.round(p/step)*step;
+}
+function updateContactLensParameterMatch(){
+  const out=document.getElementById('clParamOutput'); if(!out)return;
+  const name=document.getElementById('contactLensName')?.value.trim()||'';
+  const v=window.currentClVertex;
+  if(!name){out.textContent='Select a lens above to compare the vertexed result with available manufactured powers.';return;}
+  if(!v){out.textContent='Enter spectacle Rx above to calculate the closest available '+name+' option.';return;}
+  const sph=availableSphereForLens(name,v.sphere);
+  if(sph==null){out.textContent='Unable to calculate an available power.';return;}
+  let line='Closest available '+name+' option: '+formatDiopter(sph);
+  if(Math.abs(v.cyl)>=0.75){
+    line+='\nVertexed cylinder: '+formatDiopter(v.cyl)+(v.axis?' x '+v.axis:'');
+    line+='\nIf fitting a toric design, select the closest manufactured cylinder and axis for that specific product.';
+  }
+  if(/multifocal/i.test(name)){
+    line+='\nMultifocal add: use LO / MED / HI according to the selected product fitting algorithm.';
+  }
+  line+='\nCalculated vertexed sphere: '+formatDiopter(v.sphere);
+  out.textContent=line;
+}
+
 function recommendContactLensOptions(){
   const sphere=Number(document.getElementById('clRxSphere').value);
   const cylRaw=document.getElementById('clRxCyl').value;
@@ -1604,7 +1819,7 @@ function clearAll(){
   const section=activeSection();
   section.querySelectorAll('input[type=checkbox]').forEach(x=>x.checked=false);
   section.querySelectorAll('select').forEach(x=>x.selectedIndex=0);
-  ['rtcNumber','customSentence','rxAge','rxMeridian1','rxMeridian2','supportAdd','clRxSphere','clRxCyl','clRxAxis','clRxAdd'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['rtcNumber','customSentence','rxAge','rxMeridian1','rxMeridian2','supportAdd','clRxSphere','clRxCyl','clRxAxis','clRxAdd','clVertexSphere','clVertexCyl','clVertexAxis'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   ['rtcUnit','rxPediatric','rxSafety','supportSymptoms','supportInsurance'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id==='rxSafety'?'no':'';});
   const sp=document.getElementById('soonerPrn'); if(sp)sp.checked=false;
   const un=document.getElementById('understanding'); if(un)un.checked=true;
