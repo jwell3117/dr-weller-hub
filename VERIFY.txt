@@ -1,0 +1,12 @@
+Chart Builder v1.06 repository update
+
+Replace BOTH index.html and chart-builder.html in the repository root with the files in this folder.
+Do not rename either file.
+
+PASS — index.html and chart-builder.html identical
+PASS — v1.06 title present
+PASS — Alcon FittingHub link present
+PASS — CooperVision OptiExpert link present
+PASS — PVD referral output present
+PASS — Pediatric checklist present
+PASS — Limited exam / dilation page present
